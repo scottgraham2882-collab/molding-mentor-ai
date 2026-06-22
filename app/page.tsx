@@ -89,6 +89,13 @@ const dashboardCards: DashboardCard[] = [
     href: "/shift-handoff",
     accent: "from-cyan-300 to-emerald-400",
   },
+  {
+    title: "Plant Daily Report",
+    description:
+      "Create, save, edit, delete, review, and print daily plant reports covering production, scrap, downtime, machines, quality, safety, staffing, maintenance, and next-shift priorities.",
+    href: "/reports/daily",
+    accent: "from-emerald-300 to-cyan-400",
+  },
 
   {
     title: "OEE Dashboard",
