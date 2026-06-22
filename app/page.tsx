@@ -10,6 +10,13 @@ type DashboardCard = {
 
 const dashboardCards: DashboardCard[] = [
   {
+    title: "AI Troubleshooting Coach",
+    description:
+      "Chat through a molding problem to get targeted questions, likely root causes, corrective actions, and links to lessons and defect guides.",
+    href: "/coach",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Defect Library",
     description:
       "Review common injection molding defects, likely root causes, and corrective actions before changing the process.",
