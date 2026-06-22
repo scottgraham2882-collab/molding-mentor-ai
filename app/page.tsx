@@ -61,6 +61,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-amber-300 to-cyan-400",
   },
   {
+    title: "Employee Performance Coaching Log",
+    description:
+      "Create, save, edit, delete, filter, and print employee coaching records with discussion notes, expectations, follow-up dates, status, and comments.",
+    href: "/employees/coaching",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Mold History Database",
     description:
       "Add, search, edit, delete, save, and print mold history records with tooling notes, repair history, and process knowledge.",
