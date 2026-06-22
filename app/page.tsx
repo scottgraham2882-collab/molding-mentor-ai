@@ -47,6 +47,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-lime-300 to-cyan-400",
   },
   {
+    title: "Shift Handoff Logs",
+    description:
+      "Record machine status, open issues, process changes, quality holds, downtime notes, and instructions for the next shift.",
+    href: "/shift-handoff",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "AI Troubleshooting Coach",
     description:
       "Chat through a molding problem to get targeted questions, likely root causes, corrective actions, and links to lessons and defect guides.",
