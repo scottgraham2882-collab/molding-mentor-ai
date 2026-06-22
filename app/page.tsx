@@ -37,6 +37,13 @@ const dashboardCards: DashboardCard[] = [
     href: "/calculators",
     accent: "from-amber-300 to-orange-400",
   },
+  {
+    title: "Material Guides",
+    description:
+      "Check resin drying conditions and moisture-related defect risks before starting a run or troubleshooting splay.",
+    href: "/materials/resin-drying",
+    accent: "from-teal-300 to-cyan-400",
+  },
 ];
 
 function CardContent({ card }: { card: DashboardCard }) {
