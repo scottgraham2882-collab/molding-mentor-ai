@@ -119,6 +119,12 @@ export default function EmployeeTrainingRecordPage() {
     return { expired, expiringSoon, passed };
   }, [records]);
 
+  const certificationWatchlist = useMemo(() => {
+    return records
+      .filter((record) => ["Expired", "Expiring Soon"].includes(getCertificationStatus(record)))
+      .sort((first, second) => (daysUntil(first.expirationDate) ?? 9999) - (daysUntil(second.expirationDate) ?? 9999));
+  }, [records]);
+
   function saveRecord(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextRecord = {
@@ -191,6 +197,34 @@ export default function EmployeeTrainingRecordPage() {
             </div>
           </div>
         </header>
+
+        <section className="rounded-[1.75rem] border border-amber-300/20 bg-amber-300/10 p-5 shadow-xl shadow-amber-950/20 sm:p-6 print:hidden">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-amber-200">Certification watchlist</p>
+              <h2 className="mt-2 text-2xl font-black text-white">Expired and soon-to-expire certifications</h2>
+            </div>
+            <p className="text-sm font-bold text-amber-100">30-day expiration window</p>
+          </div>
+          {certificationWatchlist.length === 0 ? (
+            <p className="mt-4 rounded-2xl border border-dashed border-amber-200/30 p-4 text-sm text-amber-50">No expired or soon-to-expire certifications are currently saved in this browser.</p>
+          ) : (
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              {certificationWatchlist.map((record) => (
+                <article key={record.id} className="rounded-2xl border border-amber-200/20 bg-slate-950/60 p-4">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <h3 className="font-black text-white">{record.employeeName}</h3>
+                      <p className="text-sm text-slate-300">{record.certificationEarned || "Certification not recorded"}</p>
+                    </div>
+                    <span className="w-fit rounded-full border border-amber-200/30 bg-amber-200/10 px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-amber-100">{getCertificationStatus(record)}</span>
+                  </div>
+                  <p className="mt-3 text-sm font-bold text-amber-50">{getExpirationLabel(record)}</p>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
 
         <section className="grid gap-6 xl:grid-cols-[0.85fr_1.15fr] print:block">
           <form onSubmit={saveRecord} className="rounded-[1.75rem] border border-white/10 bg-white/[0.07] p-5 shadow-xl shadow-slate-950/30 sm:p-6 print:hidden">
