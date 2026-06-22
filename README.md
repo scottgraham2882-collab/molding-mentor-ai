@@ -1,4 +1,4 @@
-# Molding Mentor AI
+# AI Molding Coach
 
 Injection molding training, troubleshooting, and scientific molding education platform.
 

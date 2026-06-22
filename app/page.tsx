@@ -95,7 +95,7 @@ export default function Home() {
               Mobile-first molding support
             </p>
             <h1 className="mt-4 max-w-4xl text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-7xl">
-              Molding Mentor AI
+              AI Molding Coach
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
               A focused dashboard for injection molding teams to diagnose defects, follow disciplined troubleshooting, and prepare for future scientific molding tools.
@@ -104,7 +104,7 @@ export default function Home() {
         </header>
 
         <section
-          aria-label="Molding Mentor AI tools"
+          aria-label="AI Molding Coach tools"
           className="grid gap-4 sm:grid-cols-2 lg:gap-6"
         >
           {dashboardCards.map((card) => {
