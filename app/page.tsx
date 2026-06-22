@@ -241,6 +241,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-amber-400",
   },
   {
+    title: "Supervisor Training Module",
+    description:
+      "Train supervisors on production floor leadership, shift startup expectations, dashboards, scrap and downtime review, operator coaching, quality escalation, process change approval, shift handoffs, assignment follow-up, and quiz completion.",
+    href: "/training/supervisor",
+    accent: "from-amber-300 to-cyan-400",
+  },
+  {
     title: "Scientific Molding Training",
     description:
       "Build a structured learning path for process windows, gate seal studies, viscosity curves, and setup discipline.",
