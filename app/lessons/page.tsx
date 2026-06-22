@@ -2,6 +2,13 @@ import Link from "next/link";
 
 const featuredLessons = [
   {
+    title: "Process Window",
+    description:
+      "Learn how to bracket fill speed, pack pressure, mold temperature, and cooling time so the team understands the approved low, target, and high limits.",
+    href: "/lessons/process-window",
+    level: "Beginner/Intermediate",
+  },
+  {
     title: "Gate Seal Study",
     description:
       "Learn how to identify gate seal with hold-time steps, part-weight data, and a clear weight plateau before locking in production hold time.",
