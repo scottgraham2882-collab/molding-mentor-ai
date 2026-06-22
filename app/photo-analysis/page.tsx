@@ -3,101 +3,115 @@
 import Link from "next/link";
 import { ChangeEvent, useMemo, useState } from "react";
 
-type DefectCategory = "surface" | "fill" | "dimensional" | "contamination";
+type DefectCategory = "splay" | "short-shot" | "sink-warp" | "burns" | "contamination";
 
 type AnalysisResult = {
   likelyDefect: string;
   confidence: string;
-  evidence: string[];
-  nextChecks: string[];
-  guideHref: string;
-  lessons: { label: string; href: string }[];
+  possibleCauses: string[];
+  processChecks: string[];
+  correctiveActions: string[];
 };
 
 const materials = ["ABS", "PP", "PE", "PC", "Nylon", "PBT", "Acetal", "TPE"];
 
 const defectCategories: { label: string; value: DefectCategory; helper: string }[] = [
-  { label: "Surface mark", value: "surface", helper: "Splay, burns, blush, sink, gloss change" },
-  { label: "Fill problem", value: "fill", helper: "Short shot, hesitation, flow lines, weld lines" },
-  { label: "Dimensional issue", value: "dimensional", helper: "Warp, bow, shrink, sink, flash" },
-  { label: "Contamination", value: "contamination", helper: "Black specks, color streaks, delamination" },
+  { label: "Splay / silver streaks", value: "splay", helper: "Silver lines, moisture streaks, gas trails, surface splash" },
+  { label: "Short shot", value: "short-shot", helper: "Missing features, incomplete fill, thin flow-front edges" },
+  { label: "Sink / warp", value: "sink-warp", helper: "Depressions, bowing, twist, uneven shrink near ribs or bosses" },
+  { label: "Burn marks", value: "burns", helper: "Brown or black marks near end-of-fill, vents, ribs, or weld lines" },
+  { label: "Contamination", value: "contamination", helper: "Black specks, color streaks, delamination, foreign material" },
 ];
 
 const categoryAnalysis: Record<DefectCategory, Omit<AnalysisResult, "confidence">> = {
-  surface: {
-    likelyDefect: "Splay / surface streaking",
-    evidence: [
-      "Surface-mark reports commonly map to moisture, volatiles, air entrapment, or shear-related streaking.",
-      "The selected material should be checked against dryer temperature, dew point, and drying-time requirements before changing press settings.",
-      "Compare the uploaded photo against good-part photos by gate area, flow direction, and end-of-fill location.",
+  splay: {
+    likelyDefect: "Splay / silver streaking",
+    possibleCauses: [
+      "Moisture in the resin, colorant, or regrind stream.",
+      "Excessive screw decompression, high back pressure, or shear that pulls air or volatiles into the melt.",
+      "Restricted vents, poor surface polish, or trapped gas following the flow path.",
     ],
-    nextChecks: [
-      "Verify dryer dew point, hopper residence time, material lot, colorant, and regrind percentage.",
-      "Reduce decompression and review screw recovery, back pressure, and injection speed if moisture checks pass.",
-      "Tag the photo with cavity number and defect location so the tooling team can check vents and polish condition.",
+    processChecks: [
+      "Verify dryer temperature, dew point, hopper residence time, and material lot history for the selected resin.",
+      "Compare screw recovery time, back pressure, screw speed, and decompression against the approved process sheet.",
+      "Map the streak direction from gate to end-of-fill and confirm whether every cavity shows the same pattern.",
     ],
-    guideHref: "/defects",
-    lessons: [
-      { label: "Resin Drying Guide", href: "/materials/resin-drying" },
-      { label: "Material Troubleshooter", href: "/materials/troubleshooter" },
-      { label: "Defect Library", href: "/defects" },
+    correctiveActions: [
+      "Dry or replace suspect material before making major press changes.",
+      "Reduce decompression and make small, documented adjustments to screw speed or back pressure if drying checks pass.",
+      "Clean vents and review the affected cavity surface if the defect repeats in the same location.",
     ],
   },
-  fill: {
+  "short-shot": {
     likelyDefect: "Short shot / incomplete fill",
-    evidence: [
-      "Fill-problem photos should be checked for missing features, thin flow-front edges, weld lines, or hesitation near ribs and long flow paths.",
-      "Likely causes include low melt temperature, low injection speed, pressure limit, undersized shot, blocked gates, or poor venting.",
-      "The most useful comparison is a fill-only progression photo set from the same cavity and material.",
+    possibleCauses: [
+      "Low melt temperature, low injection speed, pressure limiting, or an undersized shot.",
+      "Blocked gate, cold slug, nozzle restriction, check-ring leakage, or insufficient venting.",
+      "Material viscosity shift from lot, moisture, regrind, or temperature variation.",
     ],
-    nextChecks: [
-      "Confirm cushion, transfer position, shot size, fill time, and peak pressure are repeatable and not pressure-limited.",
-      "Inspect gate, runner, nozzle tip, check ring, feed throat, and end-of-fill vents before large process changes.",
-      "Increase speed or temperature only in documented steps and watch for flash or burns.",
+    processChecks: [
+      "Confirm cushion, transfer position, shot size, fill time, and peak pressure are repeatable.",
+      "Check whether the machine is reaching pressure limit before transfer.",
+      "Inspect gate, runner, nozzle tip, check ring, feed throat, and end-of-fill vents.",
     ],
-    guideHref: "/troubleshooting",
-    lessons: [
-      { label: "Decoupled Molding I", href: "/lessons/decoupled-molding-1" },
-      { label: "Process Window Lesson", href: "/lessons/process-window" },
-      { label: "Shot Size Calculator", href: "/calculators/shot-size" },
+    correctiveActions: [
+      "Restore shot size and transfer settings to the approved setup, then document any needed changes.",
+      "Increase injection speed or melt temperature in controlled steps only after restrictions are ruled out.",
+      "Clean or repair blocked flow paths and vents before compensating with excessive pressure.",
     ],
   },
-  dimensional: {
-    likelyDefect: "Warpage / shrink imbalance",
-    evidence: [
-      "Dimensional symptoms often come from unbalanced cooling, uneven wall thickness, gate location, fiber orientation, or pack variation.",
-      "If depressions are visible near ribs or bosses, sink marks may be the primary defect instead of global warp.",
-      "Photo evidence is strongest when paired with dimensions taken at a consistent time after molding.",
+  "sink-warp": {
+    likelyDefect: "Sink marks / warpage",
+    possibleCauses: [
+      "Insufficient pack pressure or pack time before gate seal.",
+      "Uneven wall thickness, hot cores, blocked cooling circuits, or early ejection.",
+      "Unbalanced shrink from gate location, fiber orientation, or cavity-to-cavity cooling variation.",
     ],
-    nextChecks: [
-      "Compare coolant temperature, flow, and blocked circuits across mold halves and cavities.",
-      "Review pack pressure, pack time, gate seal, cooling time, and ejection temperature before changing clamp or fill settings.",
-      "Fixture or measure the part the same way every time so the result is not handling-related.",
+    processChecks: [
+      "Review pack pressure, pack time, cushion, gate-seal evidence, cooling time, and ejection temperature.",
+      "Compare coolant temperature and flow across mold halves, cores, slides, and cavities.",
+      "Measure parts at a consistent time after molding using the same fixture or inspection method.",
     ],
-    guideHref: "/defects",
-    lessons: [
-      { label: "Gate Seal Study", href: "/lessons/gate-seal-study" },
-      { label: "Cycle Time Calculator", href: "/calculators/cycle-time" },
-      { label: "Process Window Lesson", href: "/lessons/process-window" },
+    correctiveActions: [
+      "Run or repeat a gate-seal study before increasing hold time blindly.",
+      "Balance cooling and repair blocked circuits before extending cycle time.",
+      "Increase pack pressure/time in documented steps while watching for flash, sticking, or stress.",
+    ],
+  },
+  burns: {
+    likelyDefect: "Burn marks / trapped gas",
+    possibleCauses: [
+      "Poor venting, high injection speed, diesel effect at end-of-fill, or blocked vents.",
+      "Material degradation from excessive barrel temperature, residence time, screw speed, or back pressure.",
+      "Air traps around ribs, bosses, weld lines, or long flow paths.",
+    ],
+    processChecks: [
+      "Locate burns relative to end-of-fill, weld lines, vents, gates, and cavity number.",
+      "Check fill speed, peak pressure, barrel temperature profile, residence time, and purge condition.",
+      "Inspect vents, parting line, ejector pins, hot-runner drops, and shutoffs for contamination or damage.",
+    ],
+    correctiveActions: [
+      "Clean or improve vents and confirm clamp force is not sealing the vents shut.",
+      "Lower fill speed in the affected zone if venting is adequate and short shots do not appear.",
+      "Reduce melt temperature or residence time if purge material shows degradation.",
     ],
   },
   contamination: {
     likelyDefect: "Black specks / contamination",
-    evidence: [
-      "Contamination reports commonly trace to degraded resin, mixed material, dirty loaders, colorant issues, or dead spots in the barrel or hot runner.",
-      "Dark specks or color streaks should be compared to purge patties and parts from adjacent cavities.",
-      "If the marks follow end-of-fill locations, trapped-gas burn marks should also be considered.",
+    possibleCauses: [
+      "Degraded resin, mixed material, dirty loaders, grinder contamination, or colorant issues.",
+      "Dead spots in the barrel, screw, nozzle, hot runner, or material-handling system.",
+      "Burning from trapped gas when dark marks repeat at end-of-fill.",
     ],
-    nextChecks: [
-      "Purge and inspect hopper, loader, grinder, regrind containers, barrel, screw, nozzle, and hot runner drops.",
-      "Confirm residence time, rear-zone temperature, screw speed, and back pressure are not degrading the material.",
-      "Quarantine suspect resin or colorant lots until the source is verified.",
+    processChecks: [
+      "Compare affected parts with purge patties, startup shots, and adjacent cavities.",
+      "Inspect hopper, loader, grinder, regrind containers, barrel, screw, nozzle, and hot-runner drops.",
+      "Confirm rear-zone temperature, screw speed, back pressure, and residence time are not degrading the resin.",
     ],
-    guideHref: "/materials/troubleshooter",
-    lessons: [
-      { label: "Material Troubleshooter", href: "/materials/troubleshooter" },
-      { label: "Defect Library", href: "/defects" },
-      { label: "Troubleshooting Assistant", href: "/troubleshooting" },
+    correctiveActions: [
+      "Quarantine suspect resin, colorant, or regrind lots until the source is verified.",
+      "Purge and clean the material path from gaylord or dryer through nozzle and hot runner.",
+      "Lower temperatures or residence time if degradation is confirmed by purge evidence.",
     ],
   },
 };
@@ -112,7 +126,7 @@ function buildAnalysis(material: string, category: DefectCategory, hasPhoto: boo
 
 export default function PhotoAnalysisPage() {
   const [material, setMaterial] = useState(materials[0]);
-  const [category, setCategory] = useState<DefectCategory>("surface");
+  const [category, setCategory] = useState<DefectCategory>("splay");
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState("");
   const [analyzed, setAnalyzed] = useState(false);
@@ -140,7 +154,7 @@ export default function PhotoAnalysisPage() {
           <p className="mt-8 text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Defect Photo Analysis</p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">Upload a molded part photo for guided AI review</h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">
-            Add a part image, material, and defect category. The assistant summarizes the likely defect, evidence to verify on the floor, and the best troubleshooting guides and lessons to open next.
+            Add a part image, material, and visible defect type. This placeholder assistant uses rules for now to summarize likely causes, process checks, corrective actions, and the best troubleshooting tools to open next.
           </p>
         </header>
 
@@ -175,7 +189,7 @@ export default function PhotoAnalysisPage() {
               </select>
 
               <fieldset className="mt-5">
-                <legend className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-300">Defect category</legend>
+                <legend className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-300">Visible defect type</legend>
                 <div className="mt-3 grid gap-3">
                   {defectCategories.map((option) => (
                     <label key={option.value} className="rounded-2xl border border-white/10 bg-slate-900/70 p-4 transition has-[:checked]:border-cyan-300/60 has-[:checked]:bg-cyan-300/10">
@@ -199,19 +213,20 @@ export default function PhotoAnalysisPage() {
           <section className="mt-6 rounded-3xl border border-cyan-300/20 bg-slate-900/80 p-5 shadow-xl shadow-cyan-950/20 sm:p-6">
             <div className="grid gap-5 lg:grid-cols-[1fr_20rem]">
               <div>
-                <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-300">AI analysis result</p>
+                <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-300">Rule-based analysis result</p>
                 <h2 className="mt-2 text-3xl font-bold text-white">Likely defect: {result.likelyDefect}</h2>
                 <p className="mt-2 text-sm font-semibold text-cyan-200">Confidence: {result.confidence}</p>
                 <div className="mt-5 grid gap-5 md:grid-cols-2">
-                  <section><h3 className="font-bold text-white">Evidence to verify</h3><ul className="mt-3 space-y-2 text-sm leading-6 text-slate-300">{result.evidence.map((item) => <li key={item}>• {item}</li>)}</ul></section>
-                  <section><h3 className="font-bold text-white">Recommended next checks</h3><ul className="mt-3 space-y-2 text-sm leading-6 text-slate-300">{result.nextChecks.map((item) => <li key={item}>• {item}</li>)}</ul></section>
+                  <section><h3 className="font-bold text-white">Possible causes</h3><ul className="mt-3 space-y-2 text-sm leading-6 text-slate-300">{result.possibleCauses.map((item) => <li key={item}>• {item}</li>)}</ul></section>
+                  <section><h3 className="font-bold text-white">Process checks</h3><ul className="mt-3 space-y-2 text-sm leading-6 text-slate-300">{result.processChecks.map((item) => <li key={item}>• {item}</li>)}</ul></section>
+                  <section className="md:col-span-2"><h3 className="font-bold text-white">Corrective actions</h3><ul className="mt-3 space-y-2 text-sm leading-6 text-slate-300">{result.correctiveActions.map((item) => <li key={item}>• {item}</li>)}</ul></section>
                 </div>
               </div>
               <aside className="rounded-3xl border border-white/10 bg-white/10 p-5">
                 <h3 className="text-xl font-bold text-white">Open next</h3>
                 <div className="mt-4 flex flex-col gap-3">
-                  <Link href={result.guideHref} className="rounded-2xl border border-cyan-300/30 px-4 py-3 text-center font-bold text-cyan-100 transition hover:bg-cyan-300/10">Troubleshooting guide →</Link>
-                  {result.lessons.map((lesson) => <Link key={lesson.href} href={lesson.href} className="rounded-2xl border border-white/10 px-4 py-3 text-center font-bold text-slate-100 transition hover:bg-white/10">{lesson.label} →</Link>)}
+                  <Link href="/defects" className="rounded-2xl border border-cyan-300/30 px-4 py-3 text-center font-bold text-cyan-100 transition hover:bg-cyan-300/10">Defect Library →</Link>
+                  <Link href="/troubleshooting" className="rounded-2xl border border-emerald-300/30 px-4 py-3 text-center font-bold text-emerald-100 transition hover:bg-emerald-300/10">Troubleshooting Assistant →</Link>
                 </div>
               </aside>
             </div>
