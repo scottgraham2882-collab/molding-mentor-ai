@@ -105,9 +105,9 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-violet-300 to-fuchsia-400",
   },
   {
-    title: "Process Calculator",
+    title: "Scientific Molding Calculator",
     description:
-      "Estimate clamp tonnage, shot utilization, cycle time, and cushion consistency with quick shop-floor calculators.",
+      "Estimate clamp tonnage, total shot weight, and screw recovery time with mobile-friendly scientific molding calculator cards.",
     href: "/calculators",
     accent: "from-amber-300 to-orange-400",
   },
