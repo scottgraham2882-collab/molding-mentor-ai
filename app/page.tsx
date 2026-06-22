@@ -84,6 +84,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-teal-300 to-emerald-400",
   },
   {
+    title: "Quality Hold / Containment Tracker",
+    description:
+      "Create, save, edit, delete, total, and print containment records for suspect parts held by quality.",
+    href: "/quality/containment",
+    accent: "from-amber-300 to-emerald-400",
+  },
+  {
     title: "Scrap Tracker",
     description:
       "Add, edit, and review scrap entries with total quantity and defect-type summaries stored in this browser.",
