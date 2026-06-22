@@ -23,6 +23,14 @@ const dashboardCards: DashboardCard[] = [
     href: "/troubleshooting",
     accent: "from-emerald-300 to-teal-400",
   },
+
+  {
+    title: "Certification Center",
+    description:
+      "Track completed training modules, quiz scores, certification progress, earned badges, and generate printable certificates.",
+    href: "/certifications",
+    accent: "from-emerald-300 to-cyan-400",
+  },
   {
     title: "Operator Safety & Startup",
     description:
