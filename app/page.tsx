@@ -206,6 +206,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Training Assignment Manager",
+    description:
+      "Assign modules, track due dates, status, quiz scores, supervisor notes, completion percentage, and print training reports.",
+    href: "/training/assignments",
+    accent: "from-emerald-300 to-cyan-400",
+  },
+  {
     title: "Operator Safety & Startup",
     description:
       "Complete Operator Training Module 1 with machine-safety basics, startup verification, an interactive checklist, quiz, and certificate.",
