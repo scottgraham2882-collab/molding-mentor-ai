@@ -270,6 +270,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Training Compliance Dashboard",
+    description:
+      "Enter compliance snapshots, monitor assignments and certifications, review saved history, edit or delete records, and print compliance reports.",
+    href: "/training/compliance",
+    accent: "from-cyan-300 to-violet-400",
+  },
+  {
     title: "Employee Training Record",
     description:
       "Create, save, edit, filter, and print employee training records with quiz scores, pass/fail status, certifications, expiration alerts, and supervisor sign-off.",
