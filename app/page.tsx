@@ -62,6 +62,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-emerald-400",
   },
   {
+    title: "Startup Approval System",
+    description:
+      "Complete startup sign-offs with interactive checks, approval status, saved approvals, edit/delete controls, and print-friendly reports.",
+    href: "/startup-approval",
+    accent: "from-emerald-300 to-cyan-400",
+  },
+  {
     title: "Shift Handoff Logs",
     description:
       "Record machine status, open issues, process changes, quality holds, downtime notes, and instructions for the next shift.",
