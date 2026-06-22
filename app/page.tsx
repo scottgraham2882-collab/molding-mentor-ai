@@ -53,6 +53,13 @@ const dashboardCards: DashboardCard[] = [
     href: "/process-change-log",
     accent: "from-cyan-300 to-emerald-400",
   },
+  {
+    title: "Mold History Database",
+    description:
+      "Add, search, edit, delete, save, and print mold history records with tooling notes, repair history, and process knowledge.",
+    href: "/molds",
+    accent: "from-cyan-300 to-emerald-400",
+  },
 
   {
     title: "Mold Change Checklist",
