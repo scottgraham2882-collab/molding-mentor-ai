@@ -256,6 +256,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Certification Management Center",
+    description:
+      "Create, save, edit, filter, delete, and print employee certification records with status counts and 30-day expiration visibility.",
+    href: "/training/certifications",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Training Assignment Manager",
     description:
       "Assign modules, track due dates, status, quiz scores, supervisor notes, completion percentage, and print training reports.",
