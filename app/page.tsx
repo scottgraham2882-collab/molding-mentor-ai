@@ -75,6 +75,14 @@ const dashboardCards: DashboardCard[] = [
     href: "/maintenance",
     accent: "from-emerald-300 to-teal-400",
   },
+
+  {
+    title: "First Article Inspection Report",
+    description:
+      "Create, save, edit, delete, and print quality first article inspection reports with critical dimensions and approval status.",
+    href: "/quality/first-article",
+    accent: "from-teal-300 to-emerald-400",
+  },
   {
     title: "Scrap Tracker",
     description:
