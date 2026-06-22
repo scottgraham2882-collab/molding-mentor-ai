@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { demoProgress, getProgressSummary } from "../lib/progress-data";
 
 type DashboardCard = {
   title: string;
@@ -8,7 +9,36 @@ type DashboardCard = {
   accent: string;
 };
 
+const progressSummary = getProgressSummary(demoProgress);
+
+const dashboardWidgets = [
+  { label: "Training progress", value: `${progressSummary.trainingProgress}%`, description: "Completed lesson path" },
+  { label: "Certifications earned", value: String(progressSummary.certificationsEarned), description: "Printable credentials" },
+  { label: "Lessons remaining", value: String(progressSummary.lessonsRemaining), description: "Modules left to finish" },
+];
+
 const dashboardCards: DashboardCard[] = [
+  {
+    title: "User Profile",
+    description:
+      "Review your account, completed lessons, quiz scores, certifications, calculator history, and AI Coach conversations.",
+    href: "/profile",
+    accent: "from-cyan-300 to-blue-400",
+  },
+  {
+    title: "User Login",
+    description:
+      "Log in to restore your personalized training dashboard and progress-tracking workspace.",
+    href: "/account/login",
+    accent: "from-blue-300 to-violet-400",
+  },
+  {
+    title: "User Registration",
+    description:
+      "Create a user account for saved training activity, credentials, calculator runs, and coach chats.",
+    href: "/account/register",
+    accent: "from-emerald-300 to-lime-400",
+  },
   {
     title: "Process Sheet Builder",
     description:
@@ -124,6 +154,16 @@ export default function Home() {
             </p>
           </div>
         </header>
+
+        <section aria-label="Progress widgets" className="grid gap-4 sm:grid-cols-3">
+          {dashboardWidgets.map((widget) => (
+            <article key={widget.label} className="rounded-[1.5rem] border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-xl shadow-cyan-950/20">
+              <p className="text-4xl font-black text-white">{widget.value}</p>
+              <h2 className="mt-2 text-sm font-black uppercase tracking-[0.2em] text-cyan-100">{widget.label}</h2>
+              <p className="mt-2 text-sm text-slate-300">{widget.description}</p>
+            </article>
+          ))}
+        </section>
 
         <section
           aria-label="AI Molding Coach tools"
