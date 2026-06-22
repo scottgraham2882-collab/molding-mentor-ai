@@ -1,5 +1,15 @@
 import Link from "next/link";
 
+const featuredLessons = [
+  {
+    title: "Decoupled Molding I",
+    description:
+      "Learn how to establish a fill-only process, set a reliable transfer position, and separate fill from pack before troubleshooting part quality.",
+    href: "/lessons/decoupled-molding-1",
+    level: "Beginner/Intermediate",
+  },
+];
+
 const lessonModules = [
   {
     title: "Process window fundamentals",
@@ -62,6 +72,23 @@ export default function LessonsPage() {
             </div>
           </div>
         </header>
+
+        <section className="mt-6 grid gap-4">
+          {featuredLessons.map((lesson) => (
+            <Link
+              key={lesson.title}
+              href={lesson.href}
+              className="rounded-3xl border border-violet-300/30 bg-violet-300/10 p-5 shadow-xl shadow-violet-950/20 backdrop-blur transition hover:-translate-y-1 hover:border-violet-200 sm:p-6"
+            >
+              <span className="rounded-full bg-violet-300 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-slate-950">
+                {lesson.level}
+              </span>
+              <h2 className="mt-4 text-2xl font-bold text-white">{lesson.title}</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-300 sm:text-base">{lesson.description}</p>
+              <p className="mt-5 text-sm font-bold text-violet-100">Start lesson →</p>
+            </Link>
+          ))}
+        </section>
 
         <section className="mt-6 grid gap-4 md:grid-cols-2">
           {lessonModules.map((module) => (
