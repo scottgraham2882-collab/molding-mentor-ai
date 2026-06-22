@@ -90,6 +90,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-emerald-400",
   },
   {
+    title: "Meeting Notes & Follow-Up Tracker",
+    description:
+      "Create, save, edit, delete, filter, and print meeting notes with attendees, decisions, action items, owners, due dates, and follow-up notes.",
+    href: "/meetings",
+    accent: "from-violet-300 to-cyan-400",
+  },
+  {
     title: "Plant Daily Report",
     description:
       "Create, save, edit, delete, review, and print daily plant reports covering production, scrap, downtime, machines, quality, safety, staffing, maintenance, and next-shift priorities.",
