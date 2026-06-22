@@ -270,6 +270,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Training Renewal Reminder System",
+    description:
+      "Add, save, edit, delete, filter, count, and print employee training and certification renewal reminders with 30-day due-soon visibility.",
+    href: "/training/renewals",
+    accent: "from-amber-300 to-cyan-400",
+  },
+  {
     title: "Training Compliance Dashboard",
     description:
       "Enter compliance snapshots, monitor assignments and certifications, review saved history, edit or delete records, and print compliance reports.",
