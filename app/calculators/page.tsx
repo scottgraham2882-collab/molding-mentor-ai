@@ -13,12 +13,21 @@ type NumberFieldProps = {
   onChange: (value: string) => void;
 };
 
+type CalculatorCardProps = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  accent: string;
+  children: React.ReactNode;
+  result: React.ReactNode;
+};
+
 function parseInput(value: string) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
-function formatNumber(value: number, digits = 1) {
+function formatNumber(value: number, digits = 2) {
   if (!Number.isFinite(value)) {
     return "--";
   }
@@ -62,62 +71,64 @@ function NumberField({
   );
 }
 
-function ResultCard({ label, value, note }: { label: string; value: string; note: string }) {
+function CalculatorCard({
+  eyebrow,
+  title,
+  description,
+  accent,
+  children,
+  result,
+}: CalculatorCardProps) {
   return (
-    <div className="rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-4">
+    <article className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/10 p-5 shadow-xl shadow-slate-950/20 backdrop-blur sm:p-6">
+      <div className={`h-1.5 w-24 rounded-full bg-gradient-to-r ${accent}`} aria-hidden="true" />
+      <p className="mt-5 text-xs font-black uppercase tracking-[0.22em] text-cyan-200">{eyebrow}</p>
+      <h2 className="mt-2 text-2xl font-bold text-white">{title}</h2>
+      <p className="mt-2 text-sm leading-6 text-slate-300">{description}</p>
+      <div className="mt-5 grid gap-4">{children}</div>
+      <div className="mt-5 flex-1 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-4">
+        {result}
+      </div>
+    </article>
+  );
+}
+
+function Result({ label, value, note }: { label: string; value: string; note: string }) {
+  return (
+    <>
       <p className="text-xs font-bold uppercase tracking-[0.22em] text-cyan-200">{label}</p>
-      <p className="mt-2 text-3xl font-black text-white">{value}</p>
+      <p className="mt-2 text-3xl font-black text-white sm:text-4xl">{value}</p>
       <p className="mt-2 text-sm leading-6 text-slate-300">{note}</p>
-    </div>
+    </>
   );
 }
 
 export default function CalculatorsPage() {
   const [projectedArea, setProjectedArea] = useState("24");
-  const [cavityPressure, setCavityPressure] = useState("4");
-  const [safetyFactor, setSafetyFactor] = useState("10");
+  const [cavityPressure, setCavityPressure] = useState("4000");
 
-  const [shotWeight, setShotWeight] = useState("3.2");
-  const [barrelCapacity, setBarrelCapacity] = useState("8");
+  const [partWeight, setPartWeight] = useState("0.35");
+  const [runnerWeight, setRunnerWeight] = useState("0.2");
+  const [numberOfCavities, setNumberOfCavities] = useState("4");
 
-  const [fillTime, setFillTime] = useState("1.2");
-  const [packTime, setPackTime] = useState("4");
-  const [coolingTime, setCoolingTime] = useState("18");
-  const [moldOpenTime, setMoldOpenTime] = useState("2");
-  const [ejectionTime, setEjectionTime] = useState("1.5");
-  const [moldCloseTime, setMoldCloseTime] = useState("1.5");
+  const [screwRpm, setScrewRpm] = useState("120");
+  const [shotSize, setShotSize] = useState("1.6");
+  const [screwCapacity, setScrewCapacity] = useState("0.08");
 
-  const [targetCushion, setTargetCushion] = useState("0.20");
-  const [lowCushion, setLowCushion] = useState("0.16");
-  const [highCushion, setHighCushion] = useState("0.24");
-
-  const clampTonnage = useMemo(() => {
-    const baseTons = parseInput(projectedArea) * parseInput(cavityPressure);
-    return baseTons * (1 + parseInput(safetyFactor) / 100);
-  }, [projectedArea, cavityPressure, safetyFactor]);
-
-  const shotUsage = useMemo(() => {
-    const capacity = parseInput(barrelCapacity);
-    return capacity > 0 ? (parseInput(shotWeight) / capacity) * 100 : 0;
-  }, [shotWeight, barrelCapacity]);
-
-  const cycleTime = useMemo(
-    () =>
-      parseInput(fillTime) +
-      parseInput(packTime) +
-      parseInput(coolingTime) +
-      parseInput(moldOpenTime) +
-      parseInput(ejectionTime) +
-      parseInput(moldCloseTime),
-    [fillTime, packTime, coolingTime, moldOpenTime, ejectionTime, moldCloseTime],
+  const clampTonnage = useMemo(
+    () => (parseInput(projectedArea) * parseInput(cavityPressure)) / 2000,
+    [projectedArea, cavityPressure],
   );
 
-  const cushionSpread = useMemo(
-    () => Math.max(0, parseInput(highCushion) - parseInput(lowCushion)),
-    [highCushion, lowCushion],
+  const totalShotWeight = useMemo(
+    () => parseInput(partWeight) * parseInput(numberOfCavities) + parseInput(runnerWeight),
+    [partWeight, numberOfCavities, runnerWeight],
   );
-  const cushionWindow = parseInput(targetCushion) * 0.2;
-  const cushionStatus = cushionSpread <= cushionWindow ? "Stable" : "Review variation";
+
+  const recoveryTime = useMemo(() => {
+    const capacityPerSecond = (parseInput(screwRpm) * parseInput(screwCapacity)) / 60;
+    return capacityPerSecond > 0 ? parseInput(shotSize) / capacityPerSecond : 0;
+  }, [screwCapacity, screwRpm, shotSize]);
 
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100 sm:px-6 lg:px-8">
@@ -129,106 +140,73 @@ export default function CalculatorsPage() {
               href="/"
               className="inline-flex items-center rounded-full border border-cyan-300/30 px-4 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-200 hover:bg-cyan-300/10"
             >
-              ← Back to coach
+              ← Back to dashboard
             </Link>
             <p className="mt-8 text-sm font-semibold uppercase tracking-[0.3em] text-amber-300">
-              Process Calculator
+              Scientific Molding Calculator
             </p>
             <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Quick molding process estimates
+              Shop-floor molding calculations
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">
-              Use these simple calculators for first-pass setup conversations, then confirm with actual machine data, material behavior, and part quality.
+              Estimate clamp force, total shot weight, and screw recovery time from the core values molding teams review during setup and process validation.
             </p>
           </div>
         </header>
 
-        <section className="mt-6 grid gap-4 lg:grid-cols-2 lg:gap-6">
-          <article className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-xl shadow-slate-950/20 backdrop-blur sm:p-6">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-              <h2 className="text-2xl font-bold text-white">Clamp tonnage estimate</h2>
-              <Link
-                href="/calculators/clamp-tonnage"
-                className="inline-flex w-fit items-center rounded-full border border-amber-300/30 px-3 py-1.5 text-sm font-bold text-amber-100 transition hover:border-amber-200 hover:bg-amber-300/10"
-              >
-                Open full calculator →
-              </Link>
-            </div>
-            <p className="mt-2 text-sm leading-6 text-slate-300">
-              Estimate clamp force from projected area and expected plastic pressure.
-            </p>
-            <div className="mt-5 grid gap-4 sm:grid-cols-3">
-              <NumberField id="projected-area" label="Projected area" value={projectedArea} suffix="in²" onChange={setProjectedArea} />
-              <NumberField id="cavity-pressure" label="Pressure factor" value={cavityPressure} suffix="tons/in²" onChange={setCavityPressure} />
-              <NumberField id="safety-factor" label="Safety factor" value={safetyFactor} suffix="%" onChange={setSafetyFactor} />
-            </div>
-            <div className="mt-5">
-              <ResultCard label="Estimated clamp" value={`${formatNumber(clampTonnage)} tons`} note="Formula: projected area × pressure factor × safety factor." />
-            </div>
-          </article>
+        <section className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6" aria-label="Scientific molding calculators">
+          <CalculatorCard
+            eyebrow="Clamp force"
+            title="Clamp Tonnage Calculator"
+            description="Calculate the minimum clamp force needed to hold the mold closed during injection."
+            accent="from-amber-300 to-orange-400"
+            result={
+              <Result
+                label="Required Clamp Tonnage"
+                value={`${formatNumber(clampTonnage, 1)} tons`}
+                note="Formula: projected area × cavity pressure ÷ 2,000. Add your plant's preferred safety margin before selecting a press."
+              />
+            }
+          >
+            <NumberField id="projected-area" label="Projected Area" value={projectedArea} suffix="sq in" onChange={setProjectedArea} />
+            <NumberField id="cavity-pressure" label="Cavity Pressure" value={cavityPressure} suffix="psi" step="50" onChange={setCavityPressure} />
+          </CalculatorCard>
 
-          <article className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-xl shadow-slate-950/20 backdrop-blur sm:p-6">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-              <h2 className="text-2xl font-bold text-white">Shot size usage percentage</h2>
-              <Link
-                href="/calculators/shot-size"
-                className="inline-flex w-fit items-center rounded-full border border-cyan-300/30 px-3 py-1.5 text-sm font-bold text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/10"
-              >
-                Open full calculator →
-              </Link>
-            </div>
-            <p className="mt-2 text-sm leading-6 text-slate-300">
-              Compare total shot weight to machine barrel capacity.
-            </p>
-            <div className="mt-5 grid gap-4 sm:grid-cols-2">
-              <NumberField id="shot-weight" label="Part + runner shot" value={shotWeight} suffix="oz" onChange={setShotWeight} />
-              <NumberField id="barrel-capacity" label="Barrel capacity" value={barrelCapacity} suffix="oz" onChange={setBarrelCapacity} />
-            </div>
-            <div className="mt-5">
-              <ResultCard label="Barrel usage" value={`${formatNumber(shotUsage)}%`} note="Many processes target a comfortable mid-range shot usage instead of extremes." />
-            </div>
-          </article>
+          <CalculatorCard
+            eyebrow="Shot planning"
+            title="Shot Size Calculator"
+            description="Estimate the total material weight required for one complete shot."
+            accent="from-cyan-300 to-blue-400"
+            result={
+              <Result
+                label="Total Shot Weight"
+                value={`${formatNumber(totalShotWeight, 2)} oz`}
+                note="Formula: part weight × number of cavities + runner weight. Keep units consistent for all weight inputs."
+              />
+            }
+          >
+            <NumberField id="part-weight" label="Part Weight" value={partWeight} suffix="oz" step="0.01" onChange={setPartWeight} />
+            <NumberField id="runner-weight" label="Runner Weight" value={runnerWeight} suffix="oz" step="0.01" onChange={setRunnerWeight} />
+            <NumberField id="number-of-cavities" label="Number of Cavities" value={numberOfCavities} step="1" onChange={setNumberOfCavities} />
+          </CalculatorCard>
 
-          <article className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-xl shadow-slate-950/20 backdrop-blur sm:p-6">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-              <h2 className="text-2xl font-bold text-white">Cycle time estimator</h2>
-              <Link
-                href="/calculators/cycle-time"
-                className="inline-flex w-fit items-center rounded-full border border-emerald-300/30 px-3 py-1.5 text-sm font-bold text-emerald-100 transition hover:border-emerald-200 hover:bg-emerald-300/10"
-              >
-                Open full calculator →
-              </Link>
-            </div>
-            <p className="mt-2 text-sm leading-6 text-slate-300">
-              Add core phases together to estimate total cycle time.
-            </p>
-            <div className="mt-5 grid gap-4 sm:grid-cols-2">
-              <NumberField id="fill-time" label="Fill time" value={fillTime} suffix="sec" onChange={setFillTime} />
-              <NumberField id="pack-time" label="Pack / hold time" value={packTime} suffix="sec" onChange={setPackTime} />
-              <NumberField id="cooling-time" label="Cooling time" value={coolingTime} suffix="sec" onChange={setCoolingTime} />
-              <NumberField id="mold-open-time" label="Mold open time" value={moldOpenTime} suffix="sec" onChange={setMoldOpenTime} />
-              <NumberField id="ejection-time" label="Ejection time" value={ejectionTime} suffix="sec" onChange={setEjectionTime} />
-              <NumberField id="mold-close-time" label="Mold close time" value={moldCloseTime} suffix="sec" onChange={setMoldCloseTime} />
-            </div>
-            <div className="mt-5">
-              <ResultCard label="Estimated cycle" value={`${formatNumber(cycleTime)} sec`} note={`Estimated output is ${formatNumber(cycleTime > 0 ? 3600 / cycleTime : 0, 0)} parts per hour. Use as a planning number before confirming recovery, cooling, and robot timing.`} />
-            </div>
-          </article>
-
-          <article className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-xl shadow-slate-950/20 backdrop-blur sm:p-6">
-            <h2 className="text-2xl font-bold text-white">Cushion consistency checklist</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-300">
-              Check whether observed cushion readings stay within a simple ±20% target window.
-            </p>
-            <div className="mt-5 grid gap-4 sm:grid-cols-3">
-              <NumberField id="target-cushion" label="Target cushion" value={targetCushion} suffix="in" step="0.01" onChange={setTargetCushion} />
-              <NumberField id="low-cushion" label="Lowest reading" value={lowCushion} suffix="in" step="0.01" onChange={setLowCushion} />
-              <NumberField id="high-cushion" label="Highest reading" value={highCushion} suffix="in" step="0.01" onChange={setHighCushion} />
-            </div>
-            <div className="mt-5">
-              <ResultCard label="Checklist result" value={cushionStatus} note={`Observed spread is ${formatNumber(cushionSpread, 2)} in. Verify non-return valve, transfer stability, and material feed if variation grows.`} />
-            </div>
-          </article>
+          <CalculatorCard
+            eyebrow="Plasticating"
+            title="Recovery Time Calculator"
+            description="Approximate screw recovery time based on screw speed and measured output capacity."
+            accent="from-emerald-300 to-lime-400"
+            result={
+              <Result
+                label="Estimated Recovery Time"
+                value={`${formatNumber(recoveryTime, 1)} sec`}
+                note="Formula: shot size ÷ ((screw RPM × screw capacity) ÷ 60). Confirm against actual recovery before locking cycle time."
+              />
+            }
+          >
+            <NumberField id="screw-rpm" label="Screw RPM" value={screwRpm} suffix="rpm" step="1" onChange={setScrewRpm} />
+            <NumberField id="shot-size" label="Shot Size" value={shotSize} suffix="oz" step="0.01" onChange={setShotSize} />
+            <NumberField id="screw-capacity" label="Screw Capacity" value={screwCapacity} suffix="oz/rev" step="0.01" onChange={setScrewCapacity} />
+          </CalculatorCard>
         </section>
       </div>
     </main>
