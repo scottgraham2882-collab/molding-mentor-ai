@@ -61,6 +61,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Scrap Tracker",
+    description:
+      "Add, edit, and review scrap entries with total quantity and defect-type summaries stored in this browser.",
+    href: "/scrap",
+    accent: "from-rose-300 to-orange-400",
+  },
+  {
     title: "AI Troubleshooting Coach",
     description:
       "Chat through a molding problem to get targeted questions, likely root causes, corrective actions, and links to lessons and defect guides.",
