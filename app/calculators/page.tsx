@@ -164,7 +164,15 @@ export default function CalculatorsPage() {
           </article>
 
           <article className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-xl shadow-slate-950/20 backdrop-blur sm:p-6">
-            <h2 className="text-2xl font-bold text-white">Shot size usage percentage</h2>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <h2 className="text-2xl font-bold text-white">Shot size usage percentage</h2>
+              <Link
+                href="/calculators/shot-size"
+                className="inline-flex w-fit items-center rounded-full border border-cyan-300/30 px-3 py-1.5 text-sm font-bold text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/10"
+              >
+                Open full calculator →
+              </Link>
+            </div>
             <p className="mt-2 text-sm leading-6 text-slate-300">
               Compare total shot weight to machine barrel capacity.
             </p>
