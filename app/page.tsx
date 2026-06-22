@@ -91,6 +91,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-amber-300 to-emerald-400",
   },
   {
+    title: "Corrective Action / Root Cause Report",
+    description:
+      "Create, save, edit, filter, delete, and print corrective action reports with containment, root cause, and verification notes.",
+    href: "/quality/corrective-action",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Scrap Tracker",
     description:
       "Add, edit, and review scrap entries with total quantity and defect-type summaries stored in this browser.",
