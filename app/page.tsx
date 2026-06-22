@@ -31,6 +31,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-violet-300 to-fuchsia-400",
   },
   {
+    title: "Operator Safety Startup",
+    description:
+      "Complete Operator Training Module 1 with safety basics, startup verification, checklist progress, quiz, and completion certificate.",
+    href: "/training/operator-safety-startup",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Process Calculator",
     description:
       "Estimate clamp tonnage, shot utilization, cycle time, and cushion consistency with quick shop-floor calculators.",

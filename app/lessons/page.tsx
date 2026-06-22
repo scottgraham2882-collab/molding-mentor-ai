@@ -2,6 +2,13 @@ import Link from "next/link";
 
 const featuredLessons = [
   {
+    title: "Operator Training Module 1: Machine Safety & Startup Checklist",
+    description:
+      "Review molding-cell safety basics, PPE, lockout/tagout awareness, material and mold verification, first article inspection, and shift handoff with an interactive checklist and quiz.",
+    href: "/training/operator-safety-startup",
+    level: "Operator",
+  },
+  {
     title: "Process Window",
     description:
       "Learn how to bracket fill speed, pack pressure, mold temperature, and cooling time so the team understands the approved low, target, and high limits.",
