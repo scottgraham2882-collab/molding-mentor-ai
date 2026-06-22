@@ -227,6 +227,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-emerald-400",
   },
   {
+    title: "Mold Setup Training Module",
+    description:
+      "Train setup technicians on safe mold changes, verification, crane awareness, utilities, mold protection, automation checks, first shots, common mistakes, and quiz completion.",
+    href: "/training/mold-setup",
+    accent: "from-emerald-300 to-cyan-400",
+  },
+  {
     title: "Scientific Molding Training",
     description:
       "Build a structured learning path for process windows, gate seal studies, viscosity curves, and setup discipline.",
