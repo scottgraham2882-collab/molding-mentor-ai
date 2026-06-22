@@ -234,6 +234,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Process Technician Training Module",
+    description:
+      "Train process technicians on process sheet verification, fill-only setup, transfer, cushion, pack/hold, gate seal, recovery, cooling validation, data troubleshooting, and quiz completion.",
+    href: "/training/process-technician",
+    accent: "from-cyan-300 to-amber-400",
+  },
+  {
     title: "Scientific Molding Training",
     description:
       "Build a structured learning path for process windows, gate seal studies, viscosity curves, and setup discipline.",
