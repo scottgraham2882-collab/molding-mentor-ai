@@ -192,6 +192,13 @@ const dashboardCards: DashboardCard[] = [
   },
 
   {
+    title: "Weekly Management Report",
+    description:
+      "Create, save, edit, delete, view, and print weekly production, quality, downtime, safety, training, and corrective-action reports.",
+    href: "/reports/weekly",
+    accent: "from-cyan-300 to-violet-400",
+  },
+  {
     title: "Plant Management Mode",
     description:
       "Manage multiple users, employee training records, certification tracking, shift assignments, reports, and supervisor reviews.",
