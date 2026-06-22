@@ -60,6 +60,13 @@ const dashboardCards: DashboardCard[] = [
     href: "/molds",
     accent: "from-cyan-300 to-emerald-400",
   },
+  {
+    title: "Machine History Database",
+    description:
+      "Add, search, edit, delete, save, and print machine history records with maintenance, hydraulic, electrical, automation, and process notes.",
+    href: "/machines",
+    accent: "from-emerald-300 to-cyan-400",
+  },
 
   {
     title: "Mold Change Checklist",
