@@ -120,6 +120,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-teal-300 to-emerald-400",
   },
   {
+    title: "Audit Checklist System",
+    description:
+      "Create layered process, 5S, safety, mold setup, first article, and process sheet audits with pass/fail checks, corrective actions, saved records, filters, and print reports.",
+    href: "/quality/audits",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Quality Hold / Containment Tracker",
     description:
       "Create, save, edit, delete, total, and print containment records for suspect parts held by quality.",
