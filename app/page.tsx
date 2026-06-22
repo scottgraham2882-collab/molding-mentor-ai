@@ -277,6 +277,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-violet-400",
   },
   {
+    title: "Employee Training Plan Builder",
+    description:
+      "Create, save, edit, filter, delete, track progress, and print employee training plans with role goals, skill gaps, modules, certifications, mentors, dates, status, and supervisor notes.",
+    href: "/training/plan-builder",
+    accent: "from-emerald-300 to-violet-400",
+  },
+  {
     title: "Employee Training Record",
     description:
       "Create, save, edit, filter, and print employee training records with quiz scores, pass/fail status, certifications, expiration alerts, and supervisor sign-off.",
