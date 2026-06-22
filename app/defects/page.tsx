@@ -98,20 +98,12 @@ export default function DefectsPage() {
     <main className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100 sm:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-6xl">
         <header className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-2xl shadow-cyan-950/30 backdrop-blur sm:p-8 lg:p-10">
-          <nav className="flex flex-col gap-3 sm:flex-row">
-            <Link
-              href="/"
-              className="inline-flex items-center justify-center rounded-full border border-cyan-300/30 px-4 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-200 hover:bg-cyan-300/10"
-            >
-              ← Back to coach
-            </Link>
-            <Link
-              href="/troubleshooting"
-              className="inline-flex items-center justify-center rounded-full bg-cyan-300 px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-cyan-200"
-            >
-              Open Troubleshooting Assistant
-            </Link>
-          </nav>
+          <Link
+            href="/"
+            className="inline-flex items-center rounded-full border border-cyan-300/30 px-4 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-200 hover:bg-cyan-300/10"
+          >
+            ← Back to coach
+          </Link>
           <p className="mt-8 text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">
             Defect Library
           </p>
