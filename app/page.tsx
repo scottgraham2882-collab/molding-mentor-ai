@@ -61,6 +61,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Preventive Maintenance Tracker",
+    description:
+      "Schedule PM follow-ups, log maintenance tasks, edit saved records, and review upcoming due dates from browser storage.",
+    href: "/maintenance",
+    accent: "from-emerald-300 to-teal-400",
+  },
+  {
     title: "Scrap Tracker",
     description:
       "Add, edit, and review scrap entries with total quantity and defect-type summaries stored in this browser.",
