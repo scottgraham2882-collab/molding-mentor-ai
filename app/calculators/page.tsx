@@ -141,7 +141,15 @@ export default function CalculatorsPage() {
 
         <section className="mt-6 grid gap-4 lg:grid-cols-2 lg:gap-6">
           <article className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-xl shadow-slate-950/20 backdrop-blur sm:p-6">
-            <h2 className="text-2xl font-bold text-white">Clamp tonnage estimate</h2>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <h2 className="text-2xl font-bold text-white">Clamp tonnage estimate</h2>
+              <Link
+                href="/calculators/clamp-tonnage"
+                className="inline-flex w-fit items-center rounded-full border border-amber-300/30 px-3 py-1.5 text-sm font-bold text-amber-100 transition hover:border-amber-200 hover:bg-amber-300/10"
+              >
+                Open full calculator →
+              </Link>
+            </div>
             <p className="mt-2 text-sm leading-6 text-slate-300">
               Estimate clamp force from projected area and expected plastic pressure.
             </p>
