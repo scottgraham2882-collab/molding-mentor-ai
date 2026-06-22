@@ -134,6 +134,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-emerald-400",
   },
   {
+    title: "Customer Complaint Tracker",
+    description:
+      "Create, save, edit, delete, filter, and print 8D-style customer complaint records for quality follow-up.",
+    href: "/quality/customer-complaints",
+    accent: "from-emerald-300 to-cyan-400",
+  },
+  {
     title: "Scrap Tracker",
     description:
       "Add, edit, and review scrap entries with total quantity and defect-type summaries stored in this browser.",
