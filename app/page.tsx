@@ -54,6 +54,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-emerald-400",
   },
   {
+    title: "Downtime Tracker",
+    description:
+      "Log downtime events, edit saved entries, and review total minutes with reason-code summaries from browser storage.",
+    href: "/downtime",
+    accent: "from-emerald-300 to-cyan-400",
+  },
+  {
     title: "AI Troubleshooting Coach",
     description:
       "Chat through a molding problem to get targeted questions, likely root causes, corrective actions, and links to lessons and defect guides.",
