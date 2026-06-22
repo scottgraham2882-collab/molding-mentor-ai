@@ -47,6 +47,14 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-lime-300 to-cyan-400",
   },
   {
+    title: "Work Instruction Builder",
+    description:
+      "Create, save, filter, edit, delete, and print controlled work instructions with PPE, tools, safety warnings, quality checks, approvals, and image placeholders.",
+    href: "/work-instructions",
+    accent: "from-emerald-300 to-cyan-400",
+  },
+
+  {
     title: "Process Change Log",
     description:
       "Create before-and-after process change records with reasons, results, notes, browser storage, filters, editing, deletion, and print view.",
@@ -365,8 +373,13 @@ export default function Home() {
           ))}
         </section>
 
+        <div>
+          <p className="text-sm font-black uppercase tracking-[0.28em] text-emerald-300">Management Tools</p>
+          <h2 className="mt-2 text-3xl font-black tracking-tight text-white">Run the plant from one mobile-first workspace</h2>
+        </div>
+
         <section
-          aria-label="AI Molding Coach tools"
+          aria-label="Management Tools"
           className="grid gap-4 sm:grid-cols-2 lg:gap-6"
         >
           {dashboardCards.map((card) => {
