@@ -248,6 +248,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Employee Training Record",
+    description:
+      "Create, save, edit, filter, and print employee training records with quiz scores, pass/fail status, certifications, expiration alerts, and supervisor sign-off.",
+    href: "/employees/training-record",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Employee Skills Matrix",
     description:
       "Add, save, edit, filter, and print employee skill records with qualification levels, expiration dates, and supervisor sign-offs.",
