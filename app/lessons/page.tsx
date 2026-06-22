@@ -2,6 +2,13 @@ import Link from "next/link";
 
 const featuredLessons = [
   {
+    title: "Gate Seal Study",
+    description:
+      "Learn how to identify gate seal with hold-time steps, part-weight data, and a clear weight plateau before locking in production hold time.",
+    href: "/lessons/gate-seal-study",
+    level: "Beginner/Intermediate",
+  },
+  {
     title: "Decoupled Molding I",
     description:
       "Learn how to establish a fill-only process, set a reliable transfer position, and separate fill from pack before troubleshooting part quality.",
