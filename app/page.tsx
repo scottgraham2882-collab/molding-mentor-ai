@@ -2,28 +2,39 @@ import Link from "next/link";
 
 const navigationCards = [
   {
-    title: "Open Defect Library",
+    title: "Defect Library",
+    cta: "Open Defect Library",
     description:
       "Review common injection molding defects, likely causes, and corrective actions before changing the process.",
     href: "/defects",
-    accent: "text-cyan-200",
     badge: "Reference",
+    accent: "text-cyan-200",
   },
   {
-    title: "Open Troubleshooting Assistant",
+    title: "Troubleshooting Assistant",
+    cta: "Open Troubleshooting Assistant",
     description:
-      "Use a guided workflow to collect evidence, isolate variables, and validate one process change at a time.",
+      "Collect evidence, isolate variables, and validate one process change at a time with a guided workflow.",
     href: "/troubleshooting",
-    accent: "text-emerald-200",
     badge: "Guided help",
+    accent: "text-emerald-200",
   },
+];
+
+const resourceCards = [
   {
     title: "Scientific Molding Training",
+    status: "Training",
     description:
       "Build disciplined habits around fill studies, gate seal, process windows, cooling checks, and documentation.",
-    href: "/training",
     accent: "text-violet-200",
-    badge: "Training",
+  },
+  {
+    title: "Process Calculator",
+    status: "Coming Soon",
+    description:
+      "Future calculators for shot size, clamp tonnage, residence time, cooling estimates, and process change records.",
+    accent: "text-amber-100",
   },
 ];
 
@@ -41,7 +52,7 @@ export default function Home() {
                 Molding Mentor AI
               </h1>
               <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">
-                Choose a focused workspace for defect reference, guided troubleshooting, scientific molding training, or upcoming process tools.
+                Start from the latest home experience, then choose the right workspace for defect reference, guided troubleshooting, training, or upcoming process tools.
               </p>
             </div>
             <div className="rounded-2xl border border-cyan-300/20 bg-slate-900/70 p-4 text-sm leading-6 text-slate-300">
@@ -65,23 +76,28 @@ export default function Home() {
                 <p className="mt-4 text-sm leading-6 text-slate-300 sm:text-base">{card.description}</p>
               </div>
               <span className="mt-8 inline-flex items-center text-sm font-bold text-cyan-200 transition group-hover:translate-x-1">
-                Open workspace →
+                {card.cta} →
               </span>
             </Link>
           ))}
 
-          <article className="flex min-h-64 flex-col justify-between rounded-3xl border border-white/10 bg-slate-900/70 p-5 opacity-80 shadow-xl shadow-slate-950/20 backdrop-blur sm:p-6">
-            <div>
-              <span className="inline-flex rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-amber-200">
-                Coming soon
+          {resourceCards.map((card) => (
+            <article
+              key={card.title}
+              className="flex min-h-64 flex-col justify-between rounded-3xl border border-white/10 bg-slate-900/70 p-5 shadow-xl shadow-slate-950/20 backdrop-blur sm:p-6"
+            >
+              <div>
+                <span className="inline-flex rounded-full border border-white/10 bg-slate-950/70 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-slate-300">
+                  {card.status}
+                </span>
+                <h2 className={`mt-5 text-2xl font-bold ${card.accent}`}>{card.title}</h2>
+                <p className="mt-4 text-sm leading-6 text-slate-300 sm:text-base">{card.description}</p>
+              </div>
+              <span className="mt-8 text-sm font-bold text-slate-400">
+                {card.status === "Coming Soon" ? "In development" : "Training resource"}
               </span>
-              <h2 className="mt-5 text-2xl font-bold text-amber-100">Process Calculator</h2>
-              <p className="mt-4 text-sm leading-6 text-slate-300 sm:text-base">
-                Future calculators for shot size, clamp tonnage, residence time, cooling estimates, and process change documentation.
-              </p>
-            </div>
-            <span className="mt-8 text-sm font-bold text-slate-400">In development</span>
-          </article>
+            </article>
+          ))}
         </section>
       </section>
     </main>
