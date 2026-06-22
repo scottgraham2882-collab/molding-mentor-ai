@@ -46,6 +46,14 @@ const dashboardCards: DashboardCard[] = [
     href: "/process-sheet-builder",
     accent: "from-lime-300 to-cyan-400",
   },
+
+  {
+    title: "Mold Change Checklist",
+    description:
+      "Work through mold-change safety, removal, installation, connections, startup checks, and first article approval with saved progress and print view.",
+    href: "/mold-change",
+    accent: "from-cyan-300 to-emerald-400",
+  },
   {
     title: "Shift Handoff Logs",
     description:
