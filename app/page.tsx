@@ -46,6 +46,13 @@ const dashboardCards: DashboardCard[] = [
     href: "/process-sheet-builder",
     accent: "from-lime-300 to-cyan-400",
   },
+  {
+    title: "Process Change Log",
+    description:
+      "Create before-and-after process change records with reasons, results, notes, browser storage, filters, editing, deletion, and print view.",
+    href: "/process-change-log",
+    accent: "from-cyan-300 to-emerald-400",
+  },
 
   {
     title: "Mold Change Checklist",
