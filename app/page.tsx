@@ -270,6 +270,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-emerald-400",
   },
   {
+    title: "Employee Performance Coaching Log",
+    description:
+      "Create, save, edit, filter, and print employee performance coaching logs with observations, standards, action plans, employee responses, follow-up dates, and closure status.",
+    href: "/employees/performance-coaching-log",
+    accent: "from-violet-300 to-cyan-400",
+  },
+  {
     title: "Employee Skills Matrix",
     description:
       "Add, save, edit, filter, and print employee skill records with qualification levels, expiration dates, and supervisor sign-offs.",
