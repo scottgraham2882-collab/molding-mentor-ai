@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const recommendations = [
   "Describe the defect, material, tool, machine settings, and when the issue started.",
   "Check one variable at a time so each process change can be measured clearly.",
@@ -19,6 +21,15 @@ export default function Home() {
             Enter a molding problem and get structured troubleshooting guidance for defects,
             process drift, tooling concerns, and scientific molding next steps.
           </p>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Link
+              href="/defects"
+              className="inline-flex justify-center rounded-2xl border border-cyan-300/30 px-5 py-3 text-base font-bold text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/10 focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
+            >
+              Open Defect Library
+            </Link>
+          </div>
 
           <form className="mt-8 space-y-5">
             <label htmlFor="problem" className="block text-sm font-medium text-slate-200">
