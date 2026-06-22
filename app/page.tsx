@@ -23,6 +23,14 @@ const dashboardCards: DashboardCard[] = [
     href: "/coach",
     accent: "from-cyan-300 to-emerald-400",
   },
+
+  {
+    title: "Defect Photo Analysis",
+    description:
+      "Upload a molded part photo, select material and defect category, then get an AI-style likely defect review with troubleshooting and lesson links.",
+    href: "/photo-analysis",
+    accent: "from-sky-300 to-cyan-400",
+  },
   {
     title: "Defect Library",
     description:
