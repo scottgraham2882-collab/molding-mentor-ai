@@ -2,6 +2,13 @@ import Link from "next/link";
 
 const featuredLessons = [
   {
+    title: "Operator Safety & Startup",
+    description:
+      "Complete Operator Training Module 1 with safety basics, PPE, LOTO awareness, startup checks, first article inspection, shift handoff, a quiz, and certificate.",
+    href: "/training/operator-safety-startup",
+    level: "Operator Module 1",
+  },
+  {
     title: "Process Window",
     description:
       "Learn how to bracket fill speed, pack pressure, mold temperature, and cooling time so the team understands the approved low, target, and high limits.",

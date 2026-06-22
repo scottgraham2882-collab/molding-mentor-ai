@@ -24,6 +24,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-teal-400",
   },
   {
+    title: "Operator Safety & Startup",
+    description:
+      "Complete Operator Training Module 1 with machine-safety basics, startup verification, an interactive checklist, quiz, and certificate.",
+    href: "/training/operator-safety-startup",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Scientific Molding Training",
     description:
       "Build a structured learning path for process windows, gate seal studies, viscosity curves, and setup discipline.",
