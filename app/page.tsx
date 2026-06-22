@@ -206,6 +206,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-violet-400",
   },
   {
+    title: "Executive KPI Dashboard",
+    description:
+      "Track executive production, quality, downtime, OEE, corrective-action, complaint, training, and certification KPIs with local history, trend indicators, editing, deletion, and print view.",
+    href: "/reports/kpi-dashboard",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Plant Management Mode",
     description:
       "Manage multiple users, employee training records, certification tracking, shift assignments, reports, and supervisor reviews.",
