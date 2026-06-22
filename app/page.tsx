@@ -319,6 +319,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Training Gap Analysis",
+    description:
+      "Add, save, edit, delete, filter, and print employee training gap records with role targets, skill levels, severity, due dates, status, open-gap totals, and critical-gap visibility.",
+    href: "/training/gap-analysis",
+    accent: "from-rose-300 to-cyan-400",
+  },
+  {
     title: "Operator Safety & Startup",
     description:
       "Complete Operator Training Module 1 with machine-safety basics, startup verification, an interactive checklist, quiz, and certificate.",
