@@ -284,6 +284,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-violet-400",
   },
   {
+    title: "Role-Based Training Paths",
+    description:
+      "Select a role, view required modules, lessons, certifications, skills, completion time, advancement path, saved progress, and print-friendly training plans.",
+    href: "/training/role-paths",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Employee Training Record",
     description:
       "Create, save, edit, filter, and print employee training records with quiz scores, pass/fail status, certifications, expiration alerts, and supervisor sign-off.",
