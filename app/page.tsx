@@ -312,6 +312,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-emerald-400",
   },
   {
+    title: "Department Training Matrix",
+    description:
+      "Add, save, edit, delete, filter, and print department training records with completion percentages, certification status, expiration dates, and supervisor sign-offs.",
+    href: "/training/department-matrix",
+    accent: "from-emerald-300 to-cyan-400",
+  },
+  {
     title: "Operator Safety & Startup",
     description:
       "Complete Operator Training Module 1 with machine-safety basics, startup verification, an interactive checklist, quiz, and certificate.",
