@@ -33,8 +33,8 @@ const dashboardCards: DashboardCard[] = [
   {
     title: "Process Calculator",
     description:
-      "Estimate molding fundamentals like residence time, shot utilization, clamp tonnage, and cooling considerations.",
-    status: "Coming Soon",
+      "Estimate clamp tonnage, shot utilization, cycle time, and cushion consistency with quick shop-floor calculators.",
+    href: "/calculators",
     accent: "from-amber-300 to-orange-400",
   },
 ];
