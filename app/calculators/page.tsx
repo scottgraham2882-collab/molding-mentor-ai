@@ -83,7 +83,9 @@ export default function CalculatorsPage() {
   const [fillTime, setFillTime] = useState("1.2");
   const [packTime, setPackTime] = useState("4");
   const [coolingTime, setCoolingTime] = useState("18");
-  const [moldOpenTime, setMoldOpenTime] = useState("5");
+  const [moldOpenTime, setMoldOpenTime] = useState("2");
+  const [ejectionTime, setEjectionTime] = useState("1.5");
+  const [moldCloseTime, setMoldCloseTime] = useState("1.5");
 
   const [targetCushion, setTargetCushion] = useState("0.20");
   const [lowCushion, setLowCushion] = useState("0.16");
@@ -104,8 +106,10 @@ export default function CalculatorsPage() {
       parseInput(fillTime) +
       parseInput(packTime) +
       parseInput(coolingTime) +
-      parseInput(moldOpenTime),
-    [fillTime, packTime, coolingTime, moldOpenTime],
+      parseInput(moldOpenTime) +
+      parseInput(ejectionTime) +
+      parseInput(moldCloseTime),
+    [fillTime, packTime, coolingTime, moldOpenTime, ejectionTime, moldCloseTime],
   );
 
   const cushionSpread = useMemo(
@@ -186,7 +190,15 @@ export default function CalculatorsPage() {
           </article>
 
           <article className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-xl shadow-slate-950/20 backdrop-blur sm:p-6">
-            <h2 className="text-2xl font-bold text-white">Cycle time estimator</h2>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <h2 className="text-2xl font-bold text-white">Cycle time estimator</h2>
+              <Link
+                href="/calculators/cycle-time"
+                className="inline-flex w-fit items-center rounded-full border border-emerald-300/30 px-3 py-1.5 text-sm font-bold text-emerald-100 transition hover:border-emerald-200 hover:bg-emerald-300/10"
+              >
+                Open full calculator →
+              </Link>
+            </div>
             <p className="mt-2 text-sm leading-6 text-slate-300">
               Add core phases together to estimate total cycle time.
             </p>
@@ -194,10 +206,12 @@ export default function CalculatorsPage() {
               <NumberField id="fill-time" label="Fill time" value={fillTime} suffix="sec" onChange={setFillTime} />
               <NumberField id="pack-time" label="Pack / hold time" value={packTime} suffix="sec" onChange={setPackTime} />
               <NumberField id="cooling-time" label="Cooling time" value={coolingTime} suffix="sec" onChange={setCoolingTime} />
-              <NumberField id="mold-open-time" label="Mold open / eject" value={moldOpenTime} suffix="sec" onChange={setMoldOpenTime} />
+              <NumberField id="mold-open-time" label="Mold open time" value={moldOpenTime} suffix="sec" onChange={setMoldOpenTime} />
+              <NumberField id="ejection-time" label="Ejection time" value={ejectionTime} suffix="sec" onChange={setEjectionTime} />
+              <NumberField id="mold-close-time" label="Mold close time" value={moldCloseTime} suffix="sec" onChange={setMoldCloseTime} />
             </div>
             <div className="mt-5">
-              <ResultCard label="Estimated cycle" value={`${formatNumber(cycleTime)} sec`} note="Use as a planning number before confirming recovery, cooling, and robot timing." />
+              <ResultCard label="Estimated cycle" value={`${formatNumber(cycleTime)} sec`} note={`Estimated output is ${formatNumber(cycleTime > 0 ? 3600 / cycleTime : 0, 0)} parts per hour. Use as a planning number before confirming recovery, cooling, and robot timing.`} />
             </div>
           </article>
 
