@@ -284,6 +284,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-violet-400",
   },
   {
+    title: "Training Audit Report",
+    description:
+      "Add, save, edit, delete, filter, count, and print training audit records for employee training records, certifications, findings, corrective actions, owners, and due dates.",
+    href: "/training/audit-report",
+    accent: "from-violet-300 to-cyan-400",
+  },
+  {
     title: "Employee Training Plan Builder",
     description:
       "Create, save, edit, filter, delete, track progress, and print employee training plans with role goals, skill gaps, modules, certifications, mentors, dates, status, and supervisor notes.",
