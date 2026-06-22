@@ -213,6 +213,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Employee Skills Matrix",
+    description:
+      "Add, save, edit, filter, and print employee skill records with qualification levels, expiration dates, and supervisor sign-offs.",
+    href: "/training/skills-matrix",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Operator Safety & Startup",
     description:
       "Complete Operator Training Module 1 with machine-safety basics, startup verification, an interactive checklist, quiz, and certificate.",
