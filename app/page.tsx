@@ -29,6 +29,12 @@ export default function Home() {
             >
               Open Defect Library
             </Link>
+            <Link
+              href="/troubleshooting"
+              className="inline-flex justify-center rounded-2xl bg-cyan-300 px-5 py-3 text-base font-bold text-slate-950 shadow-lg shadow-cyan-950/30 transition hover:bg-cyan-200 focus:outline-none focus:ring-4 focus:ring-cyan-300/30"
+            >
+              Open Troubleshooting Assistant
+            </Link>
           </div>
 
           <form className="mt-8 space-y-5">
