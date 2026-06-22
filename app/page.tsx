@@ -39,6 +39,13 @@ const dashboardCards: DashboardCard[] = [
   },
 
   {
+    title: "Plant Management Mode",
+    description:
+      "Manage multiple users, employee training records, certification tracking, shift assignments, reports, and supervisor reviews.",
+    href: "/plant-management",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Certification Center",
     description:
       "Track completed training modules, quiz scores, certification progress, earned badges, and generate printable certificates.",
