@@ -40,9 +40,16 @@ const dashboardCards: DashboardCard[] = [
   {
     title: "Material Guides",
     description:
-      "Check resin drying conditions and moisture-related defect risks before starting a run or troubleshooting splay.",
+      "Check resin drying conditions and troubleshoot material-related defects before starting a run or adjusting the process.",
     href: "/materials/resin-drying",
     accent: "from-teal-300 to-cyan-400",
+  },
+  {
+    title: "Material Defect Troubleshooter",
+    description:
+      "Select splay, bubbles, silver streaks, black specks, delamination, or brittleness to review material causes and corrective actions.",
+    href: "/materials/troubleshooter",
+    accent: "from-blue-300 to-cyan-400",
   },
 ];
 

@@ -92,9 +92,18 @@ export default function ResinDryingGuidePage() {
           </div>
         </header>
 
-        <aside className="mt-6 rounded-3xl border border-amber-300/30 bg-amber-300/10 p-5 text-sm font-semibold leading-6 text-amber-100 shadow-xl shadow-amber-950/20 sm:p-6">
-          Always verify drying requirements with the resin supplier technical data sheet.
-        </aside>
+        <div className="mt-6 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-stretch">
+          <aside className="rounded-3xl border border-amber-300/30 bg-amber-300/10 p-5 text-sm font-semibold leading-6 text-amber-100 shadow-xl shadow-amber-950/20 sm:p-6">
+            Always verify drying requirements with the resin supplier technical data sheet.
+          </aside>
+          <Link
+            href="/materials/troubleshooter"
+            className="flex items-center justify-between gap-6 rounded-3xl border border-cyan-300/30 bg-cyan-300/10 p-5 text-sm font-bold text-cyan-100 shadow-xl shadow-cyan-950/20 transition hover:border-cyan-200 hover:bg-cyan-300/15 sm:p-6 lg:min-w-80"
+          >
+            <span>Open Material Defect Troubleshooter</span>
+            <span aria-hidden="true">→</span>
+          </Link>
+        </div>
 
         <section className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Resin drying requirements">
           {materials.map((material) => (
