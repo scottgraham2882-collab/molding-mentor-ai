@@ -27,7 +27,7 @@ const dashboardCards: DashboardCard[] = [
     title: "Scientific Molding Training",
     description:
       "Build a structured learning path for process windows, gate seal studies, viscosity curves, and setup discipline.",
-    status: "Coming Soon",
+    href: "/lessons",
     accent: "from-violet-300 to-fuchsia-400",
   },
   {
