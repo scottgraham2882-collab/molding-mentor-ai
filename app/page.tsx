@@ -61,6 +61,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-amber-300 to-cyan-400",
   },
   {
+    title: "Document Control System",
+    description:
+      "Create, save, edit, filter, review, delete, and print controlled document records with revision, owner, status, and review-due tracking.",
+    href: "/documents",
+    accent: "from-cyan-300 to-amber-400",
+  },
+  {
     title: "Mold History Database",
     description:
       "Add, search, edit, delete, save, and print mold history records with tooling notes, repair history, and process knowledge.",
