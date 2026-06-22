@@ -141,6 +141,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "8D Problem Solving Report",
+    description:
+      "Create, save, edit, delete, filter, and print structured 8D reports linked to complaints, parts, molds, and machines.",
+    href: "/quality/8d-report",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Scrap Tracker",
     description:
       "Add, edit, and review scrap entries with total quantity and defect-type summaries stored in this browser.",
