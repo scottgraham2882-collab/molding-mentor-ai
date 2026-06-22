@@ -54,6 +54,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-emerald-400",
   },
   {
+    title: "Action Item Tracker",
+    description:
+      "Create, assign, filter, edit, save, and print management action items with status, priority, category, assignee, due-date, and overdue tracking.",
+    href: "/actions",
+    accent: "from-amber-300 to-cyan-400",
+  },
+  {
     title: "Mold History Database",
     description:
       "Add, search, edit, delete, save, and print mold history records with tooling notes, repair history, and process knowledge.",
