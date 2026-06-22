@@ -89,6 +89,14 @@ const dashboardCards: DashboardCard[] = [
     href: "/shift-handoff",
     accent: "from-cyan-300 to-emerald-400",
   },
+
+  {
+    title: "OEE Dashboard",
+    description:
+      "Calculate availability, performance, quality, scrap, downtime, and OEE with saved history, charts, editing, deletion, and print-friendly reports.",
+    href: "/oee",
+    accent: "from-emerald-300 to-cyan-400",
+  },
   {
     title: "Downtime Tracker",
     description:
