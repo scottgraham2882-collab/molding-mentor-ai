@@ -10,6 +10,13 @@ type DashboardCard = {
 
 const dashboardCards: DashboardCard[] = [
   {
+    title: "Process Sheet Builder",
+    description:
+      "Create, save, edit, print, and export injection molding process sheets for repeatable setups and shift handoffs.",
+    href: "/process-sheet-builder",
+    accent: "from-lime-300 to-cyan-400",
+  },
+  {
     title: "AI Troubleshooting Coach",
     description:
       "Chat through a molding problem to get targeted questions, likely root causes, corrective actions, and links to lessons and defect guides.",
