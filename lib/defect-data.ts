@@ -7,6 +7,14 @@ export type DefectGuide = {
   actions: string[];
   processAreas: string[];
   materialChecks: string[];
+  whyThisHappens?: {
+    simple: string;
+    scientific: string;
+    misconceptions: string[];
+    ineffectiveFirstTries: string[];
+    technicianFirstLooks: string[];
+  };
+  teachNewTechnician?: string[];
 };
 
 export const defectGuides: DefectGuide[] = [
@@ -19,6 +27,14 @@ export const defectGuides: DefectGuide[] = [
     actions: ["Increase shot size, transfer later, injection speed, or pressure limit in controlled steps.", "Raise melt or mold temperature within the approved material range.", "Clean or repair blocked flow paths, worn check rings, and restricted vents."],
     processAreas: ["Fill speed", "Shot size", "Transfer", "Venting", "Melt temperature"],
     materialChecks: ["Lot viscosity", "Drying status", "Regrind level", "Feed consistency"],
+    whyThisHappens: {
+      simple: "The cavity runs out of usable plastic before the part is full.",
+      scientific: "The melt front loses heat or pressure before end-of-fill, so flow stops before packing can support the part.",
+      misconceptions: ["It is always a shot-size problem.", "More heat fixes every short shot."],
+      ineffectiveFirstTries: ["Adding random pack pressure before confirming the part fills.", "Raising every temperature zone at once."],
+      technicianFirstLooks: ["Cushion, transfer, fill time, and pressure limit.", "Gate, runner, nozzle, feed, and end-of-fill vents."],
+    },
+    teachNewTechnician: ["A short shot is usually a fill problem first, not a pack problem.", "Save a sample and mark the short location and cavity.", "If the press hits pressure limit, it cannot push harder no matter what the speed setting says.", "One blocked gate or cold runner can look like a bad process."],
   },
   {
     name: "Flash",
@@ -29,6 +45,14 @@ export const defectGuides: DefectGuide[] = [
     actions: ["Clean or repair shutoffs, vent lands, inserts, and damaged parting-line areas.", "Reduce transfer, pack pressure, pack time, or injection speed in measured steps.", "Confirm fill-only parts separate fill pressure from pack pressure."],
     processAreas: ["Clamp", "Pack/hold", "Transfer", "Tooling shutoffs", "Venting"],
     materialChecks: ["Melt temperature", "Viscosity shift", "Moisture", "Wrong resin grade"],
+    whyThisHappens: {
+      simple: "Plastic is being squeezed into places where the mold should be closed tight.",
+      scientific: "Cavity pressure exceeds the mold's ability to seal at the parting line, vents, pins, inserts, or shutoffs.",
+      misconceptions: ["Flash always means clamp tonnage is too low.", "More pack pressure will make the edge cleaner."],
+      ineffectiveFirstTries: ["Increasing pack or hold to fill small features.", "Ignoring dirty, damaged, or misaligned shutoffs."],
+      technicianFirstLooks: ["Where the flash starts on the tool.", "Clamp setup, transfer point, peak pressure, and vent condition."],
+    },
+    teachNewTechnician: ["Flash is escaped plastic; find the escape path.", "Do not pack harder into a leaking mold.", "Compare the flashed area to vents, pins, inserts, and shutoffs.", "Clean steel and verify setup before chasing settings."],
   },
   {
     name: "Sink Marks",
@@ -39,6 +63,14 @@ export const defectGuides: DefectGuide[] = [
     actions: ["Increase pack pressure and pack time until gate seal is confirmed.", "Improve cooling around thick sections and verify water flow.", "Review wall uniformity, rib thickness, and coring opportunities."],
     processAreas: ["Pack/hold", "Gate seal", "Cooling", "Part design", "Mold temperature"],
     materialChecks: ["Shrink rate", "Filler content", "Drying", "Lot change"],
+    whyThisHappens: {
+      simple: "Thick areas shrink inward after the surface has already hardened.",
+      scientific: "Volumetric shrinkage in heavy sections is not replaced by effective packing before gate seal.",
+      misconceptions: ["More cooling time always removes sink.", "Sink only comes from bad material."],
+      ineffectiveFirstTries: ["Adding cooling time without checking gate seal.", "Raising pack pressure after the gate is already frozen."],
+      technicianFirstLooks: ["Part weight, cushion, pack time, and gate-seal evidence.", "Ribs, bosses, and cooling near thick steel."],
+    },
+    teachNewTechnician: ["Sink follows thick plastic and weak packing.", "Part weight tells you if pack is getting into the part.", "Pack only helps while the gate is open.", "Look at ribs and bosses before blaming the operator."],
   },
   {
     name: "Burn Marks",
@@ -49,6 +81,14 @@ export const defectGuides: DefectGuide[] = [
     actions: ["Clean, inspect, or add venting at trapped gas locations.", "Reduce fill speed, screw speed, back pressure, or melt temperature when shear is excessive.", "Purge degraded material and reduce residence time."],
     processAreas: ["Venting", "Fill speed", "Shear", "Residence time", "Hot runner"],
     materialChecks: ["Degradation", "Contamination", "Drying temperature", "Purge compatibility"],
+    whyThisHappens: {
+      simple: "Air or gas gets trapped and scorches the plastic, or the plastic is overheated.",
+      scientific: "Compressed gas, high shear, or long residence time raises local temperature enough to degrade polymer at the flow front.",
+      misconceptions: ["Burns are always from barrel temperatures.", "Slowing the whole process is always safe."],
+      ineffectiveFirstTries: ["Only lowering barrel heat while vents stay blocked.", "Making several speed and temperature changes together."],
+      technicianFirstLooks: ["End-of-fill locations, vents, and cavity pattern.", "Fill speed profile, shear points, purge quality, and residence time."],
+    },
+    teachNewTechnician: ["Burns often show where trapped air had nowhere to go.", "Check vents before blaming material.", "A black spot at the end of fill is a clue, not a mystery.", "Purge evidence helps separate degraded material from trapped gas."],
   },
   {
     name: "Splay",
@@ -59,6 +99,14 @@ export const defectGuides: DefectGuide[] = [
     actions: ["Dry or replace suspect resin and protect it from moisture pickup.", "Reduce suck-back, screw speed, back pressure, or aggressive fill speed.", "Purge contamination and clean material handling paths."],
     processAreas: ["Drying", "Screw recovery", "Decompression", "Fill speed", "Venting"],
     materialChecks: ["Moisture", "Volatiles", "Colorant compatibility", "Regrind cleanliness"],
+    whyThisHappens: {
+      simple: "Moisture, gas, or degraded material streaks across the part surface.",
+      scientific: "Volatiles flash out of the melt or shear-degraded polymer reaches the surface during flow.",
+      misconceptions: ["Splay is always wet resin.", "Turning up barrel heat will dry the material."],
+      ineffectiveFirstTries: ["Raising heat before checking dryer performance.", "Adding more suck-back and pulling in more air."],
+      technicianFirstLooks: ["Dryer temperature, dew point, time, and hopper condition.", "Screw speed, back pressure, decompression, and recent material changes."],
+    },
+    teachNewTechnician: ["Silver streaks usually mean something unwanted rode with the melt.", "Drying is time, temperature, airflow, and dew point—not just a hot hopper.", "Too much suck-back can pull air into the shot.", "Check material handling before changing every press setting."],
   },
   {
     name: "Warpage",
@@ -69,6 +117,14 @@ export const defectGuides: DefectGuide[] = [
     actions: ["Balance mold temperatures and water circuits.", "Optimize pack pressure, hold time, cooling time, and ejection timing.", "Review gate location, wall thickness, ribs, and fiber direction."],
     processAreas: ["Cooling", "Pack/hold", "Ejection", "Mold temperature", "Part design"],
     materialChecks: ["Shrink rate", "Fiber orientation", "Filler content", "Lot change"],
+    whyThisHappens: {
+      simple: "Different areas shrink different amounts and pull the part out of shape.",
+      scientific: "Uneven cooling, packing, orientation, or geometry creates nonuniform shrinkage and residual stress after ejection.",
+      misconceptions: ["Warpage is fixed by just adding cooling time.", "Only the operator caused it."],
+      ineffectiveFirstTries: ["Changing one mold-temperature zone without checking water flow.", "Judging parts before they cool the same amount."],
+      technicianFirstLooks: ["Cooling flow and temperature by circuit and cavity.", "Pack balance, ejection temperature, wall thickness, and part handling."],
+    },
+    teachNewTechnician: ["Warp is a shrinkage balance problem.", "Measure parts the same way and at the same time after molding.", "Hot parts can bend after ejection if they are stacked or handled poorly.", "Cooling problems often hide as process problems."],
   },
   {
     name: "Jetting",
@@ -89,6 +145,14 @@ export const defectGuides: DefectGuide[] = [
     actions: ["Increase melt temperature, mold temperature, or fill speed in controlled steps.", "Improve venting where melt fronts meet.", "Review gate location, flow leaders, overflow wells, or design changes."],
     processAreas: ["Fill speed", "Melt temperature", "Mold temperature", "Venting", "Gate design"],
     materialChecks: ["Moisture", "Contamination", "Filler orientation", "Regrind level"],
+    whyThisHappens: {
+      simple: "Two flow fronts meet but do not knit together strongly or cleanly.",
+      scientific: "Melt fronts cool, lose pressure, or trap gas before polymer chains can interdiffuse across the meeting line.",
+      misconceptions: ["A weld line is only cosmetic.", "More pack pressure always strengthens it."],
+      ineffectiveFirstTries: ["Packing harder after a cold weak knit has formed.", "Ignoring venting where the fronts meet."],
+      technicianFirstLooks: ["Gate, hole, insert, and flow-front map.", "Melt temperature, mold temperature, fill speed, and vents at the knit location."],
+    },
+    teachNewTechnician: ["A weld line is where flow fronts shake hands.", "If they meet cold or with trapped gas, the handshake is weak.", "Always ask whether the line is cosmetic or a strength risk.", "Location around holes and inserts matters."],
   },
   {
     name: "Flow Lines",
@@ -109,6 +173,14 @@ export const defectGuides: DefectGuide[] = [
     actions: ["Increase effective packing until gate seal is proven.", "Improve cooling and core thick sections where possible.", "Dry or replace resin if gas voids are moisture-related."],
     processAreas: ["Pack/hold", "Gate seal", "Cooling", "Part design", "Drying"],
     materialChecks: ["Moisture", "Volatiles", "Shrink rate", "Regrind"],
+    whyThisHappens: {
+      simple: "A bubble or empty pocket forms inside the part instead of solid plastic.",
+      scientific: "Thick-section shrinkage or trapped volatiles create internal cavities when packing cannot replace lost volume.",
+      misconceptions: ["All voids are air bubbles from the mold.", "More cooling time is the first fix."],
+      ineffectiveFirstTries: ["Cooling longer without proving pack and gate seal.", "Increasing pack before checking moisture or section thickness."],
+      technicianFirstLooks: ["Cut parts, part weight, cushion, pack profile, and gate seal.", "Drying records and whether voids sit in thick sections."],
+    },
+    teachNewTechnician: ["Voids often hide until you cut the part or see a bubble in thick plastic.", "Shrink voids need effective pack while the gate is open.", "Gas voids point back to moisture, volatiles, or trapped air.", "Location inside a thick boss is an important clue."],
   },
   {
     name: "Brittleness",
