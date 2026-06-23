@@ -1,587 +1,371 @@
 import Link from "next/link";
-import { demoProgress, getProgressSummary } from "../lib/progress-data";
 
-type DashboardCard = {
+type Tool = {
   title: string;
+  shopFloorName: string;
   description: string;
-  href?: string;
-  status?: "Coming Soon";
-  accent: string;
+  href: string;
 };
 
-const progressSummary = getProgressSummary(demoProgress);
+type Category = {
+  title: string;
+  helper: string;
+  href: string;
+  tools: Tool[];
+};
 
-const dashboardWidgets = [
-  { label: "Training progress", value: `${progressSummary.trainingProgress}%`, description: "Completed lesson path" },
-  { label: "Certifications earned", value: String(progressSummary.certificationsEarned), description: "Printable credentials" },
-  { label: "Lessons remaining", value: String(progressSummary.lessonsRemaining), description: "Modules left to finish" },
-];
-
-const dashboardCards: DashboardCard[] = [
+const categories: Category[] = [
   {
-    title: "User Profile",
-    description:
-      "Review your account, completed lessons, quiz scores, certifications, calculator history, and AI Coach conversations.",
-    href: "/profile",
-    accent: "from-cyan-300 to-blue-400",
-  },
-  {
-    title: "User Login",
-    description:
-      "Log in to restore your personalized training dashboard and progress-tracking workspace.",
-    href: "/account/login",
-    accent: "from-blue-300 to-violet-400",
-  },
-  {
-    title: "User Registration",
-    description:
-      "Create a user account for saved training activity, credentials, calculator runs, and coach chats.",
-    href: "/account/register",
-    accent: "from-emerald-300 to-lime-400",
-  },
-  {
-    title: "Process Sheet Builder",
-    description:
-      "Create, save, edit, print, and export injection molding process sheets for repeatable setups and shift handoffs.",
-    href: "/process-sheet-builder",
-    accent: "from-lime-300 to-cyan-400",
-  },
-  {
-    title: "Electronic Process Sheet Approval",
-    description:
-      "Create, save, filter, edit, delete, and print electronic approvals for controlled process sheet revisions.",
-    href: "/process-sheets/approval",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Work Instruction Builder",
-    description:
-      "Create, save, filter, edit, delete, and print controlled work instructions with PPE, tools, safety warnings, quality checks, approvals, and image placeholders.",
-    href: "/work-instructions",
-    accent: "from-emerald-300 to-cyan-400",
-  },
-
-  {
-    title: "Process Change Log",
-    description:
-      "Create before-and-after process change records with reasons, results, notes, browser storage, filters, editing, deletion, and print view.",
-    href: "/process-change-log",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Action Item Tracker",
-    description:
-      "Create, assign, filter, edit, save, and print management action items with status, priority, category, assignee, due-date, and overdue tracking.",
-    href: "/actions",
-    accent: "from-amber-300 to-cyan-400",
-  },
-  {
-    title: "Document Control System",
-    description:
-      "Create, save, edit, filter, review, delete, and print controlled document records with revision, owner, status, and review-due tracking.",
-    href: "/documents",
-    accent: "from-cyan-300 to-amber-400",
-  },
-  {
-    title: "Mold History Database",
-    description:
-      "Add, search, edit, delete, save, and print mold history records with tooling notes, repair history, and process knowledge.",
-    href: "/molds",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Machine History Database",
-    description:
-      "Add, search, edit, delete, save, and print machine history records with maintenance, hydraulic, electrical, automation, and process notes.",
-    href: "/machines",
-    accent: "from-emerald-300 to-cyan-400",
-  },
-
-  {
-    title: "Mold Change Checklist",
-    description:
-      "Work through mold-change safety, removal, installation, connections, startup checks, and first article approval with saved progress and print view.",
-    href: "/mold-change",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Startup Approval System",
-    description:
-      "Complete startup sign-offs with interactive checks, approval status, saved approvals, edit/delete controls, and print-friendly reports.",
-    href: "/startup-approval",
-    accent: "from-emerald-300 to-cyan-400",
-  },
-  {
-    title: "Shift Handoff Logs",
-    description:
-      "Record machine status, open issues, process changes, quality holds, downtime notes, and instructions for the next shift.",
-    href: "/shift-handoff",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Production Schedule Board",
-    description:
-      "Create, save, edit, filter, delete, and print production schedule entries with planned-versus-actual quantities and job status tracking.",
-    href: "/production/schedule",
-    accent: "from-emerald-300 to-cyan-400",
-  },
-  {
-    title: "Real-Time Production Board",
-    description:
-      "Add, save, edit, delete, filter, and print live machine status cards with cycle times, quantities, scrap, downtime, issues, next actions, and status counts.",
-    href: "/production/live-board",
-    accent: "from-cyan-300 to-blue-400",
-  },
-  {
-    title: "Production Run Log",
-    description:
-      "Create, save, edit, filter, delete, and print production run logs with automatic run time, total parts, scrap percentage, and parts-per-hour calculations.",
-    href: "/production/run-log",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Production Job Traveler",
-    description:
-      "Create, save, edit, delete, status-track, and print job travelers from material verification through final approval.",
-    href: "/production/job-traveler",
-    accent: "from-cyan-300 to-blue-400",
-  },
-  {
-    title: "Meeting Notes & Follow-Up Tracker",
-    description:
-      "Create, save, edit, delete, filter, and print meeting notes with attendees, decisions, action items, owners, due dates, and follow-up notes.",
-    href: "/meetings",
-    accent: "from-violet-300 to-cyan-400",
-  },
-  {
-    title: "Plant Daily Report",
-    description:
-      "Create, save, edit, delete, review, and print daily plant reports covering production, scrap, downtime, machines, quality, safety, staffing, maintenance, and next-shift priorities.",
-    href: "/reports/daily",
-    accent: "from-emerald-300 to-cyan-400",
-  },
-
-  {
-    title: "OEE Dashboard",
-    description:
-      "Calculate availability, performance, quality, scrap, downtime, and OEE with saved history, charts, editing, deletion, and print-friendly reports.",
-    href: "/oee",
-    accent: "from-emerald-300 to-cyan-400",
-  },
-  {
-    title: "Downtime Tracker",
-    description:
-      "Log downtime events, edit saved entries, and review total minutes with reason-code summaries from browser storage.",
-    href: "/downtime",
-    accent: "from-emerald-300 to-cyan-400",
-  },
-  {
-    title: "Preventive Maintenance Tracker",
-    description:
-      "Schedule PM follow-ups, log maintenance tasks, edit saved records, and review upcoming due dates from browser storage.",
-    href: "/maintenance",
-    accent: "from-emerald-300 to-teal-400",
-  },
-
-  {
-    title: "First Article Inspection Report",
-    description:
-      "Create, save, edit, delete, and print quality first article inspection reports with critical dimensions and approval status.",
-    href: "/quality/first-article",
-    accent: "from-teal-300 to-emerald-400",
-  },
-  {
-    title: "Digital First Piece Approval",
-    description:
-      "Create, save, view, edit, delete, filter, and print first-piece approvals with part, mold, machine, inspection, packaging, and disposition details.",
-    href: "/quality/first-piece-approval",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Audit Checklist System",
-    description:
-      "Create layered process, 5S, safety, mold setup, first article, and process sheet audits with pass/fail checks, corrective actions, saved records, filters, and print reports.",
-    href: "/quality/audits",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Quality Hold / Containment Tracker",
-    description:
-      "Create, save, edit, delete, total, and print containment records for suspect parts held by quality.",
-    href: "/quality/containment",
-    accent: "from-amber-300 to-emerald-400",
-  },
-  {
-    title: "Corrective Action / Root Cause Report",
-    description:
-      "Create, save, edit, filter, delete, and print corrective action reports with containment, root cause, and verification notes.",
-    href: "/quality/corrective-action",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Corrective Action Tracker (CAPA)",
-    description:
-      "Create, save, edit, delete, filter, dashboard, and print CAPA records with owners, due dates, containment, corrective action, prevention, and verification notes.",
-    href: "/quality/capa",
-    accent: "from-emerald-300 to-cyan-400",
-  },
-  {
-    title: "Customer Complaint Tracker",
-    description:
-      "Create, save, edit, delete, filter, and print 8D-style customer complaint records for quality follow-up.",
-    href: "/quality/customer-complaints",
-    accent: "from-emerald-300 to-cyan-400",
-  },
-  {
-    title: "Supplier Quality Issue Tracker",
-    description:
-      "Create, save, edit, delete, filter, count, and print supplier issue records with containment, corrective action requests, due dates, status, and verification notes.",
-    href: "/quality/supplier-issues",
-    accent: "from-amber-300 to-cyan-400",
-  },
-  {
-    title: "8D Problem Solving Report",
-    description:
-      "Create, save, edit, delete, filter, and print structured 8D reports linked to complaints, parts, molds, and machines.",
-    href: "/quality/8d-report",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Scrap Tracker",
-    description:
-      "Add, edit, and review scrap entries with total quantity and defect-type summaries stored in this browser.",
-    href: "/scrap",
-    accent: "from-rose-300 to-orange-400",
-  },
-  {
-    title: "AI Troubleshooting Coach",
-    description:
-      "Chat through a molding problem to get targeted questions, likely root causes, corrective actions, and links to lessons and defect guides.",
-    href: "/coach",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-
-  {
-    title: "Defect Photo Analysis",
-    description:
-      "Upload a molded part photo, select material and defect category, then get an AI-style likely defect review with troubleshooting and lesson links.",
-    href: "/photo-analysis",
-    accent: "from-sky-300 to-cyan-400",
-  },
-  {
-    title: "Defect Library",
-    description:
-      "Review common injection molding defects, likely root causes, and corrective actions before changing the process.",
-    href: "/defects",
-    accent: "from-cyan-300 to-sky-400",
-  },
-  {
-    title: "Troubleshooting Assistant",
-    description:
-      "Use a guided workflow to collect evidence, isolate process variables, and validate the next corrective step.",
+    title: "Troubleshoot a Problem",
+    helper: "Find the cause, pick the next check, and fix defects without guessing.",
     href: "/troubleshooting",
-    accent: "from-emerald-300 to-teal-400",
-  },
-
-  {
-    title: "Weekly Management Report",
-    description:
-      "Create, save, edit, delete, view, and print weekly production, quality, downtime, safety, training, and corrective-action reports.",
-    href: "/reports/weekly",
-    accent: "from-cyan-300 to-violet-400",
-  },
-  {
-    title: "Executive KPI Dashboard",
-    description:
-      "Track executive production, quality, downtime, OEE, corrective-action, complaint, training, and certification KPIs with local history, trend indicators, editing, deletion, and print view.",
-    href: "/reports/kpi-dashboard",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Plant Management Mode",
-    description:
-      "Manage multiple users, employee training records, certification tracking, shift assignments, reports, and supervisor reviews.",
-    href: "/plant-management",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Certification Center",
-    description:
-      "Track completed training modules, quiz scores, certification progress, earned badges, and generate printable certificates.",
-    href: "/certifications",
-    accent: "from-emerald-300 to-cyan-400",
-  },
-  {
-    title: "Certification Management Center",
-    description:
-      "Create, save, edit, filter, delete, and print employee certification records with status counts and 30-day expiration visibility.",
-    href: "/training/certifications",
-    accent: "from-cyan-300 to-emerald-400",
+    tools: [
+      {
+        title: "Troubleshooting Assistant",
+        shopFloorName: "Guided problem solver",
+        description: "Walk through checks before changing the process.",
+        href: "/troubleshooting",
+      },
+      {
+        title: "AI Troubleshooting Coach",
+        shopFloorName: "Ask the coach",
+        description: "Get likely causes and corrective actions.",
+        href: "/coach",
+      },
+      {
+        title: "Defect Library",
+        shopFloorName: "Defect look-up",
+        description: "Match defects to common molding causes.",
+        href: "/defects",
+      },
+      {
+        title: "Defect Photo Analysis",
+        shopFloorName: "Photo defect check",
+        description: "Use a part photo to review likely defects.",
+        href: "/photo-analysis",
+      },
+      {
+        title: "Material Defect Troubleshooter",
+        shopFloorName: "Material issue check",
+        description: "Check splay, bubbles, black specks, and more.",
+        href: "/materials/troubleshooter",
+      },
+    ],
   },
   {
-    title: "Training Assignment Manager",
-    description:
-      "Assign modules, track due dates, status, quiz scores, supervisor notes, completion percentage, and print training reports.",
+    title: "Run Production",
+    helper: "Start jobs, follow the sheet, track the shift, and keep machines moving.",
+    href: "/production/live-board",
+    tools: [
+      {
+        title: "Real-Time Production Board",
+        shopFloorName: "Live machine board",
+        description: "See what is running and what needs attention.",
+        href: "/production/live-board",
+      },
+      {
+        title: "Production Schedule Board",
+        shopFloorName: "Today’s schedule",
+        description: "Plan jobs and compare actual output.",
+        href: "/production/schedule",
+      },
+      {
+        title: "Production Run Log",
+        shopFloorName: "Run log",
+        description: "Record counts, scrap, runtime, and notes.",
+        href: "/production/run-log",
+      },
+      {
+        title: "Process Sheet Builder",
+        shopFloorName: "Process sheet",
+        description: "Build and print repeatable setup sheets.",
+        href: "/process-sheet-builder",
+      },
+      {
+        title: "Mold Change Checklist",
+        shopFloorName: "Mold change checklist",
+        description: "Work through safe removal, install, and startup.",
+        href: "/mold-change",
+      },
+      {
+        title: "Shift Handoff Logs",
+        shopFloorName: "Shift handoff",
+        description: "Tell the next shift what changed and what is open.",
+        href: "/shift-handoff",
+      },
+    ],
+  },
+  {
+    title: "Check Quality",
+    helper: "Approve first pieces, contain bad parts, and document corrective actions.",
+    href: "/quality/first-piece-approval",
+    tools: [
+      {
+        title: "Digital First Piece Approval",
+        shopFloorName: "First piece approval",
+        description: "Verify parts before the run continues.",
+        href: "/quality/first-piece-approval",
+      },
+      {
+        title: "First Article Inspection Report",
+        shopFloorName: "First article report",
+        description: "Record dimensions, checks, and approval status.",
+        href: "/quality/first-article",
+      },
+      {
+        title: "Quality Hold / Containment Tracker",
+        shopFloorName: "Quality hold",
+        description: "Track suspect parts held by quality.",
+        href: "/quality/containment",
+      },
+      {
+        title: "Scrap Tracker",
+        shopFloorName: "Scrap tracker",
+        description: "Log scrap by defect and quantity.",
+        href: "/scrap",
+      },
+      {
+        title: "Corrective Action Tracker (CAPA)",
+        shopFloorName: "CAPA tracker",
+        description: "Track owners, due dates, and verification.",
+        href: "/quality/capa",
+      },
+    ],
+  },
+  {
+    title: "Train Employees",
+    helper: "Assign training, check skills, and help operators learn the right way.",
     href: "/training/assignments",
-    accent: "from-emerald-300 to-cyan-400",
+    tools: [
+      {
+        title: "Training Assignment Manager",
+        shopFloorName: "Training assignments",
+        description: "Assign modules and check completion.",
+        href: "/training/assignments",
+      },
+      {
+        title: "Employee Skills Matrix",
+        shopFloorName: "Skills matrix",
+        description: "See who is qualified for each skill.",
+        href: "/training/skills-matrix",
+      },
+      {
+        title: "Operator Safety & Startup",
+        shopFloorName: "Operator startup training",
+        description: "Train operators on safe startup checks.",
+        href: "/training/operator-safety-startup",
+      },
+      {
+        title: "Mold Setup Training Module",
+        shopFloorName: "Mold setup training",
+        description: "Teach safe and repeatable mold changes.",
+        href: "/training/mold-setup",
+      },
+      {
+        title: "Process Technician Training Module",
+        shopFloorName: "Process tech training",
+        description: "Teach process checks and troubleshooting discipline.",
+        href: "/training/process-technician",
+      },
+    ],
   },
   {
-    title: "Training Renewal Reminder System",
-    description:
-      "Add, save, edit, delete, filter, count, and print employee training and certification renewal reminders with 30-day due-soon visibility.",
-    href: "/training/renewals",
-    accent: "from-amber-300 to-cyan-400",
-  },
-  {
-    title: "Training Compliance Dashboard",
-    description:
-      "Enter compliance snapshots, monitor assignments and certifications, review saved history, edit or delete records, and print compliance reports.",
-    href: "/training/compliance",
-    accent: "from-cyan-300 to-violet-400",
-  },
-  {
-    title: "Training Audit Report",
-    description:
-      "Add, save, edit, delete, filter, count, and print training audit records for employee training records, certifications, findings, corrective actions, owners, and due dates.",
-    href: "/training/audit-report",
-    accent: "from-violet-300 to-cyan-400",
-  },
-  {
-    title: "Employee Training Plan Builder",
-    description:
-      "Create, save, edit, filter, delete, track progress, and print employee training plans with role goals, skill gaps, modules, certifications, mentors, dates, status, and supervisor notes.",
-    href: "/training/plan-builder",
-    accent: "from-emerald-300 to-violet-400",
-  },
-  {
-    title: "Role-Based Training Paths",
-    description:
-      "Select a role, view required modules, lessons, certifications, skills, completion time, advancement path, saved progress, and print-friendly training plans.",
-    href: "/training/role-paths",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Employee Training Record",
-    description:
-      "Create, save, edit, filter, and print employee training records with quiz scores, pass/fail status, certifications, expiration alerts, and supervisor sign-off.",
-    href: "/employees/training-record",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Employee Performance Coaching Log",
-    description:
-      "Create, save, edit, filter, and print employee performance coaching logs with observations, standards, action plans, employee responses, follow-up dates, and closure status.",
-    href: "/employees/performance-coaching-log",
-    accent: "from-violet-300 to-cyan-400",
-  },
-  {
-    title: "Employee Skills Matrix",
-    description:
-      "Add, save, edit, filter, and print employee skill records with qualification levels, expiration dates, and supervisor sign-offs.",
-    href: "/training/skills-matrix",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Department Training Matrix",
-    description:
-      "Add, save, edit, delete, filter, and print department training records with completion percentages, certification status, expiration dates, and supervisor sign-offs.",
-    href: "/training/department-matrix",
-    accent: "from-emerald-300 to-cyan-400",
-  },
-  {
-    title: "Training Gap Analysis",
-    description:
-      "Add, save, edit, delete, filter, and print employee training gap records with role targets, skill levels, severity, due dates, status, open-gap totals, and critical-gap visibility.",
-    href: "/training/gap-analysis",
-    accent: "from-rose-300 to-cyan-400",
-  },
-  {
-    title: "Operator Safety & Startup",
-    description:
-      "Complete Operator Training Module 1 with machine-safety basics, startup verification, an interactive checklist, quiz, and certificate.",
-    href: "/training/operator-safety-startup",
-    accent: "from-cyan-300 to-emerald-400",
-  },
-  {
-    title: "Mold Setup Training Module",
-    description:
-      "Train setup technicians on safe mold changes, verification, crane awareness, utilities, mold protection, automation checks, first shots, common mistakes, and quiz completion.",
-    href: "/training/mold-setup",
-    accent: "from-emerald-300 to-cyan-400",
-  },
-  {
-    title: "Process Technician Training Module",
-    description:
-      "Train process technicians on process sheet verification, fill-only setup, transfer, cushion, pack/hold, gate seal, recovery, cooling validation, data troubleshooting, and quiz completion.",
-    href: "/training/process-technician",
-    accent: "from-cyan-300 to-amber-400",
-  },
-  {
-    title: "Supervisor Training Module",
-    description:
-      "Train supervisors on production floor leadership, shift startup expectations, dashboards, scrap and downtime review, operator coaching, quality escalation, process change approval, shift handoffs, assignment follow-up, and quiz completion.",
-    href: "/training/supervisor",
-    accent: "from-amber-300 to-cyan-400",
-  },
-  {
-    title: "Scientific Molding Study Manager",
-    description:
-      "Create, save, edit, filter, delete, and print fill, gate seal, pressure drop, decoupled molding, and process window study records.",
-    href: "/scientific-molding/studies",
-    accent: "from-cyan-300 to-violet-400",
-  },
-  {
-    title: "Scientific Molding Training",
-    description:
-      "Build a structured learning path for process windows, gate seal studies, viscosity curves, and setup discipline.",
-    href: "/lessons",
-    accent: "from-violet-300 to-fuchsia-400",
-  },
-  {
-    title: "Scientific Molding Calculator",
-    description:
-      "Estimate clamp tonnage, total shot weight, and screw recovery time with mobile-friendly scientific molding calculator cards.",
-    href: "/calculators",
-    accent: "from-amber-300 to-orange-400",
-  },
-  {
-    title: "Material Guides",
-    description:
-      "Check resin drying conditions and troubleshoot material-related defects before starting a run or adjusting the process.",
-    href: "/materials/resin-drying",
-    accent: "from-teal-300 to-cyan-400",
-  },
-  {
-    title: "Material Lot Traceability Tracker",
-    description:
-      "Create, save, edit, filter, delete, and print resin lot traceability records from receiving through drying and production output.",
-    href: "/materials/lot-traceability",
-    accent: "from-emerald-300 to-cyan-400",
-  },
-  {
-    title: "Material Inventory Tracker",
-    description:
-      "Add, save, view, edit, delete, filter, count, and print material inventory records with supplier lots, quantities, locations, expirations, and stock status.",
+    title: "Manage Materials",
+    helper: "Dry resin, track lots, manage inventory, and control material changes.",
     href: "/materials/inventory",
-    accent: "from-amber-300 to-emerald-400",
+    tools: [
+      {
+        title: "Material Inventory Tracker",
+        shopFloorName: "Material inventory",
+        description: "Check stock, lots, locations, and status.",
+        href: "/materials/inventory",
+      },
+      {
+        title: "Material Lot Traceability Tracker",
+        shopFloorName: "Lot traceability",
+        description: "Follow resin lots from receiving to production.",
+        href: "/materials/lot-traceability",
+      },
+      {
+        title: "Material Drying Log",
+        shopFloorName: "Drying log",
+        description: "Record dryer settings, dew point, and time.",
+        href: "/materials/drying-log",
+      },
+      {
+        title: "Material Guides",
+        shopFloorName: "Drying guide",
+        description: "Check resin drying conditions before startup.",
+        href: "/materials/resin-drying",
+      },
+      {
+        title: "Color Change Procedure & Log",
+        shopFloorName: "Color change log",
+        description: "Record purge time, scrap, and first-good part.",
+        href: "/materials/color-change",
+      },
+    ],
   },
   {
-    title: "Material Drying Log",
-    description:
-      "Create, save, edit, delete, filter, and print material drying records with dryer settings, dew point, duration, operator notes, and browser storage.",
-    href: "/materials/drying-log",
-    accent: "from-teal-300 to-emerald-400",
-  },
-  {
-    title: "Color Change Procedure & Log",
-    description:
-      "Create, save, edit, delete, filter, and print color change records with purge timing, scrap generated, first-good-part time, and browser storage.",
-    href: "/materials/color-change",
-    accent: "from-fuchsia-300 to-cyan-400",
-  },
-  {
-    title: "Material Change Approval Form",
-    description:
-      "Create, save, edit, delete, filter, approve, reject, and print material change approvals with quality, technician, and supervisor sign-offs.",
-    href: "/materials/change-approval",
-    accent: "from-cyan-300 to-blue-400",
-  },
-  {
-    title: "Material Defect Troubleshooter",
-    description:
-      "Select splay, bubbles, silver streaks, black specks, delamination, or brittleness to review material causes and corrective actions.",
-    href: "/materials/troubleshooter",
-    accent: "from-blue-300 to-cyan-400",
+    title: "Reports & Management",
+    helper: "Review plant results, assign actions, and keep records controlled.",
+    href: "/reports/daily",
+    tools: [
+      {
+        title: "Plant Daily Report",
+        shopFloorName: "Daily plant report",
+        description: "Review production, scrap, downtime, and priorities.",
+        href: "/reports/daily",
+      },
+      {
+        title: "Weekly Management Report",
+        shopFloorName: "Weekly report",
+        description: "Summarize results for the management team.",
+        href: "/reports/weekly",
+      },
+      {
+        title: "Executive KPI Dashboard",
+        shopFloorName: "KPI dashboard",
+        description: "Check trends for production, quality, and training.",
+        href: "/reports/kpi-dashboard",
+      },
+      {
+        title: "Action Item Tracker",
+        shopFloorName: "Action items",
+        description: "Track owners, due dates, priorities, and status.",
+        href: "/actions",
+      },
+      {
+        title: "Document Control System",
+        shopFloorName: "Documents",
+        description: "Manage controlled documents and reviews.",
+        href: "/documents",
+      },
+    ],
   },
 ];
 
-function CardContent({ card }: { card: DashboardCard }) {
+const favoriteTools = [
+  categories[1].tools[0],
+  categories[0].tools[1],
+  categories[2].tools[0],
+  categories[4].tools[2],
+];
+
+const recentTools = [
+  categories[1].tools[2],
+  categories[1].tools[5],
+  categories[2].tools[3],
+  categories[5].tools[0],
+];
+
+const mostUsedTools = [
+  categories[0].tools[0],
+  categories[1].tools[3],
+  categories[3].tools[1],
+  categories[5].tools[3],
+];
+
+function ToolList({ title, tools }: { title: string; tools: Tool[] }) {
   return (
-    <>
-      <div
-        className={`h-1.5 w-20 rounded-full bg-gradient-to-r ${card.accent}`}
-        aria-hidden="true"
-      />
-      <div className="mt-6 flex items-start justify-between gap-4">
-        <h2 className="text-2xl font-bold tracking-tight text-white">{card.title}</h2>
-        {card.status ? (
-          <span className="shrink-0 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-slate-300">
-            {card.status}
-          </span>
-        ) : null}
+    <section className="rounded-[1.75rem] border border-white/10 bg-white/[0.06] p-4 shadow-xl shadow-slate-950/30 sm:p-5">
+      <h2 className="text-lg font-black text-white">{title}</h2>
+      <div className="mt-4 grid gap-3">
+        {tools.map((tool) => (
+          <Link
+            key={`${title}-${tool.href}`}
+            href={tool.href}
+            className="rounded-2xl border border-white/10 bg-slate-950/70 p-4 transition hover:border-cyan-300/50 hover:bg-slate-900 focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="font-bold text-slate-100">{tool.shopFloorName}</p>
+                <p className="mt-1 text-sm leading-5 text-slate-400">{tool.description}</p>
+              </div>
+              <span className="shrink-0 text-lg text-cyan-200" aria-hidden="true">
+                →
+              </span>
+            </div>
+          </Link>
+        ))}
       </div>
-      <p className="mt-4 text-sm leading-6 text-slate-300 sm:text-base">{card.description}</p>
-      <div className="mt-7 flex items-center justify-between text-sm font-bold text-cyan-100">
-        <span>{card.href ? "Open tool" : "Planned module"}</span>
-        <span aria-hidden="true">→</span>
-      </div>
-    </>
+    </section>
   );
 }
 
 export default function Home() {
   return (
-    <main className="min-h-screen overflow-hidden bg-slate-950 px-4 py-8 text-slate-100 sm:px-6 lg:px-8">
-      <section className="mx-auto flex w-full max-w-6xl flex-col gap-8">
-        <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/80 p-6 shadow-2xl shadow-cyan-950/30 sm:p-8 lg:p-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.22),transparent_38%),radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.18),transparent_32%)]" />
+    <main className="min-h-screen bg-slate-950 px-4 py-5 text-slate-100 sm:px-6 lg:px-8">
+      <section className="mx-auto flex w-full max-w-7xl flex-col gap-6">
+        <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl shadow-cyan-950/30 sm:p-8">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.2),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.16),transparent_30%)]" />
           <div className="relative">
-            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-300">
-              Mobile-first molding support
-            </p>
-            <h1 className="mt-4 max-w-4xl text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-7xl">
-              AI Molding Coach
-            </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
-              A focused dashboard for injection molding teams to diagnose defects, follow disciplined troubleshooting, and prepare for future scientific molding tools.
-            </p>
+            <p className="text-sm font-bold uppercase tracking-[0.25em] text-cyan-300">Molding Mentor AI</p>
+            <div className="mt-4 grid gap-4 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+              <div>
+                <h1 className="text-4xl font-black tracking-tight text-white sm:text-6xl">
+                  Find the right shop-floor tool fast.
+                </h1>
+                <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
+                  Simple shortcuts for process techs and supervisors. Troubleshoot problems, run the shift, check quality, train people, and manage materials from one clean home screen.
+                </p>
+              </div>
+              <form className="rounded-3xl border border-cyan-300/20 bg-slate-950/70 p-3" role="search">
+                <label htmlFor="tool-search" className="sr-only">
+                  What do you need help with?
+                </label>
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <input
+                    id="tool-search"
+                    name="q"
+                    type="search"
+                    placeholder="What do you need help with?"
+                    className="min-h-14 flex-1 rounded-2xl border border-white/10 bg-white px-4 text-base font-semibold text-slate-950 outline-none placeholder:text-slate-500 focus:ring-4 focus:ring-cyan-300/30"
+                  />
+                  <button
+                    type="submit"
+                    className="min-h-14 rounded-2xl bg-cyan-300 px-6 text-base font-black text-slate-950 transition hover:bg-cyan-200 focus:outline-none focus:ring-4 focus:ring-cyan-300/30"
+                  >
+                    Search
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </header>
 
-        <section aria-label="Progress widgets" className="grid gap-4 sm:grid-cols-3">
-          {dashboardWidgets.map((widget) => (
-            <article key={widget.label} className="rounded-[1.5rem] border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-xl shadow-cyan-950/20">
-              <p className="text-4xl font-black text-white">{widget.value}</p>
-              <h2 className="mt-2 text-sm font-black uppercase tracking-[0.2em] text-cyan-100">{widget.label}</h2>
-              <p className="mt-2 text-sm text-slate-300">{widget.description}</p>
-            </article>
+        <section aria-label="Tool categories" className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {categories.map((category, index) => (
+            <Link
+              key={category.title}
+              href={category.href}
+              className="group rounded-[1.75rem] border border-white/10 bg-white/[0.07] p-5 shadow-xl shadow-slate-950/30 transition hover:-translate-y-1 hover:border-cyan-300/50 hover:bg-white/[0.1] focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-300 text-xl font-black text-slate-950">
+                  {index + 1}
+                </span>
+                <span className="mt-2 text-2xl text-cyan-200" aria-hidden="true">
+                  →
+                </span>
+              </div>
+              <h2 className="mt-5 text-2xl font-black text-white">{category.title}</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-300">{category.helper}</p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {category.tools.slice(0, 3).map((tool) => (
+                  <span key={tool.href} className="rounded-full border border-white/10 bg-slate-950/70 px-3 py-1 text-xs font-bold text-slate-300">
+                    {tool.shopFloorName}
+                  </span>
+                ))}
+              </div>
+            </Link>
           ))}
         </section>
 
-        <div>
-          <p className="text-sm font-black uppercase tracking-[0.28em] text-emerald-300">Process & Production Tools</p>
-          <h2 className="mt-2 text-3xl font-black tracking-tight text-white">Run process and production control from one mobile-first workspace</h2>
-        </div>
-
-        <section
-          aria-label="Process and Production Tools"
-          className="grid gap-4 sm:grid-cols-2 lg:gap-6"
-        >
-          {dashboardCards.map((card) => {
-            const className =
-              "group min-h-64 rounded-[1.75rem] border border-white/10 bg-white/[0.07] p-6 shadow-xl shadow-slate-950/30 backdrop-blur transition sm:p-7";
-
-            if (card.href) {
-              return (
-                <Link
-                  key={card.title}
-                  href={card.href}
-                  className={`${className} hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-white/[0.1] focus:outline-none focus:ring-4 focus:ring-cyan-300/20`}
-                >
-                  <CardContent card={card} />
-                </Link>
-              );
-            }
-
-            return (
-              <article
-                key={card.title}
-                className={`${className} opacity-80`}
-              >
-                <CardContent card={card} />
-              </article>
-            );
-          })}
+        <section className="grid gap-4 lg:grid-cols-3">
+          <ToolList title="Favorites" tools={favoriteTools} />
+          <ToolList title="Recent tools" tools={recentTools} />
+          <ToolList title="Most used tools" tools={mostUsedTools} />
         </section>
       </section>
     </main>
