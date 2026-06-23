@@ -1046,6 +1046,15 @@ export default function Home() {
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">
               Simple buttons for technicians and supervisors. Search by defect, job, material, training, report, or tool name.
             </p>
+            <div className="mt-6">
+              <Link
+                href="/start-here"
+                className="inline-flex w-full items-center justify-between rounded-full bg-gradient-to-r from-amber-300 to-cyan-300 px-6 py-4 text-base font-black text-slate-950 shadow-2xl shadow-cyan-950/30 transition hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-amber-300/30 sm:w-auto sm:min-w-72"
+              >
+                <span>Start Here</span>
+                <span aria-hidden="true">→</span>
+              </Link>
+            </div>
             <div className="mt-6 flex flex-col gap-3 rounded-3xl border border-white/10 bg-slate-950/55 p-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm font-black text-white">Beginner Mode</p>
