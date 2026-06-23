@@ -603,6 +603,17 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-emerald-400",
     keywords: ["lessons learned", "knowledge base", "root cause", "teach technician", "tribal knowledge"],
   },
+  {
+    title: "Scott's Mentor Knowledge Capture",
+    plainSubtitle: "Turn real shop-floor fixes into teaching notes",
+    description:
+      "Use a simple guided form to capture injection molding problems, defects, first checks, failed fixes, proven fixes, warnings, and tags, then save mentor notes, case studies, and troubleshooting tips.",
+    href: "/mentor-capture",
+    accent: "from-amber-300 to-cyan-400",
+    beginnerTitle: "Capture a Mentor Story",
+    beginnerExplanation: "Answer plain-language questions after a real molding problem so the next technician can learn from it.",
+    keywords: ["mentor capture", "knowledge capture", "scott", "shop floor fixes", "tribal knowledge", "case study", "troubleshooting tip"],
+  },
 
   {
     title: "Mentor Notes",
@@ -675,6 +686,7 @@ const categoryOrder = [
   "Troubleshoot a Problem",
   "Run Production",
   "Check Quality",
+  "Capture Knowledge",
   "Learn & Teach",
   "Manage Materials",
   "Reports & Management",
@@ -698,6 +710,12 @@ const categoryDetails: Record<string, { icon: string; helper: string; cta: strin
     helper: "Approve first pieces, hold suspect parts, and close quality actions.",
     cta: "Check parts",
     accent: "from-teal-300 to-emerald-400",
+  },
+  "Capture Knowledge": {
+    icon: "📝",
+    helper: "Save real fixes, mentor notes, case studies, and troubleshooting lessons.",
+    cta: "Capture a fix",
+    accent: "from-amber-300 to-cyan-400",
   },
   "Learn & Teach": {
     icon: "🎓",
@@ -723,6 +741,7 @@ const categoryQuickLinks: Record<string, string> = {
   "Troubleshoot a Problem": "/troubleshooting",
   "Run Production": "/production/live-board",
   "Check Quality": "/quality/first-piece-approval",
+  "Capture Knowledge": "/mentor-capture",
   "Learn & Teach": "/training/assignments",
   "Manage Materials": "/materials/resin-drying",
   "Reports & Management": "/reports/daily",
@@ -732,6 +751,7 @@ const categoryKeywords: Record<string, string[]> = {
   "Troubleshoot a Problem": ["troubleshooting", "fix", "defect", "scrap", "short shot", "flash", "sink", "warp", "machine alarm", "root cause"],
   "Run Production": ["production", "run", "setup", "startup", "mold change", "handoff", "schedule", "process sheet", "downtime", "oee"],
   "Check Quality": ["quality", "first piece", "first article", "inspection", "hold", "containment", "audit", "capa", "corrective action"],
+  "Capture Knowledge": ["knowledge capture", "mentor capture", "lessons learned", "case study", "mentor notes", "troubleshooting tip", "tribal knowledge", "real fix"],
   "Learn & Teach": ["training", "employee", "operator", "technician", "supervisor", "skills", "certification", "lesson", "quiz", "safety"],
   "Manage Materials": ["material", "resin", "drying", "dryer", "lot", "inventory", "color change", "purge", "moisture", "supplier"],
   "Reports & Management": ["report", "management", "daily", "weekly", "kpi", "meeting", "document", "action item", "mold history", "machine history"],
@@ -757,6 +777,7 @@ const toolKeywordMap: Record<string, string[]> = {
   "/scenarios": ["shop-floor scenarios", "troubleshooting practice", "real molding problems", "flash startup", "short shot material change", "splay color change", "warpage cycle time", "burn marks end of fill", "voids thick section"],
   "/knowledge-search": ["knowledge search", "search all", "defects", "troubleshooting", "materials", "scientific molding", "mold number", "machine number", "part number", "plain english"],
   "/knowledge-base": ["lessons learned", "knowledge base", "root cause", "teach technician", "tribal knowledge", "saved fixes"],
+  "/mentor-capture": ["mentor capture", "knowledge capture", "scott", "real world experience", "guided form", "case study version", "mentor note version", "troubleshooting tip version"],
   "/mentor-notes": ["mentor notes", "teaching notes", "new technician", "supervisor notes", "topic", "defect", "machine", "mold", "tag", "tribal knowledge"],
   "/training/skills-matrix": ["skills", "qualified", "cross training", "matrix"],
 };
@@ -783,7 +804,8 @@ function getToolCategory(card: DashboardCard) {
   }
 
   if (href.startsWith("/quality")) return "Check Quality";
-  if (href.startsWith("/training") || href.startsWith("/lessons") || href === "/knowledge-base" || href === "/knowledge-search" || href === "/mentor-notes" || href === "/learning-paths" || href === "/scenarios" || href.startsWith("/certifications") || href.startsWith("/employees")) return "Learn & Teach";
+  if (href === "/mentor-capture" || href === "/knowledge-base" || href === "/knowledge-search" || href === "/mentor-notes" || href === "/case-studies") return "Capture Knowledge";
+  if (href.startsWith("/training") || href.startsWith("/lessons") || href === "/learning-paths" || href === "/scenarios" || href.startsWith("/certifications") || href.startsWith("/employees")) return "Learn & Teach";
   if (href.startsWith("/materials")) return "Manage Materials";
 
   return "Reports & Management";
