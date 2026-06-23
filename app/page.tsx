@@ -672,69 +672,78 @@ const dashboardCards: DashboardCard[] = [
 ];
 
 const categoryOrder = [
-  "Troubleshoot a Problem",
+  "Fix a Problem",
+  "Learn Molding",
+  "Capture Knowledge",
   "Run Production",
   "Check Quality",
-  "Learn & Teach",
-  "Manage Materials",
-  "Reports & Management",
+  "Manage Training",
+  "Materials",
 ];
 
 const categoryDetails: Record<string, { icon: string; helper: string; cta: string; accent: string }> = {
-  "Troubleshoot a Problem": {
-    icon: "🔎",
-    helper: "Fix defects, machine issues, scrap, and process problems fast.",
-    cta: "Start troubleshooting",
+  "Fix a Problem": {
+    icon: "🆘",
+    helper: "Start here when parts look wrong, scrap goes up, or you are not sure what changed.",
+    cta: "Fix a problem",
     accent: "from-cyan-300 to-blue-400",
+  },
+  "Learn Molding": {
+    icon: "🎓",
+    helper: "Learn molding basics, practice real scenarios, and build stronger process thinking.",
+    cta: "Start learning",
+    accent: "from-violet-300 to-cyan-400",
+  },
+  "Capture Knowledge": {
+    icon: "🧠",
+    helper: "Save fixes, notes, case studies, documents, and lessons learned so the next person can find them.",
+    cta: "Save knowledge",
+    accent: "from-emerald-300 to-cyan-400",
   },
   "Run Production": {
     icon: "🏭",
-    helper: "Set up jobs, run the floor, track downtime, and hand off the shift.",
+    helper: "Run jobs, change molds, approve startup, track downtime, and hand off the shift.",
     cta: "Run the floor",
     accent: "from-emerald-300 to-cyan-400",
   },
   "Check Quality": {
     icon: "✅",
-    helper: "Approve first pieces, hold suspect parts, and close quality actions.",
+    helper: "Check first pieces, control suspect parts, track scrap, and close corrective actions.",
     cta: "Check parts",
     accent: "from-teal-300 to-emerald-400",
   },
-  "Learn & Teach": {
-    icon: "🎓",
-    helper: "Assign training, build skills, and print certificates.",
-    cta: "Open training",
-    accent: "from-violet-300 to-cyan-400",
+  "Manage Training": {
+    icon: "📋",
+    helper: "Assign training, track skills, watch renewals, and manage employee records.",
+    cta: "Manage training",
+    accent: "from-amber-300 to-cyan-400",
   },
-  "Manage Materials": {
+  Materials: {
     icon: "🧪",
-    helper: "Dry resin, track lots, control inventory, and manage changes.",
+    helper: "Check resin drying, material lots, inventory, color changes, and material-related defects.",
     cta: "Check materials",
     accent: "from-amber-300 to-emerald-400",
-  },
-  "Reports & Management": {
-    icon: "📊",
-    helper: "Review reports, actions, documents, meetings, people, molds, and machines.",
-    cta: "Review reports",
-    accent: "from-fuchsia-300 to-cyan-400",
   },
 };
 
 const categoryQuickLinks: Record<string, string> = {
-  "Troubleshoot a Problem": "/troubleshooting",
+  "Fix a Problem": "/problem",
+  "Learn Molding": "/learning-paths",
+  "Capture Knowledge": "/knowledge-search",
   "Run Production": "/production/live-board",
   "Check Quality": "/quality/first-piece-approval",
-  "Learn & Teach": "/training/assignments",
-  "Manage Materials": "/materials/resin-drying",
-  "Reports & Management": "/reports/daily",
+  "Manage Training": "/training/assignments",
+  Materials: "/materials/resin-drying",
 };
 
 const categoryKeywords: Record<string, string[]> = {
-  "Troubleshoot a Problem": ["troubleshooting", "fix", "defect", "scrap", "short shot", "flash", "sink", "warp", "machine alarm", "root cause"],
+  "Fix a Problem": ["troubleshooting", "fix", "defect", "scrap", "short shot", "flash", "sink", "warp", "machine alarm", "root cause"],
+  "Learn Molding": ["learn", "lesson", "scientific molding", "scenario", "calculator", "training module", "basics", "process window"],
+  "Capture Knowledge": ["knowledge", "search", "lessons learned", "mentor notes", "case study", "document", "history", "meeting", "action item"],
   "Run Production": ["production", "run", "setup", "startup", "mold change", "handoff", "schedule", "process sheet", "downtime", "oee"],
-  "Check Quality": ["quality", "first piece", "first article", "inspection", "hold", "containment", "audit", "capa", "corrective action"],
-  "Learn & Teach": ["training", "employee", "operator", "technician", "supervisor", "skills", "certification", "lesson", "quiz", "safety"],
-  "Manage Materials": ["material", "resin", "drying", "dryer", "lot", "inventory", "color change", "purge", "moisture", "supplier"],
-  "Reports & Management": ["report", "management", "daily", "weekly", "kpi", "meeting", "document", "action item", "mold history", "machine history"],
+  "Check Quality": ["quality", "first piece", "first article", "inspection", "hold", "containment", "audit", "capa", "corrective action", "scrap"],
+  "Manage Training": ["training", "employee", "operator", "technician", "supervisor", "skills", "certification", "quiz", "safety", "renewal"],
+  Materials: ["material", "resin", "drying", "dryer", "lot", "inventory", "color change", "purge", "moisture", "supplier"],
 };
 
 const toolKeywordMap: Record<string, string[]> = {
@@ -765,28 +774,60 @@ function getToolCategory(card: DashboardCard) {
   const href = card.href ?? "";
   const title = card.title.toLowerCase();
 
+  if (href.startsWith("/materials")) return "Materials";
+
   if (
-    ["/coach", "/troubleshooting", "/root-cause/what-changed", "/defects", "/photo-analysis", "/scrap", "/downtime"].includes(href) ||
-    href === "/materials/troubleshooter" ||
+    href.startsWith("/quality") ||
+    href === "/scrap" ||
+    title.includes("quality") ||
+    title.includes("inspection") ||
+    title.includes("corrective action") ||
+    title.includes("capa") ||
+    title.includes("complaint")
+  ) {
+    return "Check Quality";
+  }
+
+  if (href.startsWith("/training") || href.startsWith("/certifications") || href.startsWith("/employees") || href === "/plant-management") {
+    return "Manage Training";
+  }
+
+  if (
+    href.startsWith("/lessons") ||
+    href === "/learning-paths" ||
+    href === "/scenarios" ||
+    href === "/calculators" ||
+    href.startsWith("/calculators") ||
+    href === "/scientific-molding/studies"
+  ) {
+    return "Learn Molding";
+  }
+
+  if (
+    href === "/knowledge-search" ||
+    href === "/knowledge-base" ||
+    href === "/mentor-notes" ||
+    href === "/case-studies" ||
+    href === "/documents" ||
+    href === "/molds" ||
+    href === "/molds/pm-scheduler" ||
+    href === "/machines" ||
+    href === "/meetings" ||
+    href === "/actions" ||
+    href.startsWith("/reports")
+  ) {
+    return "Capture Knowledge";
+  }
+
+  if (
+    ["/problem", "/coach", "/troubleshooting", "/root-cause/what-changed", "/defects", "/photo-analysis"].includes(href) ||
     title.includes("troubleshoot") ||
     title.includes("defect")
   ) {
-    return "Troubleshoot a Problem";
+    return "Fix a Problem";
   }
 
-  if (
-    href.startsWith("/production") ||
-    ["/startup-approval", "/mold-change", "/shift-handoff", "/process-sheet-builder", "/process-sheets/approval", "/work-instructions", "/process-change-log", "/oee", "/calculators", "/scientific-molding/studies"].includes(href) ||
-    href.startsWith("/calculators")
-  ) {
-    return "Run Production";
-  }
-
-  if (href.startsWith("/quality")) return "Check Quality";
-  if (href.startsWith("/training") || href.startsWith("/lessons") || href === "/knowledge-base" || href === "/knowledge-search" || href === "/mentor-notes" || href === "/learning-paths" || href === "/scenarios" || href.startsWith("/certifications") || href.startsWith("/employees")) return "Learn & Teach";
-  if (href.startsWith("/materials")) return "Manage Materials";
-
-  return "Reports & Management";
+  return "Run Production";
 }
 
 
@@ -848,7 +889,7 @@ function SimpleToolCard({
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <h3 className={`${compact ? "text-base" : "text-lg"} font-black leading-tight text-white`}>{displayTitle}</h3>
           {isBeginnerStart ? (
-            <span className="rounded-full bg-amber-300 px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-[0.16em] text-slate-950">Start here</span>
+            <span className="rounded-full bg-amber-300 px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-[0.16em] text-slate-950">Best place to start</span>
           ) : null}
         </div>
         {card.plainSubtitle ? (
@@ -974,6 +1015,28 @@ function RoleToolList({
       })}
     </section>
   );
+}
+
+
+const importantToolHrefsByCategory: Record<string, Set<string>> = {
+  "Fix a Problem": new Set(["/problem", "/troubleshooting", "/photo-analysis", "/coach", "/defects", "/root-cause/what-changed"]),
+  "Learn Molding": new Set(["/learning-paths", "/lessons", "/scenarios", "/calculators"]),
+  "Capture Knowledge": new Set(["/knowledge-search", "/knowledge-base", "/mentor-notes", "/case-studies"]),
+  "Run Production": new Set(["/production/live-board", "/mold-change", "/startup-approval", "/shift-handoff", "/process-sheet-builder", "/downtime"]),
+  "Check Quality": new Set(["/quality/first-piece-approval", "/quality/containment", "/quality/first-article", "/scrap"]),
+  "Manage Training": new Set(["/training/assignments", "/training/skills-matrix", "/training/renewals", "/certifications"]),
+  Materials: new Set(["/materials/resin-drying", "/materials/drying-log", "/materials/lot-traceability", "/materials/troubleshooter"]),
+};
+
+function splitToolsByImportance(categoryName: string, tools: DashboardCard[]) {
+  const importantHrefs = importantToolHrefsByCategory[categoryName] ?? new Set<string>();
+  const importantTools = tools.filter((tool) => tool.href && importantHrefs.has(tool.href));
+  const moreTools = tools.filter((tool) => !tool.href || !importantHrefs.has(tool.href));
+
+  return {
+    importantTools: importantTools.length > 0 ? importantTools : tools.slice(0, 4),
+    moreTools: importantTools.length > 0 ? moreTools : tools.slice(4),
+  };
 }
 
 const defaultFavoriteHrefs = ["/troubleshooting", "/coach", "/defects", "/production/live-board", "/quality/first-piece-approval", "/materials/resin-drying"];
@@ -1299,7 +1362,7 @@ export default function Home() {
               <div>
                 <h1 className="text-3xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">What do you need help with today?</h1>
                 <p className="mt-3 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
-                  Pick the task that matches the problem on the floor. Every button uses plain shop-floor language and keeps the full toolset one tap away.
+                  Pick the task that matches the problem on the floor. Every button uses plain shop-floor language and keeps the full toolset one tap away. Start with Fix a Problem if you are not sure where to go.
                 </p>
               </div>
               <label className="block">
@@ -1741,15 +1804,34 @@ export default function Home() {
             <p className="text-sm text-slate-400">Search filters this list without removing any routes.</p>
           </div>
           <div className="mt-5 grid gap-5">
-            {categories.map((category) => (
-              <section key={category.name} className="rounded-[1.5rem] border border-white/10 bg-slate-950/45 p-4">
-                <div className="mb-3 flex items-center justify-between gap-3">
-                  <h3 className="text-xl font-black text-white"><span aria-hidden="true">{categoryDetails[category.name].icon}</span> {category.name}</h3>
-                  <span className="rounded-full bg-white/10 px-3 py-1 text-sm font-bold text-slate-300">{category.tools.length}</span>
-                </div>
-                {category.tools.length > 0 ? <ToolList cards={category.tools} label={`${category.name} tools`} compact favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} /> : <p className="text-sm text-slate-400">No matching tools in this category.</p>}
-              </section>
-            ))}
+            {categories.map((category) => {
+              const { importantTools, moreTools } = splitToolsByImportance(category.name, category.tools);
+
+              return (
+                <section key={category.name} className="rounded-[1.5rem] border border-white/10 bg-slate-950/45 p-4">
+                  <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <h3 className="text-xl font-black text-white"><span aria-hidden="true">{categoryDetails[category.name].icon}</span> {category.name}</h3>
+                      <p className="mt-1 text-sm leading-5 text-slate-300">{categoryDetails[category.name].helper}</p>
+                    </div>
+                    <span className="w-fit rounded-full bg-white/10 px-3 py-1 text-sm font-bold text-slate-300">{category.tools.length} tools</span>
+                  </div>
+                  {category.tools.length > 0 ? (
+                    <div className="grid gap-4">
+                      <ToolList cards={importantTools} label={`${category.name} important tools`} compact favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
+                      {moreTools.length > 0 ? (
+                        <details className="rounded-[1.25rem] border border-white/10 bg-slate-900/75 p-3">
+                          <summary className="cursor-pointer text-sm font-black uppercase tracking-[0.18em] text-cyan-100 focus:outline-none focus:ring-4 focus:ring-cyan-300/20">More tools</summary>
+                          <div className="mt-3">
+                            <ToolList cards={moreTools} label={`${category.name} more tools`} compact favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
+                          </div>
+                        </details>
+                      ) : null}
+                    </div>
+                  ) : <p className="text-sm text-slate-400">No matching tools in this category.</p>}
+                </section>
+              );
+            })}
           </div>
         </section>
       </section>
