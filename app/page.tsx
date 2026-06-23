@@ -14,6 +14,13 @@ type DashboardCard = {
   beginnerExplanation?: string;
 };
 
+type ShopRole = "Operator" | "Process Technician" | "Supervisor" | "Manager";
+
+type RoleToolPick = {
+  label: string;
+  href: string;
+};
+
 const dashboardCards: DashboardCard[] = [
   {
     title: "User Profile",
@@ -705,6 +712,7 @@ function toolButtonClass(extra = "") {
 
 function SimpleToolCard({
   card,
+  titleOverride,
   compact = false,
   isFavorite = false,
   beginnerMode = false,
@@ -713,6 +721,7 @@ function SimpleToolCard({
   onOpenTool,
 }: {
   card: DashboardCard;
+  titleOverride?: string;
   compact?: boolean;
   isFavorite?: boolean;
   beginnerMode?: boolean;
@@ -720,7 +729,7 @@ function SimpleToolCard({
   onToggleFavorite?: (href: string) => void;
   onOpenTool?: (href: string) => void;
 }) {
-  const displayTitle = beginnerMode && card.beginnerTitle ? card.beginnerTitle : card.title;
+  const displayTitle = titleOverride ?? (beginnerMode && card.beginnerTitle ? card.beginnerTitle : card.title);
   const category = getToolCategory(card);
   const favoriteLabel = isFavorite ? `Remove ${displayTitle} from favorites` : `Add ${displayTitle} to favorites`;
   const content = (
@@ -817,6 +826,46 @@ function ToolList({
   );
 }
 
+
+function RoleToolList({
+  picks,
+  favoriteHrefs,
+  beginnerMode,
+  beginnerStartHrefs,
+  onToggleFavorite,
+  onOpenTool,
+}: {
+  picks: RoleToolPick[];
+  favoriteHrefs: Set<string>;
+  beginnerMode: boolean;
+  beginnerStartHrefs: Set<string>;
+  onToggleFavorite: (href: string) => void;
+  onOpenTool: (href: string) => void;
+}) {
+  return (
+    <section aria-label="Tools for selected role" className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      {picks.map((pick) => {
+        const card = dashboardCards.find((dashboardCard) => dashboardCard.href === pick.href);
+
+        if (!card) return null;
+
+        return (
+          <SimpleToolCard
+            key={`${pick.label}-${pick.href}`}
+            card={card}
+            titleOverride={pick.label}
+            isFavorite={favoriteHrefs.has(pick.href)}
+            beginnerMode={beginnerMode}
+            isBeginnerStart={beginnerStartHrefs.has(pick.href)}
+            onToggleFavorite={onToggleFavorite}
+            onOpenTool={onOpenTool}
+          />
+        );
+      })}
+    </section>
+  );
+}
+
 const defaultFavoriteHrefs = ["/troubleshooting", "/coach", "/defects", "/production/live-board", "/quality/first-piece-approval", "/materials/resin-drying"];
 const homepageFavoritesStorageKey = "moldingMentorHomepageFavorites";
 const homepageRecentToolsStorageKey = "moldingMentorRecentTools";
@@ -826,6 +875,44 @@ const validToolHrefs = validFavoriteHrefs;
 const mostUsedHrefs = new Set(["/process-sheet-builder", "/production/live-board", "/scrap", "/oee", "/materials/resin-drying", "/calculators"]);
 const beginnerModeStorageKey = "moldingMentorBeginnerMode";
 const beginnerStartHrefs = new Set(["/troubleshooting", "/photo-analysis", "/defects", "/coach"]);
+const selectedRoleStorageKey = "moldingMentorSelectedRole";
+const shopRoles: ShopRole[] = ["Operator", "Process Technician", "Supervisor", "Manager"];
+const roleHelpers: Record<ShopRole, string> = {
+  Operator: "Fast help for defects, instructions, and basic training.",
+  "Process Technician": "Tools for troubleshooting, studies, calculations, and process changes.",
+  Supervisor: "Shift tools for production, downtime, scrap, handoff, and training status.",
+  Manager: "Reports, KPIs, action items, and customer issue follow-up.",
+};
+const roleToolPicks: Record<ShopRole, RoleToolPick[]> = {
+  Operator: [
+    { label: "Troubleshooting Wizard", href: "/troubleshooting" },
+    { label: "Defect Photo Analysis", href: "/photo-analysis" },
+    { label: "Work Instructions", href: "/work-instructions" },
+    { label: "Training", href: "/training/operator-safety-startup" },
+  ],
+  "Process Technician": [
+    { label: "Troubleshooting Assistant", href: "/troubleshooting" },
+    { label: "Defect Library", href: "/defects" },
+    { label: "Scientific Molding Studies", href: "/scientific-molding/studies" },
+    { label: "Process Calculators", href: "/calculators" },
+    { label: "Process Change Log", href: "/process-change-log" },
+  ],
+  Supervisor: [
+    { label: "Live Production Board", href: "/production/live-board" },
+    { label: "Shift Handoff", href: "/shift-handoff" },
+    { label: "Downtime Tracker", href: "/downtime" },
+    { label: "Scrap Tracker", href: "/scrap" },
+    { label: "Training Compliance", href: "/training/compliance" },
+  ],
+  Manager: [
+    { label: "KPI Dashboard", href: "/reports/kpi-dashboard" },
+    { label: "Daily Report", href: "/reports/daily" },
+    { label: "Weekly Report", href: "/reports/weekly" },
+    { label: "Action Items", href: "/actions" },
+    { label: "Customer Complaints", href: "/quality/customer-complaints" },
+  ],
+};
+
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -833,16 +920,26 @@ export default function Home() {
   const [recentToolHrefs, setRecentToolHrefs] = useState<string[]>([]);
   const [recentToolsHydrated, setRecentToolsHydrated] = useState(false);
   const [beginnerMode, setBeginnerMode] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<ShopRole>("Operator");
   const favoriteHrefSet = useMemo(() => new Set(favoriteTools), [favoriteTools]);
   const normalizedSearch = searchTerm.trim().toLowerCase();
 
   useEffect(() => {
     setBeginnerMode(window.localStorage.getItem(beginnerModeStorageKey) === "true");
+
+    const savedRole = window.localStorage.getItem(selectedRoleStorageKey);
+    if (savedRole && shopRoles.includes(savedRole as ShopRole)) {
+      setSelectedRole(savedRole as ShopRole);
+    }
   }, []);
 
   useEffect(() => {
     window.localStorage.setItem(beginnerModeStorageKey, String(beginnerMode));
   }, [beginnerMode]);
+
+  useEffect(() => {
+    window.localStorage.setItem(selectedRoleStorageKey, selectedRole);
+  }, [selectedRole]);
 
   useEffect(() => {
     const savedFavorites = window.localStorage.getItem(homepageFavoritesStorageKey);
@@ -1004,6 +1101,42 @@ export default function Home() {
               </Link>
             );
           })}
+        </section>
+
+        <section className="rounded-[2rem] border border-emerald-300/20 bg-slate-900/75 p-4 shadow-2xl shadow-emerald-950/20 sm:p-6" aria-label="Role based tools">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">Role tools</p>
+              <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Pick your role</h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
+                Choose your job for the shift. We will show the best tools first and remember this choice on this device.
+              </p>
+            </div>
+            <p className="rounded-full border border-white/10 bg-slate-950/70 px-4 py-2 text-sm font-bold text-emerald-100">
+              Showing: {selectedRole}
+            </p>
+          </div>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4" role="list" aria-label="Select role">
+            {shopRoles.map((role) => (
+              <button
+                key={role}
+                aria-pressed={selectedRole === role}
+                className={`rounded-2xl border p-4 text-left transition focus:outline-none focus:ring-4 focus:ring-emerald-300/20 ${
+                  selectedRole === role
+                    ? "border-emerald-200/80 bg-emerald-300 text-slate-950 shadow-lg shadow-emerald-950/20"
+                    : "border-white/10 bg-slate-950/55 text-slate-100 hover:border-emerald-300/50 hover:bg-white/[0.08]"
+                }`}
+                type="button"
+                onClick={() => setSelectedRole(role)}
+              >
+                <span className="block text-base font-black">{role}</span>
+                <span className={`mt-2 block text-sm leading-5 ${selectedRole === role ? "text-slate-800" : "text-slate-300"}`}>{roleHelpers[role]}</span>
+              </button>
+            ))}
+          </div>
+          <div className="mt-5">
+            <RoleToolList picks={roleToolPicks[selectedRole]} favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
+          </div>
         </section>
 
         {normalizedSearch ? (
