@@ -424,6 +424,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-teal-300 to-emerald-400",
   },
   {
+    title: "Color Change Procedure & Log",
+    description:
+      "Create, save, edit, delete, filter, and print color change records with purge timing, scrap generated, first-good-part time, and browser storage.",
+    href: "/materials/color-change",
+    accent: "from-fuchsia-300 to-cyan-400",
+  },
+  {
     title: "Material Change Approval Form",
     description:
       "Create, save, edit, delete, filter, approve, reject, and print material change approvals with quality, technician, and supervisor sign-offs.",
