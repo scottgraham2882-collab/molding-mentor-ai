@@ -417,6 +417,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Material Drying Log",
+    description:
+      "Create, save, edit, delete, filter, and print material drying records with dryer settings, dew point, duration, operator notes, and browser storage.",
+    href: "/materials/drying-log",
+    accent: "from-teal-300 to-emerald-400",
+  },
+  {
     title: "Material Change Approval Form",
     description:
       "Create, save, edit, delete, filter, approve, reject, and print material change approvals with quality, technician, and supervisor sign-offs.",
