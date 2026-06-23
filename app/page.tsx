@@ -368,6 +368,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-amber-300 to-cyan-400",
   },
   {
+    title: "Scientific Molding Study Manager",
+    description:
+      "Create, save, edit, filter, delete, and print fill, gate seal, pressure drop, decoupled molding, and process window study records.",
+    href: "/scientific-molding/studies",
+    accent: "from-cyan-300 to-violet-400",
+  },
+  {
     title: "Scientific Molding Training",
     description:
       "Build a structured learning path for process windows, gate seal studies, viscosity curves, and setup discipline.",
