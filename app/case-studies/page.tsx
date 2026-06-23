@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+
+import { RecommendedNextStepEngine } from "../../components/RecommendedNextStepEngine";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
 type CaseStudy = {
@@ -204,6 +206,11 @@ export default function CaseStudiesPage() {
           ))}
           {filteredCaseStudies.length === 0 && <p className="rounded-3xl border border-dashed border-white/15 p-8 text-center text-slate-400 md:col-span-2">No case studies found. Create one above or clear your search filters.</p>}
         </section>
+
+        <RecommendedNextStepEngine
+          context="case-study"
+          intro="After saving or reviewing a case, use it to find a lesson learned or a similar problem."
+        />
       </div>
     </main>
   );

@@ -7,8 +7,9 @@ import { useMemo, useState } from "react";
 
 import { DefectEducationPanels } from "../../components/DefectEducationPanels";
 import { LearnMoreAboutThis } from "../../components/LearnMoreAboutThis";
-import { RecommendedNextStep } from "../../components/RecommendedNextStep";
+import { RecommendedNextStepEngine } from "../../components/RecommendedNextStepEngine";
 import { defectGuides } from "../../lib/defect-data";
+import { getTroubleshootingNextStepContext } from "../../lib/next-step-engine";
 
 type WizardAnswers = {
   defectSlug: string;
@@ -251,11 +252,9 @@ export default function TroubleshootingPage() {
           </div>
         </section>
 
-        <RecommendedNextStep
-          label="AI Coach"
-          href="/coach"
-          reason="Use the coach for follow-up questions after the wizard gives you the likely defect and first checks."
-          related={[{ label: "Defect Library", href: "/defects" }, { label: "Save lesson learned", href: "/knowledge-base" }]}
+        <RecommendedNextStepEngine
+          context={getTroubleshootingNextStepContext(likelyDefect.slug)}
+          intro="After the wizard points you in a direction, choose one focused follow-up step."
         />
 
         <FeedbackPrompt page="Troubleshooting Wizard" />
