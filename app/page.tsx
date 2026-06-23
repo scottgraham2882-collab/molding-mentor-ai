@@ -9,6 +9,7 @@ type DashboardCard = {
   href?: string;
   status?: "Coming Soon";
   accent: string;
+  keywords?: string[];
 };
 
 const dashboardCards: DashboardCard[] = [
@@ -610,6 +611,33 @@ const categoryQuickLinks: Record<string, string> = {
   "Reports & Management": "/reports/daily",
 };
 
+const categoryKeywords: Record<string, string[]> = {
+  "Troubleshoot a Problem": ["troubleshooting", "fix", "defect", "scrap", "short shot", "flash", "sink", "warp", "machine alarm", "root cause"],
+  "Run Production": ["production", "run", "setup", "startup", "mold change", "handoff", "schedule", "process sheet", "downtime", "oee"],
+  "Check Quality": ["quality", "first piece", "first article", "inspection", "hold", "containment", "audit", "capa", "corrective action"],
+  "Train Employees": ["training", "employee", "operator", "technician", "supervisor", "skills", "certification", "lesson", "quiz", "safety"],
+  "Manage Materials": ["material", "resin", "drying", "dryer", "lot", "inventory", "color change", "purge", "moisture", "supplier"],
+  "Reports & Management": ["report", "management", "daily", "weekly", "kpi", "meeting", "document", "action item", "mold history", "machine history"],
+};
+
+const toolKeywordMap: Record<string, string[]> = {
+  "/coach": ["ask ai", "help", "problem", "process help", "root cause"],
+  "/troubleshooting": ["guided help", "process issue", "machine issue", "fix problem"],
+  "/defects": ["defect guide", "short shot", "flash", "sink", "burn", "warp", "splay"],
+  "/photo-analysis": ["photo", "picture", "part defect", "visual check"],
+  "/scrap": ["rejects", "bad parts", "scrap count", "defect scrap"],
+  "/process-sheet-builder": ["setup sheet", "setup parameters", "recipe", "print setup"],
+  "/production/live-board": ["press status", "machines running", "floor board", "live board"],
+  "/quality/first-piece-approval": ["first piece", "startup check", "good part", "approval"],
+  "/quality/containment": ["quality hold", "suspect parts", "quarantine", "sort"],
+  "/materials/resin-drying": ["resin drying", "dry temperature", "dry time", "material guide"],
+  "/materials/drying-log": ["dryer log", "dew point", "hopper", "moisture"],
+  "/reports/daily": ["daily report", "shift report", "plant report", "production report"],
+  "/reports/weekly": ["weekly report", "management review", "plant summary"],
+  "/training/assignments": ["assign training", "due dates", "training status", "operator training"],
+  "/training/skills-matrix": ["skills", "qualified", "cross training", "matrix"],
+};
+
 function getToolCategory(card: DashboardCard) {
   const href = card.href ?? "";
   const title = card.title.toLowerCase();
@@ -636,6 +664,29 @@ function getToolCategory(card: DashboardCard) {
   if (href.startsWith("/materials")) return "Manage Materials";
 
   return "Reports & Management";
+}
+
+
+function getToolKeywords(card: DashboardCard) {
+  const category = getToolCategory(card);
+  return [
+    card.title,
+    card.description,
+    card.href ?? "",
+    category,
+    ...(categoryKeywords[category] ?? []),
+    ...(card.href ? toolKeywordMap[card.href] ?? [] : []),
+    ...(card.keywords ?? []),
+  ];
+}
+
+function matchesToolSearch(card: DashboardCard, search: string) {
+  if (!search) return true;
+  const haystack = getToolKeywords(card).join(" ").toLowerCase();
+  return search
+    .split(/\s+/)
+    .filter(Boolean)
+    .every((word) => haystack.includes(word));
 }
 
 function toolButtonClass(extra = "") {
@@ -682,12 +733,7 @@ export default function Home() {
   const visibleCards = useMemo(() => {
     if (!normalizedSearch) return dashboardCards;
 
-    return dashboardCards.filter((card) =>
-      [card.title, card.description, card.href ?? "", getToolCategory(card)]
-        .join(" ")
-        .toLowerCase()
-        .includes(normalizedSearch),
-    );
+    return dashboardCards.filter((card) => matchesToolSearch(card, normalizedSearch));
   }, [normalizedSearch]);
 
   const favorites = visibleCards.filter((card) => card.href && favoriteHrefs.has(card.href));
@@ -740,9 +786,24 @@ export default function Home() {
           })}
         </section>
 
-        {normalizedSearch && visibleCards.length === 0 ? (
-          <section className="rounded-[1.5rem] border border-amber-300/30 bg-amber-300/10 p-6 text-center text-amber-50">
-            No tools match “{searchTerm}”. Try words like short shot, schedule, first piece, resin, or training.
+        {normalizedSearch ? (
+          <section className="rounded-[2rem] border border-cyan-300/20 bg-slate-900/70 p-4 sm:p-6" aria-live="polite">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Search results</p>
+                <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Matching tool cards</h2>
+              </div>
+              <p className="text-sm text-slate-400">{visibleCards.length} tools found for “{searchTerm}”</p>
+            </div>
+            <div className="mt-4">
+              {visibleCards.length > 0 ? (
+                <ToolList cards={visibleCards} label="Matching search tools" />
+              ) : (
+                <p className="rounded-[1.5rem] border border-amber-300/30 bg-amber-300/10 p-6 text-center text-amber-50">
+                  No tools found. Try searching troubleshooting, training, quality, material, or reports.
+                </p>
+              )}
+            </div>
           </section>
         ) : null}
 
