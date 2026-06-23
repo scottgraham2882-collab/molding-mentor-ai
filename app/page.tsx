@@ -90,6 +90,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-emerald-400",
   },
   {
+    title: "Mold Preventive Maintenance Scheduler",
+    description:
+      "Create, save, filter, edit, delete, and print mold PM schedules with cycle intervals, due dates, technicians, issues, and status counts.",
+    href: "/molds/pm-scheduler",
+    accent: "from-emerald-300 to-cyan-400",
+  },
+  {
     title: "Machine History Database",
     description:
       "Add, search, edit, delete, save, and print machine history records with maintenance, hydraulic, electrical, automation, and process notes.",
