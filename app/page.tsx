@@ -1310,9 +1310,14 @@ export default function Home() {
           <div className="relative">
             <div className="flex items-center justify-between gap-3">
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300 sm:text-sm">Molding Mentor</p>
-              <Link href="/settings" className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-2 text-xs font-black text-slate-200 transition hover:border-cyan-300/50 hover:bg-cyan-300/10 focus:outline-none focus:ring-4 focus:ring-cyan-300/20">
-                Settings
-              </Link>
+              <div className="flex flex-wrap justify-end gap-2">
+                <Link href="/mission" className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-3 py-2 text-xs font-black text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/20 focus:outline-none focus:ring-4 focus:ring-cyan-300/20">
+                  Why We Built Molding Mentor AI
+                </Link>
+                <Link href="/settings" className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-2 text-xs font-black text-slate-200 transition hover:border-cyan-300/50 hover:bg-cyan-300/10 focus:outline-none focus:ring-4 focus:ring-cyan-300/20">
+                  Settings
+                </Link>
+              </div>
             </div>
             <div className="mt-3 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
               <div>
@@ -1364,6 +1369,9 @@ export default function Home() {
               </div>
               <p className="mt-4 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-3 text-sm font-black leading-5 text-emerald-50">
                 Humility before ego: think for yourself, learn all you can, and ask for help before pride becomes the problem.
+                <Link href="/mission" className="mt-3 block text-cyan-100 underline decoration-cyan-300/60 underline-offset-4 hover:text-white">
+                  Why We Built Molding Mentor AI
+                </Link>
               </p>
             </section>
 

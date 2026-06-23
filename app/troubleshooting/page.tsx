@@ -139,7 +139,7 @@ export default function TroubleshootingPage() {
               </p>
             </div>
             <div className="rounded-2xl border border-amber-300/30 bg-amber-300/10 p-4 text-sm font-bold leading-6 text-amber-100">
-              Reminder: Make one change at a time and document the result.
+              Use evidence before assumptions.
             </div>
           </div>
         </header>
