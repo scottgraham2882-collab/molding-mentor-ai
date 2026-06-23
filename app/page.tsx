@@ -47,6 +47,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-lime-300 to-cyan-400",
   },
   {
+    title: "Electronic Process Sheet Approval",
+    description:
+      "Create, save, filter, edit, delete, and print electronic approvals for controlled process sheet revisions.",
+    href: "/process-sheets/approval",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Work Instruction Builder",
     description:
       "Create, save, filter, edit, delete, and print controlled work instructions with PPE, tools, safety warnings, quality checks, approvals, and image placeholders.",
@@ -528,12 +535,12 @@ export default function Home() {
         </section>
 
         <div>
-          <p className="text-sm font-black uppercase tracking-[0.28em] text-emerald-300">Production Tools</p>
-          <h2 className="mt-2 text-3xl font-black tracking-tight text-white">Run production from one mobile-first workspace</h2>
+          <p className="text-sm font-black uppercase tracking-[0.28em] text-emerald-300">Process Tools</p>
+          <h2 className="mt-2 text-3xl font-black tracking-tight text-white">Run process control from one mobile-first workspace</h2>
         </div>
 
         <section
-          aria-label="Production Tools"
+          aria-label="Process Tools"
           className="grid gap-4 sm:grid-cols-2 lg:gap-6"
         >
           {dashboardCards.map((card) => {
