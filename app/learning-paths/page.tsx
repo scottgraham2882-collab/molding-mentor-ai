@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { FeedbackPrompt } from "../../components/FeedbackPrompt";
+import { RecommendedNextStepEngine } from "../../components/RecommendedNextStepEngine";
 import { useEffect, useMemo, useState } from "react";
 
 type LearningPath = {
@@ -191,6 +192,11 @@ export default function LearningPathsPage() {
             );
           })}
         </section>
+
+        <RecommendedNextStepEngine
+          context="learning-path-lesson"
+          intro="When you finish a lesson, keep momentum with one small practice step."
+        />
 
         <FeedbackPrompt page="Learning Paths" />
       </div>

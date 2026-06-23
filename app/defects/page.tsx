@@ -4,8 +4,7 @@ import { FeedbackPrompt } from "../../components/FeedbackPrompt";
 
 import { DefectEducationPanels } from "../../components/DefectEducationPanels";
 import { LearnMoreAboutThis } from "../../components/LearnMoreAboutThis";
-import { RecommendedNextStep } from "../../components/RecommendedNextStep";
-import { RecommendedNextSteps } from "../../components/RecommendedNextSteps";
+import { RecommendedNextStepEngine } from "../../components/RecommendedNextStepEngine";
 import { defectGuides, troubleshootingHref } from "../../lib/defect-data";
 
 export default function DefectsPage() {
@@ -41,6 +40,7 @@ export default function DefectsPage() {
           {defectGuides.map((defect) => (
             <article
               key={defect.name}
+              id={defect.slug}
               className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/10 p-5 shadow-xl shadow-slate-950/20 backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/40 sm:p-6"
             >
               <h2 className="text-2xl font-bold text-white">{defect.name}</h2>
@@ -55,7 +55,6 @@ export default function DefectsPage() {
                   <TagList title="Related material checks" items={defect.materialChecks} />
                   <DefectEducationPanels defect={defect} compact />
                   <LearnMoreAboutThis defectSlug={defect.slug} defectName={defect.name} />
-                  <RecommendedNextSteps defectSlug={defect.slug} contextLabel={defect.name} />
                 </div>
                 <Link href={troubleshootingHref} className="rounded-2xl border border-cyan-300/30 px-4 py-3 text-center text-sm font-black text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/10">
                   Open Troubleshooting Assistant →
@@ -65,11 +64,9 @@ export default function DefectsPage() {
           ))}
         </section>
 
-        <RecommendedNextStep
-          label="Troubleshooting Wizard"
-          href={troubleshootingHref}
-          reason="After you identify the closest defect, answer the guided questions to choose a safe first check before changing the press."
-          related={[{ label: "Ask AI Coach", href: "/coach" }, { label: "Search knowledge", href: "/knowledge-search" }]}
+        <RecommendedNextStepEngine
+          context="defect-default"
+          intro="If you found the defect you are seeing, pick one simple next move before changing the process."
         />
 
         <FeedbackPrompt page="Defect Library" />

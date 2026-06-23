@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { FeedbackPrompt } from "../../components/FeedbackPrompt";
+import { RecommendedNextStepEngine } from "../../components/RecommendedNextStepEngine";
 import { ChangeEvent, useMemo, useState } from "react";
 
 import { defectGuides } from "../../lib/defect-data";
@@ -319,6 +320,11 @@ export default function PhotoAnalysisPage() {
             <Link href="/coach" className="rounded-2xl border border-cyan-300/30 px-4 py-3 text-center font-bold text-cyan-100 transition hover:bg-cyan-300/10">AI Coach →</Link>
           </div>
         </section>
+
+        <RecommendedNextStepEngine
+          context="photo-analysis"
+          intro="Use the photo review result to move into one clear learning or troubleshooting page."
+        />
 
         <FeedbackPrompt page="Photo Analysis" />
       </div>
