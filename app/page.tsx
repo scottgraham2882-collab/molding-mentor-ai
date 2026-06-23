@@ -482,6 +482,17 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-violet-300 to-fuchsia-400",
   },
   {
+    title: "Guided Learning Paths",
+    plainSubtitle: "Learn injection molding step by step",
+    description:
+      "Follow beginner-friendly role paths for operators, setup technicians, process technicians, and supervisors with saved progress and next lesson guidance.",
+    href: "/learning-paths",
+    accent: "from-cyan-300 to-emerald-400",
+    beginnerTitle: "Guided Learning Paths",
+    beginnerExplanation: "Start here to learn injection molding in a simple order for your role.",
+    keywords: ["learning paths", "injection molding basics", "operator path", "setup technician", "process technician", "supervisor path"],
+  },
+  {
     title: "Scientific Molding Calculator",
     description:
       "Estimate clamp tonnage, total shot weight, and screw recovery time with mobile-friendly scientific molding calculator cards.",
@@ -687,6 +698,7 @@ const toolKeywordMap: Record<string, string[]> = {
   "/reports/daily": ["daily report", "shift report", "plant report", "production report"],
   "/reports/weekly": ["weekly report", "management review", "plant summary"],
   "/training/assignments": ["assign training", "due dates", "training status", "operator training"],
+  "/learning-paths": ["guided learning", "role path", "operator path", "setup technician path", "process technician path", "supervisor path", "lessons complete"],
   "/knowledge-base": ["lessons learned", "knowledge base", "root cause", "teach technician", "tribal knowledge", "saved fixes"],
   "/training/skills-matrix": ["skills", "qualified", "cross training", "matrix"],
 };
@@ -713,7 +725,7 @@ function getToolCategory(card: DashboardCard) {
   }
 
   if (href.startsWith("/quality")) return "Check Quality";
-  if (href.startsWith("/training") || href.startsWith("/lessons") || href === "/knowledge-base" || href.startsWith("/certifications") || href.startsWith("/employees")) return "Train Employees";
+  if (href.startsWith("/training") || href.startsWith("/lessons") || href === "/knowledge-base" || href === "/learning-paths" || href.startsWith("/certifications") || href.startsWith("/employees")) return "Train Employees";
   if (href.startsWith("/materials")) return "Manage Materials";
 
   return "Reports & Management";
