@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type DashboardCard = {
   title: string;
@@ -693,18 +693,50 @@ function toolButtonClass(extra = "") {
   return `group flex min-h-24 items-center justify-between gap-4 rounded-3xl border border-white/10 bg-white/[0.07] p-4 text-left shadow-xl shadow-slate-950/25 transition hover:-translate-y-0.5 hover:border-cyan-300/50 hover:bg-white/[0.11] focus:outline-none focus:ring-4 focus:ring-cyan-300/20 ${extra}`;
 }
 
-function SimpleToolCard({ card, compact = false }: { card: DashboardCard; compact?: boolean }) {
+function SimpleToolCard({
+  card,
+  compact = false,
+  isFavorite = false,
+  onToggleFavorite,
+}: {
+  card: DashboardCard;
+  compact?: boolean;
+  isFavorite?: boolean;
+  onToggleFavorite?: (href: string) => void;
+}) {
   const category = getToolCategory(card);
+  const favoriteLabel = isFavorite ? `Remove ${card.title} from favorites` : `Add ${card.title} to favorites`;
   const content = (
     <>
-      <div className="min-w-0">
+      <div className="min-w-0 flex-1">
         <p className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-cyan-200/80">
           {categoryDetails[category].icon} {category}
         </p>
         <h3 className={`${compact ? "mt-1 text-base" : "mt-2 text-lg"} font-black leading-tight text-white`}>{card.title}</h3>
         <p className="mt-2 line-clamp-2 text-sm leading-5 text-slate-300">{card.description}</p>
       </div>
-      <span className="shrink-0 rounded-full border border-white/10 bg-slate-950/60 px-3 py-2 text-cyan-100" aria-hidden="true">→</span>
+      <div className="flex shrink-0 items-center gap-2">
+        {card.href && onToggleFavorite ? (
+          <button
+            aria-label={favoriteLabel}
+            aria-pressed={isFavorite}
+            className={`rounded-full border px-3 py-2 text-sm font-black transition focus:outline-none focus:ring-4 focus:ring-cyan-300/20 ${
+              isFavorite
+                ? "border-amber-200/70 bg-amber-300/20 text-amber-100"
+                : "border-white/10 bg-slate-950/60 text-slate-300 hover:border-amber-200/60 hover:text-amber-100"
+            }`}
+            type="button"
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              onToggleFavorite(card.href!);
+            }}
+          >
+            ★
+          </button>
+        ) : null}
+        <span className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-2 text-cyan-100" aria-hidden="true">→</span>
+      </div>
     </>
   );
 
@@ -715,28 +747,87 @@ function SimpleToolCard({ card, compact = false }: { card: DashboardCard; compac
   return <article className={toolButtonClass("opacity-75")}>{content}</article>;
 }
 
-function ToolList({ cards, label, compact = false }: { cards: DashboardCard[]; label: string; compact?: boolean }) {
+function ToolList({
+  cards,
+  label,
+  compact = false,
+  favoriteHrefs,
+  onToggleFavorite,
+}: {
+  cards: DashboardCard[];
+  label: string;
+  compact?: boolean;
+  favoriteHrefs: Set<string>;
+  onToggleFavorite: (href: string) => void;
+}) {
   return (
     <section aria-label={label} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-      {cards.map((card) => <SimpleToolCard key={`${label}-${card.title}`} card={card} compact={compact} />)}
+      {cards.map((card) => (
+        <SimpleToolCard
+          key={`${label}-${card.title}`}
+          card={card}
+          compact={compact}
+          isFavorite={Boolean(card.href && favoriteHrefs.has(card.href))}
+          onToggleFavorite={onToggleFavorite}
+        />
+      ))}
     </section>
   );
 }
 
-const favoriteHrefs = new Set(["/troubleshooting", "/coach", "/defects", "/production/live-board", "/quality/first-piece-approval", "/materials/resin-drying"]);
+const defaultFavoriteHrefs = ["/troubleshooting", "/coach", "/defects", "/production/live-board", "/quality/first-piece-approval", "/materials/resin-drying"];
+const homepageFavoritesStorageKey = "moldingMentorHomepageFavorites";
 const recentHrefs = new Set(["/shift-handoff", "/process-sheet-builder", "/mold-change", "/quality/containment", "/materials/drying-log", "/training/assignments"]);
 const mostUsedHrefs = new Set(["/process-sheet-builder", "/production/live-board", "/scrap", "/oee", "/materials/resin-drying", "/calculators"]);
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [favoriteTools, setFavoriteTools] = useState<string[]>(defaultFavoriteHrefs);
+  const favoriteHrefSet = useMemo(() => new Set(favoriteTools), [favoriteTools]);
   const normalizedSearch = searchTerm.trim().toLowerCase();
+
+  useEffect(() => {
+    const savedFavorites = window.localStorage.getItem(homepageFavoritesStorageKey);
+
+    if (!savedFavorites) return;
+
+    try {
+      const parsedFavorites = JSON.parse(savedFavorites);
+
+      if (Array.isArray(parsedFavorites)) {
+        const validFavorites = parsedFavorites.filter((href): href is string =>
+          typeof href === "string" && dashboardCards.some((card) => card.href === href),
+        );
+
+        if (validFavorites.length > 0) {
+          setFavoriteTools(Array.from(new Set(validFavorites)));
+        }
+      }
+    } catch {
+      window.localStorage.removeItem(homepageFavoritesStorageKey);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(homepageFavoritesStorageKey, JSON.stringify(favoriteTools));
+  }, [favoriteTools]);
+
+  const toggleFavorite = (href: string) => {
+    setFavoriteTools((currentFavorites) => {
+      if (currentFavorites.includes(href)) {
+        return currentFavorites.filter((favoriteHref) => favoriteHref !== href);
+      }
+
+      return [...currentFavorites, href];
+    });
+  };
   const visibleCards = useMemo(() => {
     if (!normalizedSearch) return dashboardCards;
 
     return dashboardCards.filter((card) => matchesToolSearch(card, normalizedSearch));
   }, [normalizedSearch]);
 
-  const favorites = visibleCards.filter((card) => card.href && favoriteHrefs.has(card.href));
+  const favorites = visibleCards.filter((card) => card.href && favoriteHrefSet.has(card.href));
   const recentTools = visibleCards.filter((card) => card.href && recentHrefs.has(card.href));
   const mostUsedTools = visibleCards.filter((card) => card.href && mostUsedHrefs.has(card.href));
   const categories = categoryOrder.map((category) => ({
@@ -797,7 +888,7 @@ export default function Home() {
             </div>
             <div className="mt-4">
               {visibleCards.length > 0 ? (
-                <ToolList cards={visibleCards} label="Matching search tools" />
+                <ToolList cards={visibleCards} label="Matching search tools" favoriteHrefs={favoriteHrefSet} onToggleFavorite={toggleFavorite} />
               ) : (
                 <p className="rounded-[1.5rem] border border-amber-300/30 bg-amber-300/10 p-6 text-center text-amber-50">
                   No tools found. Try searching troubleshooting, training, quality, material, or reports.
@@ -811,19 +902,19 @@ export default function Home() {
           <section className="xl:col-span-2">
             <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">Favorites</p>
             <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Quick picks for the floor</h2>
-            <div className="mt-3"><ToolList cards={favorites} label="Favorite tools" /></div>
+            <div className="mt-3"><ToolList cards={favorites} label="Favorite tools" favoriteHrefs={favoriteHrefSet} onToggleFavorite={toggleFavorite} /></div>
           </section>
           <section>
             <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Recent tools</p>
             <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Last used</h2>
-            <div className="mt-3"><ToolList cards={recentTools} label="Recent tools" compact /></div>
+            <div className="mt-3"><ToolList cards={recentTools} label="Recent tools" compact favoriteHrefs={favoriteHrefSet} onToggleFavorite={toggleFavorite} /></div>
           </section>
         </div>
 
         <section>
           <p className="text-xs font-black uppercase tracking-[0.28em] text-amber-300">Most used tools</p>
           <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Common daily tasks</h2>
-          <div className="mt-3"><ToolList cards={mostUsedTools} label="Most used tools" /></div>
+          <div className="mt-3"><ToolList cards={mostUsedTools} label="Most used tools" favoriteHrefs={favoriteHrefSet} onToggleFavorite={toggleFavorite} /></div>
         </section>
 
         <section className="rounded-[2rem] border border-white/10 bg-slate-900/70 p-4 sm:p-6">
@@ -841,7 +932,7 @@ export default function Home() {
                   <h3 className="text-xl font-black text-white"><span aria-hidden="true">{categoryDetails[category.name].icon}</span> {category.name}</h3>
                   <span className="rounded-full bg-white/10 px-3 py-1 text-sm font-bold text-slate-300">{category.tools.length}</span>
                 </div>
-                {category.tools.length > 0 ? <ToolList cards={category.tools} label={`${category.name} tools`} compact /> : <p className="text-sm text-slate-400">No matching tools in this category.</p>}
+                {category.tools.length > 0 ? <ToolList cards={category.tools} label={`${category.name} tools`} compact favoriteHrefs={favoriteHrefSet} onToggleFavorite={toggleFavorite} /> : <p className="text-sm text-slate-400">No matching tools in this category.</p>}
               </section>
             ))}
           </div>
