@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { demoProgress, getProgressSummary } from "../lib/progress-data";
 
 type DashboardCard = {
   title: string;
@@ -11,14 +10,6 @@ type DashboardCard = {
   status?: "Coming Soon";
   accent: string;
 };
-
-const progressSummary = getProgressSummary(demoProgress);
-
-const dashboardWidgets = [
-  { label: "Training progress", value: `${progressSummary.trainingProgress}%`, description: "Completed lesson path" },
-  { label: "Certifications earned", value: String(progressSummary.certificationsEarned), description: "Printable credentials" },
-  { label: "Lessons remaining", value: String(progressSummary.lessonsRemaining), description: "Modules left to finish" },
-];
 
 const dashboardCards: DashboardCard[] = [
   {
@@ -562,89 +553,128 @@ const dashboardCards: DashboardCard[] = [
 
 ];
 
-const categoryOrder = ["Production", "Process", "Quality", "Training", "Materials", "Management", "Mold & Machine"];
+const categoryOrder = [
+  "Troubleshoot a Problem",
+  "Run Production",
+  "Check Quality",
+  "Train Employees",
+  "Manage Materials",
+  "Reports & Management",
+];
 
-const categoryIcons: Record<string, string> = {
-  Production: "🏭",
-  Process: "⚙️",
-  Quality: "✅",
-  Training: "🎓",
-  Materials: "🧪",
-  Management: "📊",
-  "Mold & Machine": "🛠️",
+const categoryDetails: Record<string, { icon: string; helper: string; cta: string; accent: string }> = {
+  "Troubleshoot a Problem": {
+    icon: "🔎",
+    helper: "Fix defects, machine issues, scrap, and process problems fast.",
+    cta: "Start troubleshooting",
+    accent: "from-cyan-300 to-blue-400",
+  },
+  "Run Production": {
+    icon: "🏭",
+    helper: "Set up jobs, run the floor, track downtime, and hand off the shift.",
+    cta: "Run the floor",
+    accent: "from-emerald-300 to-cyan-400",
+  },
+  "Check Quality": {
+    icon: "✅",
+    helper: "Approve first pieces, hold suspect parts, and close quality actions.",
+    cta: "Check parts",
+    accent: "from-teal-300 to-emerald-400",
+  },
+  "Train Employees": {
+    icon: "🎓",
+    helper: "Assign training, build skills, and print certificates.",
+    cta: "Open training",
+    accent: "from-violet-300 to-cyan-400",
+  },
+  "Manage Materials": {
+    icon: "🧪",
+    helper: "Dry resin, track lots, control inventory, and manage changes.",
+    cta: "Check materials",
+    accent: "from-amber-300 to-emerald-400",
+  },
+  "Reports & Management": {
+    icon: "📊",
+    helper: "Review reports, actions, documents, meetings, people, molds, and machines.",
+    cta: "Review reports",
+    accent: "from-fuchsia-300 to-cyan-400",
+  },
+};
+
+const categoryQuickLinks: Record<string, string> = {
+  "Troubleshoot a Problem": "/troubleshooting",
+  "Run Production": "/production/live-board",
+  "Check Quality": "/quality/first-piece-approval",
+  "Train Employees": "/training/assignments",
+  "Manage Materials": "/materials/resin-drying",
+  "Reports & Management": "/reports/daily",
 };
 
 function getToolCategory(card: DashboardCard) {
   const href = card.href ?? "";
   const title = card.title.toLowerCase();
 
-  if (href.startsWith("/production") || ["/oee", "/downtime", "/scrap", "/shift-handoff", "/startup-approval", "/mold-change"].includes(href)) return "Production";
-  if (href.startsWith("/quality") || ["/defects", "/photo-analysis"].includes(href)) return "Quality";
-  if (href.startsWith("/training") || href.startsWith("/lessons") || href.startsWith("/certifications") || href.startsWith("/employees")) return "Training";
-  if (href.startsWith("/materials")) return "Materials";
-  if (href.startsWith("/reports") || ["/plant-management", "/actions", "/documents", "/meetings", "/profile", "/account/login", "/account/register", "/dashboard"].includes(href)) return "Management";
-  if (href.startsWith("/molds") || href === "/machines" || title.includes("mold history") || title.includes("machine history") || href === "/maintenance") return "Mold & Machine";
+  if (
+    ["/coach", "/troubleshooting", "/defects", "/photo-analysis", "/scrap", "/downtime"].includes(href) ||
+    href === "/materials/troubleshooter" ||
+    title.includes("troubleshoot") ||
+    title.includes("defect")
+  ) {
+    return "Troubleshoot a Problem";
+  }
 
-  return "Process";
+  if (
+    href.startsWith("/production") ||
+    ["/startup-approval", "/mold-change", "/shift-handoff", "/process-sheet-builder", "/process-sheets/approval", "/work-instructions", "/process-change-log", "/oee", "/calculators", "/scientific-molding/studies"].includes(href) ||
+    href.startsWith("/calculators")
+  ) {
+    return "Run Production";
+  }
+
+  if (href.startsWith("/quality")) return "Check Quality";
+  if (href.startsWith("/training") || href.startsWith("/lessons") || href.startsWith("/certifications") || href.startsWith("/employees")) return "Train Employees";
+  if (href.startsWith("/materials")) return "Manage Materials";
+
+  return "Reports & Management";
 }
 
-function CardContent({ card }: { card: DashboardCard }) {
-  return (
+function toolButtonClass(extra = "") {
+  return `group flex min-h-24 items-center justify-between gap-4 rounded-3xl border border-white/10 bg-white/[0.07] p-4 text-left shadow-xl shadow-slate-950/25 transition hover:-translate-y-0.5 hover:border-cyan-300/50 hover:bg-white/[0.11] focus:outline-none focus:ring-4 focus:ring-cyan-300/20 ${extra}`;
+}
+
+function SimpleToolCard({ card, compact = false }: { card: DashboardCard; compact?: boolean }) {
+  const category = getToolCategory(card);
+  const content = (
     <>
-      <div className="flex items-center justify-between gap-3">
-        <div
-          className={`h-1.5 w-20 rounded-full bg-gradient-to-r ${card.accent}`}
-          aria-hidden="true"
-        />
-        <span className="rounded-2xl border border-white/10 bg-white/10 px-3 py-2 text-2xl" aria-hidden="true">
-          {categoryIcons[getToolCategory(card)]}
-        </span>
+      <div className="min-w-0">
+        <p className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-cyan-200/80">
+          {categoryDetails[category].icon} {category}
+        </p>
+        <h3 className={`${compact ? "mt-1 text-base" : "mt-2 text-lg"} font-black leading-tight text-white`}>{card.title}</h3>
+        <p className="mt-2 line-clamp-2 text-sm leading-5 text-slate-300">{card.description}</p>
       </div>
-      <div className="mt-6 flex items-start justify-between gap-4">
-        <h2 className="text-2xl font-bold tracking-tight text-white">{card.title}</h2>
-        {card.status ? (
-          <span className="shrink-0 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-slate-300">
-            {card.status}
-          </span>
-        ) : null}
-      </div>
-      <p className="mt-4 text-sm leading-6 text-slate-300 sm:text-base">{card.description}</p>
-      <div className="mt-7 flex items-center justify-between text-sm font-bold text-cyan-100">
-        <span>{card.href ? "Open tool" : "Planned module"}</span>
-        <span aria-hidden="true">→</span>
-      </div>
+      <span className="shrink-0 rounded-full border border-white/10 bg-slate-950/60 px-3 py-2 text-cyan-100" aria-hidden="true">→</span>
     </>
   );
+
+  if (card.href) {
+    return <Link href={card.href} className={toolButtonClass(compact ? "min-h-20" : "")}>{content}</Link>;
+  }
+
+  return <article className={toolButtonClass("opacity-75")}>{content}</article>;
 }
 
-const favoriteHrefs = new Set(["/coach", "/troubleshooting", "/defects", "/process-sheet-builder"]);
-const recentHrefs = new Set(["/molds/pm-scheduler", "/production/live-board", "/quality/first-piece-approval", "/process-sheets/approval"]);
-const mostUsedHrefs = new Set(["/process-sheet-builder", "/shift-handoff", "/scrap", "/oee", "/materials/resin-drying", "/calculators"]);
-
-function ToolGrid({ cards, label }: { cards: DashboardCard[]; label: string }) {
+function ToolList({ cards, label, compact = false }: { cards: DashboardCard[]; label: string; compact?: boolean }) {
   return (
     <section aria-label={label} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-      {cards.map((card) => {
-        const className =
-          "group rounded-[1.5rem] border border-white/10 bg-white/[0.07] p-5 shadow-xl shadow-slate-950/25 backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-300/40 hover:bg-white/[0.1] focus:outline-none focus:ring-4 focus:ring-cyan-300/20";
-
-        if (card.href) {
-          return (
-            <Link key={`${label}-${card.title}`} href={card.href} className={className}>
-              <CardContent card={card} />
-            </Link>
-          );
-        }
-
-        return (
-          <article key={`${label}-${card.title}`} className={`${className} opacity-80`}>
-            <CardContent card={card} />
-          </article>
-        );
-      })}
+      {cards.map((card) => <SimpleToolCard key={`${label}-${card.title}`} card={card} compact={compact} />)}
     </section>
   );
 }
+
+const favoriteHrefs = new Set(["/troubleshooting", "/coach", "/defects", "/production/live-board", "/quality/first-piece-approval", "/materials/resin-drying"]);
+const recentHrefs = new Set(["/shift-handoff", "/process-sheet-builder", "/mold-change", "/quality/containment", "/materials/drying-log", "/training/assignments"]);
+const mostUsedHrefs = new Set(["/process-sheet-builder", "/production/live-board", "/scrap", "/oee", "/materials/resin-drying", "/calculators"]);
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -659,6 +689,7 @@ export default function Home() {
         .includes(normalizedSearch),
     );
   }, [normalizedSearch]);
+
   const favorites = visibleCards.filter((card) => card.href && favoriteHrefs.has(card.href));
   const recentTools = visibleCards.filter((card) => card.href && recentHrefs.has(card.href));
   const mostUsedTools = visibleCards.filter((card) => card.href && mostUsedHrefs.has(card.href));
@@ -670,79 +701,90 @@ export default function Home() {
   return (
     <main className="min-h-screen overflow-hidden bg-slate-950 px-4 py-5 text-slate-100 sm:px-6 lg:px-8">
       <section className="mx-auto flex w-full max-w-7xl flex-col gap-6">
-        <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/80 p-5 shadow-2xl shadow-cyan-950/30 sm:p-8 lg:p-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.22),transparent_38%),radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.18),transparent_32%)]" />
+        <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/90 p-5 shadow-2xl shadow-cyan-950/30 sm:p-8 lg:p-10">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.24),transparent_40%),radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.18),transparent_34%)]" />
           <div className="relative">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300 sm:text-sm">Shop-floor tool hub</p>
-            <h1 className="mt-3 text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-7xl">AI Molding Coach</h1>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">Mobile-first access to every molding route, tool, calculator, checklist, lesson, report, and troubleshooting workflow without losing the simplified homepage layout.</p>
-            <label className="mt-6 block max-w-3xl">
-              <span className="sr-only">Search tools</span>
-              <input className="w-full rounded-2xl border border-cyan-300/30 bg-slate-950/80 px-5 py-4 text-base font-semibold text-white shadow-inner shadow-slate-950 placeholder:text-slate-400 focus:border-cyan-200 focus:outline-none focus:ring-4 focus:ring-cyan-300/20" placeholder="Search tools, defects, reports, materials, training..." type="search" value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} />
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300 sm:text-sm">Shop-floor home</p>
+            <h1 className="mt-3 text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-7xl">Find the right molding tool fast.</h1>
+            <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">
+              Simple buttons for technicians and supervisors. Search by defect, job, material, training, report, or tool name.
+            </p>
+            <label className="mt-7 block max-w-4xl">
+              <span className="mb-2 block text-sm font-bold text-slate-200">What do you need help with?</span>
+              <input
+                className="w-full rounded-3xl border border-cyan-300/40 bg-slate-950/85 px-5 py-5 text-lg font-semibold text-white shadow-inner shadow-slate-950 placeholder:text-slate-400 focus:border-cyan-200 focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
+                placeholder="What do you need help with?"
+                type="search"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+              />
             </label>
           </div>
         </header>
 
-        <section aria-label="Progress widgets" className="grid gap-3 sm:grid-cols-3">
-          {dashboardWidgets.map((widget) => (
-            <article key={widget.label} className="rounded-[1.25rem] border border-cyan-300/20 bg-cyan-300/10 p-4 shadow-xl shadow-cyan-950/20">
-              <p className="text-3xl font-black text-white">{widget.value}</p>
-              <h2 className="mt-2 text-xs font-black uppercase tracking-[0.2em] text-cyan-100">{widget.label}</h2>
-              <p className="mt-2 text-sm text-slate-300">{widget.description}</p>
-            </article>
-          ))}
+        <section aria-label="Main tool categories" className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {categories.map((category) => {
+            const details = categoryDetails[category.name];
+            return (
+              <Link key={category.name} href={categoryQuickLinks[category.name]} className="group rounded-[1.75rem] border border-white/10 bg-white/[0.07] p-5 shadow-xl shadow-slate-950/25 transition hover:-translate-y-0.5 hover:border-cyan-300/50 hover:bg-white/[0.11] focus:outline-none focus:ring-4 focus:ring-cyan-300/20">
+                <div className={`mb-5 h-1.5 w-24 rounded-full bg-gradient-to-r ${details.accent}`} />
+                <div className="flex items-start justify-between gap-4">
+                  <span className="rounded-2xl border border-white/10 bg-slate-950/60 p-3 text-3xl" aria-hidden="true">{details.icon}</span>
+                  <span className="rounded-full bg-cyan-300/10 px-3 py-1 text-sm font-black text-cyan-100">{category.tools.length} tools</span>
+                </div>
+                <h2 className="mt-5 text-2xl font-black tracking-tight text-white">{category.name}</h2>
+                <p className="mt-3 text-sm leading-6 text-slate-300">{details.helper}</p>
+                <p className="mt-5 flex items-center justify-between text-sm font-black text-cyan-100"><span>{details.cta}</span><span aria-hidden="true">→</span></p>
+              </Link>
+            );
+          })}
         </section>
-
-        <section aria-label="Dashboard categories" className="flex gap-2 overflow-x-auto pb-1">
-          {categories.map((category) => (
-            <a key={category.name} href={`#${category.name.toLowerCase()}`} className="shrink-0 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100">
-              <span aria-hidden="true">{categoryIcons[category.name]}</span> {category.name} <span className="text-slate-400">{category.tools.length}</span>
-            </a>
-          ))}
-        </section>
-
-        <div className="grid gap-6 lg:grid-cols-3">
-          <section className="lg:col-span-2">
-            <div className="mb-3 flex items-end justify-between gap-4">
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">Favorites</p>
-                <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Fast floor support</h2>
-              </div>
-            </div>
-            <ToolGrid cards={favorites} label="Favorite tools" />
-          </section>
-
-          <aside className="grid gap-6">
-            <section>
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Recent tools</p>
-              <ToolGrid cards={recentTools} label="Recent tools" />
-            </section>
-            <section>
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-amber-300">Most used</p>
-              <ToolGrid cards={mostUsedTools} label="Most used tools" />
-            </section>
-          </aside>
-        </div>
 
         {normalizedSearch && visibleCards.length === 0 ? (
           <section className="rounded-[1.5rem] border border-amber-300/30 bg-amber-300/10 p-6 text-center text-amber-50">
-            No tools match “{searchTerm}”. Try a route, category, or tool name.
+            No tools match “{searchTerm}”. Try words like short shot, schedule, first piece, resin, or training.
           </section>
         ) : null}
 
-        {categories.map((category) => (
-          <section key={category.name} id={category.name.toLowerCase()} className="scroll-mt-6">
-            <div className="mb-3">
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300"><span aria-hidden="true">{categoryIcons[category.name]}</span> {category.name}</p>
-              <h2 className="mt-1 text-2xl font-black tracking-tight text-white">{category.name} tools</h2>
-            </div>
-            {category.tools.length > 0 ? (
-              <ToolGrid cards={category.tools} label={`${category.name} tools`} />
-            ) : (
-              <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.04] p-5 text-sm text-slate-400">No matching tools in this category.</div>
-            )}
+        <div className="grid gap-6 xl:grid-cols-3">
+          <section className="xl:col-span-2">
+            <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">Favorites</p>
+            <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Quick picks for the floor</h2>
+            <div className="mt-3"><ToolList cards={favorites} label="Favorite tools" /></div>
           </section>
-        ))}
+          <section>
+            <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Recent tools</p>
+            <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Last used</h2>
+            <div className="mt-3"><ToolList cards={recentTools} label="Recent tools" compact /></div>
+          </section>
+        </div>
+
+        <section>
+          <p className="text-xs font-black uppercase tracking-[0.28em] text-amber-300">Most used tools</p>
+          <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Common daily tasks</h2>
+          <div className="mt-3"><ToolList cards={mostUsedTools} label="Most used tools" /></div>
+        </section>
+
+        <section className="rounded-[2rem] border border-white/10 bg-slate-900/70 p-4 sm:p-6">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">All tools</p>
+              <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Browse by simple job type</h2>
+            </div>
+            <p className="text-sm text-slate-400">Search filters this list without removing any routes.</p>
+          </div>
+          <div className="mt-5 grid gap-5">
+            {categories.map((category) => (
+              <section key={category.name} className="rounded-[1.5rem] border border-white/10 bg-slate-950/45 p-4">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <h3 className="text-xl font-black text-white"><span aria-hidden="true">{categoryDetails[category.name].icon}</span> {category.name}</h3>
+                  <span className="rounded-full bg-white/10 px-3 py-1 text-sm font-bold text-slate-300">{category.tools.length}</span>
+                </div>
+                {category.tools.length > 0 ? <ToolList cards={category.tools} label={`${category.name} tools`} compact /> : <p className="text-sm text-slate-400">No matching tools in this category.</p>}
+              </section>
+            ))}
+          </div>
+        </section>
       </section>
     </main>
   );
