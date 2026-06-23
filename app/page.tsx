@@ -191,6 +191,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Supplier Quality Issue Tracker",
+    description:
+      "Create, save, edit, delete, filter, count, and print supplier issue records with containment, corrective action requests, due dates, status, and verification notes.",
+    href: "/quality/supplier-issues",
+    accent: "from-amber-300 to-cyan-400",
+  },
+  {
     title: "8D Problem Solving Report",
     description:
       "Create, save, edit, delete, filter, and print structured 8D reports linked to complaints, parts, molds, and machines.",
