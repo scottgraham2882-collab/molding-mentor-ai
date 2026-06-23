@@ -119,6 +119,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Production Run Log",
+    description:
+      "Create, save, edit, filter, delete, and print production run logs with automatic run time, total parts, scrap percentage, and parts-per-hour calculations.",
+    href: "/production/run-log",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Meeting Notes & Follow-Up Tracker",
     description:
       "Create, save, edit, delete, filter, and print meeting notes with attendees, decisions, action items, owners, due dates, and follow-up notes.",
