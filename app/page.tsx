@@ -582,6 +582,17 @@ const dashboardCards: DashboardCard[] = [
     keywords: ["lessons learned", "knowledge base", "root cause", "teach technician", "tribal knowledge"],
   },
   {
+    title: "Case Studies Library",
+    plainSubtitle: "Preserve real troubleshooting experiences",
+    description:
+      "Create, save, search, filter, edit, and delete real injection molding case studies with investigation steps, root cause, solution, results, lessons learned, and new-technician teaching notes.",
+    href: "/case-studies",
+    accent: "from-emerald-300 to-cyan-400",
+    beginnerTitle: "Case Studies Library",
+    beginnerExplanation: "Read and save real shop-floor troubleshooting stories so new technicians learn what was checked and why.",
+    keywords: ["case studies", "troubleshooting stories", "root cause", "lessons learned", "teach technician", "defect history"],
+  },
+  {
     title: "Decoupled Molding Lesson",
     description:
       "Learn the first practical step in decoupled molding with fill-only setup, transfer position, and repeatability checks.",
