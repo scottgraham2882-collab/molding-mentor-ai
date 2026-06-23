@@ -674,11 +674,8 @@ const dashboardCards: DashboardCard[] = [
 const categoryOrder = [
   "Fix a Problem",
   "Learn Molding",
-  "Capture Knowledge",
-  "Run Production",
-  "Check Quality",
-  "Manage Training",
-  "Materials",
+  "Search Knowledge",
+  "More Tools",
 ];
 
 const categoryDetails: Record<string, { icon: string; helper: string; cta: string; accent: string }> = {
@@ -694,56 +691,32 @@ const categoryDetails: Record<string, { icon: string; helper: string; cta: strin
     cta: "Start learning",
     accent: "from-violet-300 to-cyan-400",
   },
-  "Capture Knowledge": {
-    icon: "🧠",
-    helper: "Save fixes, notes, case studies, documents, and lessons learned so the next person can find them.",
-    cta: "Save knowledge",
+  "Search Knowledge": {
+    icon: "🔍",
+    helper: "Search answers, real case studies, and saved lessons learned before changing settings.",
+    cta: "Search knowledge",
     accent: "from-emerald-300 to-cyan-400",
   },
-  "Run Production": {
-    icon: "🏭",
-    helper: "Run jobs, change molds, approve startup, track downtime, and hand off the shift.",
-    cta: "Run the floor",
-    accent: "from-emerald-300 to-cyan-400",
-  },
-  "Check Quality": {
-    icon: "✅",
-    helper: "Check first pieces, control suspect parts, track scrap, and close corrective actions.",
-    cta: "Check parts",
-    accent: "from-teal-300 to-emerald-400",
-  },
-  "Manage Training": {
-    icon: "📋",
-    helper: "Assign training, track skills, watch renewals, and manage employee records.",
-    cta: "Manage training",
+  "More Tools": {
+    icon: "🧰",
+    helper: "Advanced production, quality, materials, training, reporting, and future expansion tools.",
+    cta: "Browse more tools",
     accent: "from-amber-300 to-cyan-400",
-  },
-  Materials: {
-    icon: "🧪",
-    helper: "Check resin drying, material lots, inventory, color changes, and material-related defects.",
-    cta: "Check materials",
-    accent: "from-amber-300 to-emerald-400",
   },
 };
 
 const categoryQuickLinks: Record<string, string> = {
   "Fix a Problem": "/problem",
   "Learn Molding": "/learning-paths",
-  "Capture Knowledge": "/knowledge-search",
-  "Run Production": "/production/live-board",
-  "Check Quality": "/quality/first-piece-approval",
-  "Manage Training": "/training/assignments",
-  Materials: "/materials/resin-drying",
+  "Search Knowledge": "/knowledge-search",
+  "More Tools": "/dashboard",
 };
 
 const categoryKeywords: Record<string, string[]> = {
   "Fix a Problem": ["troubleshooting", "fix", "defect", "scrap", "short shot", "flash", "sink", "warp", "machine alarm", "root cause"],
-  "Learn Molding": ["learn", "lesson", "scientific molding", "scenario", "calculator", "training module", "basics", "process window"],
-  "Capture Knowledge": ["knowledge", "search", "lessons learned", "mentor notes", "case study", "document", "history", "meeting", "action item"],
-  "Run Production": ["production", "run", "setup", "startup", "mold change", "handoff", "schedule", "process sheet", "downtime", "oee"],
-  "Check Quality": ["quality", "first piece", "first article", "inspection", "hold", "containment", "audit", "capa", "corrective action", "scrap"],
-  "Manage Training": ["training", "employee", "operator", "technician", "supervisor", "skills", "certification", "quiz", "safety", "renewal"],
-  Materials: ["material", "resin", "drying", "dryer", "lot", "inventory", "color change", "purge", "moisture", "supplier"],
+  "Learn Molding": ["learn", "lesson", "scientific molding", "scenario", "training module", "basics", "process window"],
+  "Search Knowledge": ["knowledge", "search", "lessons learned", "case study", "saved fixes", "tribal knowledge"],
+  "More Tools": ["advanced", "production", "quality", "materials", "training", "reports", "calculators", "documents", "future tools"],
 };
 
 const toolKeywordMap: Record<string, string[]> = {
@@ -774,62 +747,30 @@ function getToolCategory(card: DashboardCard) {
   const href = card.href ?? "";
   const title = card.title.toLowerCase();
 
-  if (href.startsWith("/materials")) return "Materials";
-
   if (
-    href.startsWith("/quality") ||
-    href === "/scrap" ||
-    title.includes("quality") ||
-    title.includes("inspection") ||
-    title.includes("corrective action") ||
-    title.includes("capa") ||
-    title.includes("complaint")
-  ) {
-    return "Check Quality";
-  }
-
-  if (href.startsWith("/training") || href.startsWith("/certifications") || href.startsWith("/employees") || href === "/plant-management") {
-    return "Manage Training";
-  }
-
-  if (
-    href.startsWith("/lessons") ||
-    href === "/learning-paths" ||
-    href === "/scenarios" ||
-    href === "/calculators" ||
-    href.startsWith("/calculators") ||
-    href === "/scientific-molding/studies"
-  ) {
-    return "Learn Molding";
-  }
-
-  if (
-    href === "/knowledge-search" ||
-    href === "/knowledge-base" ||
-    href === "/mentor-notes" ||
-    href === "/case-studies" ||
-    href === "/documents" ||
-    href === "/molds" ||
-    href === "/molds/pm-scheduler" ||
-    href === "/machines" ||
-    href === "/meetings" ||
-    href === "/actions" ||
-    href.startsWith("/reports")
-  ) {
-    return "Capture Knowledge";
-  }
-
-  if (
-    ["/problem", "/coach", "/troubleshooting", "/root-cause/what-changed", "/defects", "/photo-analysis"].includes(href) ||
+    ["/problem", "/troubleshooting", "/coach", "/photo-analysis", "/defects"].includes(href) ||
     title.includes("troubleshoot") ||
     title.includes("defect")
   ) {
     return "Fix a Problem";
   }
 
-  return "Run Production";
-}
+  if (
+    href === "/learning-paths" ||
+    href === "/lessons" ||
+    href.startsWith("/lessons") ||
+    href === "/scientific-molding/studies" ||
+    href === "/scenarios"
+  ) {
+    return "Learn Molding";
+  }
 
+  if (href === "/knowledge-search" || href === "/case-studies" || href === "/knowledge-base") {
+    return "Search Knowledge";
+  }
+
+  return "More Tools";
+}
 
 function getToolKeywords(card: DashboardCard) {
   const category = getToolCategory(card);
@@ -1019,13 +960,10 @@ function RoleToolList({
 
 
 const importantToolHrefsByCategory: Record<string, Set<string>> = {
-  "Fix a Problem": new Set(["/problem", "/troubleshooting", "/photo-analysis", "/coach", "/defects", "/root-cause/what-changed"]),
-  "Learn Molding": new Set(["/learning-paths", "/lessons", "/scenarios", "/calculators"]),
-  "Capture Knowledge": new Set(["/knowledge-search", "/knowledge-base", "/mentor-notes", "/case-studies"]),
-  "Run Production": new Set(["/production/live-board", "/mold-change", "/startup-approval", "/shift-handoff", "/process-sheet-builder", "/downtime"]),
-  "Check Quality": new Set(["/quality/first-piece-approval", "/quality/containment", "/quality/first-article", "/scrap"]),
-  "Manage Training": new Set(["/training/assignments", "/training/skills-matrix", "/training/renewals", "/certifications"]),
-  Materials: new Set(["/materials/resin-drying", "/materials/drying-log", "/materials/lot-traceability", "/materials/troubleshooter"]),
+  "Fix a Problem": new Set(["/troubleshooting", "/coach", "/photo-analysis", "/defects"]),
+  "Learn Molding": new Set(["/learning-paths", "/lessons", "/scientific-molding/studies", "/scenarios"]),
+  "Search Knowledge": new Set(["/knowledge-search", "/case-studies", "/knowledge-base"]),
+  "More Tools": new Set(["/process-sheet-builder", "/production/live-board", "/scrap", "/oee", "/materials/resin-drying", "/calculators"]),
 };
 
 function splitToolsByImportance(categoryName: string, tools: DashboardCard[]) {
@@ -1039,13 +977,13 @@ function splitToolsByImportance(categoryName: string, tools: DashboardCard[]) {
   };
 }
 
-const defaultFavoriteHrefs = ["/troubleshooting", "/coach", "/defects", "/production/live-board", "/quality/first-piece-approval", "/materials/resin-drying"];
+const defaultFavoriteHrefs = ["/troubleshooting", "/coach", "/photo-analysis", "/defects", "/knowledge-search"];
 const homepageFavoritesStorageKey = "moldingMentorHomepageFavorites";
 const homepageRecentToolsStorageKey = "moldingMentorRecentTools";
 const maxRecentTools = 5;
 const validFavoriteHrefs = new Set(dashboardCards.flatMap((card) => (card.href ? [card.href] : [])));
 const validToolHrefs = validFavoriteHrefs;
-const mostUsedHrefs = new Set(["/process-sheet-builder", "/production/live-board", "/scrap", "/oee", "/materials/resin-drying", "/calculators"]);
+const mostUsedHrefs = new Set(["/troubleshooting", "/coach", "/photo-analysis", "/defects", "/learning-paths", "/knowledge-search"]);
 const beginnerModeStorageKey = "moldingMentorBeginnerMode";
 const beginnerStartHrefs = new Set(["/problem", "/troubleshooting", "/photo-analysis", "/defects", "/coach"]);
 const selectedRoleStorageKey = "moldingMentorSelectedRole";
@@ -1159,8 +1097,8 @@ const primaryActions: QuickAction[] = [
   },
   {
     label: "Learn Injection Molding",
-    helper: "Start lessons and training built for shop-floor teams.",
-    href: "/lessons",
+    helper: "Start guided paths built for shop-floor teams.",
+    href: "/learning-paths",
     icon: "🎓",
   },
   {
@@ -1217,11 +1155,11 @@ const recentCoachingTopics = [
 ];
 
 const workflowSteps = [
-  { label: "Defect Library", href: "/defects", helper: "Name what you see." },
-  { label: "Troubleshooting Wizard", href: "/troubleshooting", helper: "Choose safe first checks." },
+  { label: "Fix a Problem", href: "/problem", helper: "Start here if you are unsure." },
+  { label: "Troubleshooting Wizard", href: "/troubleshooting", helper: "Answer guided questions." },
   { label: "AI Coach", href: "/coach", helper: "Ask follow-up questions." },
-  { label: "Lesson Learned", href: "/knowledge-base", helper: "Save the fix." },
-  { label: "Knowledge Search", href: "/knowledge-search", helper: "Find it next time." },
+  { label: "Photo Analysis", href: "/photo-analysis", helper: "Use a picture if needed." },
+  { label: "Defect Library", href: "/defects", helper: "Confirm causes and checks." },
 ];
 
 export default function Home() {
@@ -1362,7 +1300,7 @@ export default function Home() {
               <div>
                 <h1 className="text-3xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">What do you need help with today?</h1>
                 <p className="mt-3 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
-                  Pick the task that matches the problem on the floor. Every button uses plain shop-floor language and keeps the full toolset one tap away. Start with Fix a Problem if you are not sure where to go.
+                  Pick the task that matches the problem on the floor. Every button uses plain shop-floor language and keeps the full toolset one tap away. Not sure where to start? Tap Fix a Problem.
                 </p>
               </div>
               <label className="block">
@@ -1511,6 +1449,42 @@ export default function Home() {
             </div>
           </div>
         </header>
+
+
+
+        <section className="rounded-[2rem] border border-amber-300/25 bg-slate-900/80 p-4 shadow-2xl shadow-amber-950/20 sm:p-6" aria-labelledby="start-here-heading">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-amber-300">Start Here</p>
+              <h2 id="start-here-heading" className="mt-1 text-2xl font-black tracking-tight text-white">Most-used tools first</h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">Not sure where to start? Tap Fix a Problem. These are the fastest paths for common shop-floor questions.</p>
+            </div>
+            <Link href="/problem" className="rounded-full bg-amber-300 px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-amber-200 focus:outline-none focus:ring-4 focus:ring-amber-300/30" onClick={() => trackRecentTool("/problem")}>
+              Fix a Problem →
+            </Link>
+          </div>
+          <div className="mt-4">
+            <ToolList cards={mostUsedTools} label="Most-used starter tools" favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
+          </div>
+        </section>
+
+        <section aria-label="Primary tool categories" className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {categories.map((category) => {
+            const details = categoryDetails[category.name];
+            return (
+              <Link key={category.name} href={categoryQuickLinks[category.name]} className="group rounded-[1.75rem] border border-white/10 bg-white/[0.07] p-5 shadow-xl shadow-slate-950/25 transition hover:-translate-y-0.5 hover:border-cyan-300/50 hover:bg-white/[0.11] focus:outline-none focus:ring-4 focus:ring-cyan-300/20">
+                <div className={`mb-5 h-1.5 w-24 rounded-full bg-gradient-to-r ${details.accent}`} />
+                <div className="flex items-start justify-between gap-4">
+                  <span className="rounded-2xl border border-white/10 bg-slate-950/60 p-3 text-3xl" aria-hidden="true">{details.icon}</span>
+                  <span className="rounded-full bg-cyan-300/10 px-3 py-1 text-sm font-black text-cyan-100">{category.tools.length} tools</span>
+                </div>
+                <h2 className="mt-5 text-2xl font-black tracking-tight text-white">{category.name}</h2>
+                <p className="mt-3 text-sm leading-6 text-slate-300">{details.helper}</p>
+                <p className="mt-5 flex items-center justify-between text-sm font-black text-cyan-100"><span>{details.cta}</span><span aria-hidden="true">→</span></p>
+              </Link>
+            );
+          })}
+        </section>
 
         <section
           className="relative overflow-hidden rounded-[2rem] border border-cyan-200/30 bg-gradient-to-br from-cyan-300/20 via-slate-900 to-emerald-300/15 p-4 shadow-2xl shadow-cyan-950/30 sm:p-6 lg:p-8"
@@ -1665,24 +1639,6 @@ export default function Home() {
           </div>
         </section>
 
-        <section aria-label="Main tool categories" className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {categories.map((category) => {
-            const details = categoryDetails[category.name];
-            return (
-              <Link key={category.name} href={categoryQuickLinks[category.name]} className="group rounded-[1.75rem] border border-white/10 bg-white/[0.07] p-5 shadow-xl shadow-slate-950/25 transition hover:-translate-y-0.5 hover:border-cyan-300/50 hover:bg-white/[0.11] focus:outline-none focus:ring-4 focus:ring-cyan-300/20">
-                <div className={`mb-5 h-1.5 w-24 rounded-full bg-gradient-to-r ${details.accent}`} />
-                <div className="flex items-start justify-between gap-4">
-                  <span className="rounded-2xl border border-white/10 bg-slate-950/60 p-3 text-3xl" aria-hidden="true">{details.icon}</span>
-                  <span className="rounded-full bg-cyan-300/10 px-3 py-1 text-sm font-black text-cyan-100">{category.tools.length} tools</span>
-                </div>
-                <h2 className="mt-5 text-2xl font-black tracking-tight text-white">{category.name}</h2>
-                <p className="mt-3 text-sm leading-6 text-slate-300">{details.helper}</p>
-                <p className="mt-5 flex items-center justify-between text-sm font-black text-cyan-100"><span>{details.cta}</span><span aria-hidden="true">→</span></p>
-              </Link>
-            );
-          })}
-        </section>
-
         <section className="rounded-[2rem] border border-emerald-300/20 bg-slate-900/75 p-4 shadow-2xl shadow-emerald-950/20 sm:p-6" aria-label="Role based tools">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -1788,12 +1744,6 @@ export default function Home() {
             </div>
           </section>
         </div>
-
-        <section>
-          <p className="text-xs font-black uppercase tracking-[0.28em] text-amber-300">Most used tools</p>
-          <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Common daily tasks</h2>
-          <div className="mt-3"><ToolList cards={mostUsedTools} label="Most used tools" favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} /></div>
-        </section>
 
         <section className="rounded-[2rem] border border-white/10 bg-slate-900/70 p-4 sm:p-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
