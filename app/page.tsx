@@ -1253,7 +1253,12 @@ export default function Home() {
         <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/90 p-4 shadow-2xl shadow-cyan-950/30 sm:p-6 lg:p-8">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.20),transparent_36%),radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.16),transparent_32%)]" />
           <div className="relative">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300 sm:text-sm">Molding Mentor</p>
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300 sm:text-sm">Molding Mentor</p>
+              <Link href="/settings" className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-2 text-xs font-black text-slate-200 transition hover:border-cyan-300/50 hover:bg-cyan-300/10 focus:outline-none focus:ring-4 focus:ring-cyan-300/20">
+                Settings
+              </Link>
+            </div>
             <div className="mt-3 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
               <div>
                 <h1 className="text-3xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">What do you need help with today?</h1>
