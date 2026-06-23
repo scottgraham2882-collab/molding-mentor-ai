@@ -177,6 +177,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-emerald-400",
   },
   {
+    title: "Corrective Action Tracker (CAPA)",
+    description:
+      "Create, save, edit, delete, filter, dashboard, and print CAPA records with owners, due dates, containment, corrective action, prevention, and verification notes.",
+    href: "/quality/capa",
+    accent: "from-emerald-300 to-cyan-400",
+  },
+  {
     title: "Customer Complaint Tracker",
     description:
       "Create, save, edit, delete, filter, and print 8D-style customer complaint records for quality follow-up.",
