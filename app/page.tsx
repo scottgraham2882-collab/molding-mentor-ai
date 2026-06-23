@@ -325,6 +325,17 @@ const dashboardCards: DashboardCard[] = [
     href: "/troubleshooting",
     accent: "from-emerald-300 to-teal-400",
   },
+  {
+    title: "What Changed? Root Cause Helper",
+    plainSubtitle: "Find what changed before bad parts started",
+    beginnerTitle: "What Changed? Helper",
+    beginnerExplanation: "Answer simple change questions before adjusting the press.",
+    description:
+      "Walk through material, color, mold, machine, settings, shift, and maintenance changes to identify likely root-cause areas and safe first checks.",
+    href: "/root-cause/what-changed",
+    accent: "from-amber-300 to-cyan-400",
+    keywords: ["what changed", "root cause", "last good part", "sudden defect", "slow defect", "material change", "mold change", "process settings"],
+  },
 
   {
     title: "Weekly Management Report",
@@ -718,6 +729,7 @@ const categoryKeywords: Record<string, string[]> = {
 const toolKeywordMap: Record<string, string[]> = {
   "/coach": ["ask ai", "help", "problem", "process help", "root cause"],
   "/troubleshooting": ["guided help", "process issue", "machine issue", "fix problem"],
+  "/root-cause/what-changed": ["what changed", "root cause", "last good parts", "sudden problem", "slow problem", "material change", "color change", "mold change", "machine change", "settings change", "maintenance"],
   "/defects": ["defect guide", "short shot", "flash", "sink", "burn", "warp", "splay"],
   "/photo-analysis": ["photo", "picture", "part defect", "visual check"],
   "/scrap": ["rejects", "bad parts", "scrap count", "defect scrap"],
@@ -742,7 +754,7 @@ function getToolCategory(card: DashboardCard) {
   const title = card.title.toLowerCase();
 
   if (
-    ["/coach", "/troubleshooting", "/defects", "/photo-analysis", "/scrap", "/downtime"].includes(href) ||
+    ["/coach", "/troubleshooting", "/root-cause/what-changed", "/defects", "/photo-analysis", "/scrap", "/downtime"].includes(href) ||
     href === "/materials/troubleshooter" ||
     title.includes("troubleshoot") ||
     title.includes("defect")
