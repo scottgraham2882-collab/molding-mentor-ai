@@ -1171,6 +1171,24 @@ const primaryActions: QuickAction[] = [
   },
 ];
 
+
+const missionPrinciples = [
+  { title: "Help people learn", body: "Teach the why behind each check so every issue builds skill, not just a temporary fix." },
+  { title: "Troubleshoot with evidence", body: "Ask why, gather facts, rule out possibilities, and validate changes before chasing settings." },
+  { title: "Preserve shop knowledge", body: "Capture lessons, handoffs, histories, and fixes before experienced knowledge gets lost." },
+  { title: "Keep it simple", body: "Fast, practical tools that work in plain language on the shop floor." },
+  { title: "Support teamwork", body: "Bring operators, technicians, supervisors, and managers together because no one knows everything." },
+  { title: "People first", body: "Use technology to grow better problem-solvers, teachers, leaders, and teammates—not replace them." },
+];
+
+const fiveWhysReminders = [
+  "Ask why.",
+  "Gather evidence.",
+  "Rule out possibilities.",
+  "Think critically.",
+  "Seek another perspective when you reach the limit of your knowledge.",
+];
+
 const quickStartProblems = [
   { label: "Flash", helper: "Extra plastic on the edge", query: "flash" },
   { label: "Short Shot", helper: "Part did not fill all the way", query: "short shot" },
@@ -1376,6 +1394,40 @@ export default function Home() {
                 />
               </label>
             </div>
+
+            <section className="mt-6 rounded-[1.5rem] border border-cyan-300/25 bg-cyan-300/10 p-4 shadow-xl shadow-slate-950/20" aria-labelledby="mission-heading">
+              <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-200">Mission</p>
+                  <h2 id="mission-heading" className="mt-2 text-2xl font-black text-white sm:text-3xl">Make every shift better at solving molding problems.</h2>
+                  <p className="mt-2 text-sm font-semibold leading-6 text-cyan-50 sm:text-base">
+                    Molding Mentor AI helps operators, technicians, supervisors, and managers learn injection molding, troubleshoot with structured thinking, preserve manufacturing knowledge, and collaborate to improve processes.
+                  </p>
+                  <div className="mt-4 rounded-2xl border border-amber-200/30 bg-amber-300/10 p-4">
+                    <h3 className="text-base font-black text-amber-100">5 Whys mindset</h3>
+                    <ul className="mt-2 grid gap-2 text-sm font-semibold leading-5 text-amber-50 sm:grid-cols-2">
+                      {fiveWhysReminders.map((reminder) => (
+                        <li key={reminder} className="flex gap-2">
+                          <span className="text-amber-200" aria-hidden="true">•</span>
+                          <span>{reminder}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {missionPrinciples.map((principle) => (
+                    <article key={principle.title} className="rounded-2xl border border-white/10 bg-slate-950/55 p-4">
+                      <h3 className="text-base font-black text-white">{principle.title}</h3>
+                      <p className="mt-1 text-sm font-semibold leading-5 text-slate-300">{principle.body}</p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+              <p className="mt-4 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-3 text-sm font-black leading-5 text-emerald-50">
+                Humility before ego: think for yourself, learn all you can, and ask for help before pride becomes the problem.
+              </p>
+            </section>
 
             <section className="mt-6" aria-labelledby="primary-actions-heading">
               <h2 id="primary-actions-heading" className="sr-only">Primary actions</h2>
