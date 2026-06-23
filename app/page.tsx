@@ -500,6 +500,63 @@ const dashboardCards: DashboardCard[] = [
     href: "/materials/troubleshooter",
     accent: "from-blue-300 to-cyan-400",
   },
+  {
+    title: "Dashboard",
+    description:
+      "Review the main progress dashboard with training, certification, and coaching activity in one place.",
+    href: "/dashboard",
+    accent: "from-cyan-300 to-blue-400",
+  },
+  {
+    title: "Printable Certificate",
+    description:
+      "Generate and print training certificates for completed lessons and qualification records.",
+    href: "/certifications/certificate",
+    accent: "from-emerald-300 to-cyan-400",
+  },
+  {
+    title: "Decoupled Molding Lesson",
+    description:
+      "Learn the first practical step in decoupled molding with fill-only setup, transfer position, and repeatability checks.",
+    href: "/lessons/decoupled-molding-1",
+    accent: "from-violet-300 to-cyan-400",
+  },
+  {
+    title: "Gate Seal Study Lesson",
+    description:
+      "Follow the steps for proving gate seal, documenting part weight response, and setting hold-time discipline.",
+    href: "/lessons/gate-seal-study",
+    accent: "from-violet-300 to-fuchsia-400",
+  },
+  {
+    title: "Process Window Lesson",
+    description:
+      "Understand how to define practical high and low process limits before production variation reaches quality risk.",
+    href: "/lessons/process-window",
+    accent: "from-fuchsia-300 to-cyan-400",
+  },
+  {
+    title: "Clamp Tonnage Calculator",
+    description:
+      "Estimate required clamp force from projected area and pressure assumptions during setup review.",
+    href: "/calculators/clamp-tonnage",
+    accent: "from-amber-300 to-orange-400",
+  },
+  {
+    title: "Shot Size Calculator",
+    description:
+      "Check shot utilization against barrel capacity so setup teams can catch risky machine matches early.",
+    href: "/calculators/shot-size",
+    accent: "from-orange-300 to-amber-400",
+  },
+  {
+    title: "Cycle Time Calculator",
+    description:
+      "Add fill, pack, cooling, recovery, mold movement, and handling time to estimate cycle and output rate.",
+    href: "/calculators/cycle-time",
+    accent: "from-amber-300 to-cyan-400",
+  },
+
 ];
 
 function CardContent({ card }: { card: DashboardCard }) {
@@ -526,70 +583,127 @@ function CardContent({ card }: { card: DashboardCard }) {
   );
 }
 
-export default function Home() {
+const categoryOrder = ["Favorites", "Production", "Quality", "Setup", "Materials", "Training", "Reports", "People", "Utilities"];
+
+function getToolCategory(card: DashboardCard) {
+  const href = card.href ?? "";
+
+  if (["/coach", "/troubleshooting", "/defects", "/photo-analysis"].includes(href)) return "Favorites";
+  if (href.startsWith("/production") || ["/oee", "/downtime", "/scrap", "/shift-handoff", "/startup-approval"].includes(href)) return "Production";
+  if (href.startsWith("/quality")) return "Quality";
+  if (href.startsWith("/materials")) return "Materials";
+  if (href.startsWith("/training") || href.startsWith("/lessons") || href.startsWith("/certifications")) return "Training";
+  if (href.startsWith("/reports")) return "Reports";
+  if (href.startsWith("/employees") || href === "/plant-management") return "People";
+  if (href.includes("process") || href.includes("mold") || href.includes("machine") || href === "/work-instructions") return "Setup";
+
+  return "Utilities";
+}
+
+const favoriteHrefs = new Set(["/coach", "/troubleshooting", "/defects", "/process-sheet-builder"]);
+const recentHrefs = new Set(["/molds/pm-scheduler", "/production/live-board", "/quality/first-piece-approval", "/process-sheets/approval"]);
+const mostUsedHrefs = new Set(["/process-sheet-builder", "/shift-handoff", "/scrap", "/oee", "/materials/resin-drying", "/calculators"]);
+
+function ToolGrid({ cards, label }: { cards: DashboardCard[]; label: string }) {
   return (
-    <main className="min-h-screen overflow-hidden bg-slate-950 px-4 py-8 text-slate-100 sm:px-6 lg:px-8">
-      <section className="mx-auto flex w-full max-w-6xl flex-col gap-8">
-        <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/80 p-6 shadow-2xl shadow-cyan-950/30 sm:p-8 lg:p-10">
+    <section aria-label={label} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      {cards.map((card) => {
+        const className =
+          "group rounded-[1.5rem] border border-white/10 bg-white/[0.07] p-5 shadow-xl shadow-slate-950/25 backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-300/40 hover:bg-white/[0.1] focus:outline-none focus:ring-4 focus:ring-cyan-300/20";
+
+        if (card.href) {
+          return (
+            <Link key={`${label}-${card.title}`} href={card.href} className={className}>
+              <CardContent card={card} />
+            </Link>
+          );
+        }
+
+        return (
+          <article key={`${label}-${card.title}`} className={`${className} opacity-80`}>
+            <CardContent card={card} />
+          </article>
+        );
+      })}
+    </section>
+  );
+}
+
+export default function Home() {
+  const favorites = dashboardCards.filter((card) => card.href && favoriteHrefs.has(card.href));
+  const recentTools = dashboardCards.filter((card) => card.href && recentHrefs.has(card.href));
+  const mostUsedTools = dashboardCards.filter((card) => card.href && mostUsedHrefs.has(card.href));
+  const categories = categoryOrder.map((category) => ({
+    name: category,
+    tools: dashboardCards.filter((card) => getToolCategory(card) === category),
+  })).filter((category) => category.tools.length > 0);
+
+  return (
+    <main className="min-h-screen overflow-hidden bg-slate-950 px-4 py-5 text-slate-100 sm:px-6 lg:px-8">
+      <section className="mx-auto flex w-full max-w-7xl flex-col gap-6">
+        <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/80 p-5 shadow-2xl shadow-cyan-950/30 sm:p-8 lg:p-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.22),transparent_38%),radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.18),transparent_32%)]" />
           <div className="relative">
-            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-300">
-              Mobile-first molding support
-            </p>
-            <h1 className="mt-4 max-w-4xl text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-7xl">
-              AI Molding Coach
-            </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
-              A focused dashboard for injection molding teams to diagnose defects, follow disciplined troubleshooting, and prepare for future scientific molding tools.
-            </p>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300 sm:text-sm">Shop-floor tool hub</p>
+            <h1 className="mt-3 text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-7xl">AI Molding Coach</h1>
+            <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">Mobile-first access to every molding route, tool, calculator, checklist, lesson, report, and troubleshooting workflow without losing the simplified homepage layout.</p>
+            <label className="mt-6 block max-w-3xl">
+              <span className="sr-only">Search tools</span>
+              <input className="w-full rounded-2xl border border-cyan-300/30 bg-slate-950/80 px-5 py-4 text-base font-semibold text-white shadow-inner shadow-slate-950 placeholder:text-slate-400 focus:border-cyan-200 focus:outline-none focus:ring-4 focus:ring-cyan-300/20" placeholder="Search tools, defects, reports, materials, training..." type="search" />
+            </label>
           </div>
         </header>
 
-        <section aria-label="Progress widgets" className="grid gap-4 sm:grid-cols-3">
+        <section aria-label="Progress widgets" className="grid gap-3 sm:grid-cols-3">
           {dashboardWidgets.map((widget) => (
-            <article key={widget.label} className="rounded-[1.5rem] border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-xl shadow-cyan-950/20">
-              <p className="text-4xl font-black text-white">{widget.value}</p>
-              <h2 className="mt-2 text-sm font-black uppercase tracking-[0.2em] text-cyan-100">{widget.label}</h2>
+            <article key={widget.label} className="rounded-[1.25rem] border border-cyan-300/20 bg-cyan-300/10 p-4 shadow-xl shadow-cyan-950/20">
+              <p className="text-3xl font-black text-white">{widget.value}</p>
+              <h2 className="mt-2 text-xs font-black uppercase tracking-[0.2em] text-cyan-100">{widget.label}</h2>
               <p className="mt-2 text-sm text-slate-300">{widget.description}</p>
             </article>
           ))}
         </section>
 
-        <div>
-          <p className="text-sm font-black uppercase tracking-[0.28em] text-emerald-300">Process & Production Tools</p>
-          <h2 className="mt-2 text-3xl font-black tracking-tight text-white">Run process and production control from one mobile-first workspace</h2>
+        <section aria-label="Shop-floor friendly categories" className="flex gap-2 overflow-x-auto pb-1">
+          {categories.map((category) => (
+            <a key={category.name} href={`#${category.name.toLowerCase()}`} className="shrink-0 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100">
+              {category.name} <span className="text-slate-400">{category.tools.length}</span>
+            </a>
+          ))}
+        </section>
+
+        <div className="grid gap-6 lg:grid-cols-3">
+          <section className="lg:col-span-2">
+            <div className="mb-3 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">Favorites</p>
+                <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Fast floor support</h2>
+              </div>
+            </div>
+            <ToolGrid cards={favorites} label="Favorite tools" />
+          </section>
+
+          <aside className="grid gap-6">
+            <section>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Recent tools</p>
+              <ToolGrid cards={recentTools} label="Recent tools" />
+            </section>
+            <section>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-amber-300">Most used</p>
+              <ToolGrid cards={mostUsedTools} label="Most used tools" />
+            </section>
+          </aside>
         </div>
 
-        <section
-          aria-label="Process and Production Tools"
-          className="grid gap-4 sm:grid-cols-2 lg:gap-6"
-        >
-          {dashboardCards.map((card) => {
-            const className =
-              "group min-h-64 rounded-[1.75rem] border border-white/10 bg-white/[0.07] p-6 shadow-xl shadow-slate-950/30 backdrop-blur transition sm:p-7";
-
-            if (card.href) {
-              return (
-                <Link
-                  key={card.title}
-                  href={card.href}
-                  className={`${className} hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-white/[0.1] focus:outline-none focus:ring-4 focus:ring-cyan-300/20`}
-                >
-                  <CardContent card={card} />
-                </Link>
-              );
-            }
-
-            return (
-              <article
-                key={card.title}
-                className={`${className} opacity-80`}
-              >
-                <CardContent card={card} />
-              </article>
-            );
-          })}
-        </section>
+        {categories.map((category) => (
+          <section key={category.name} id={category.name.toLowerCase()} className="scroll-mt-6">
+            <div className="mb-3">
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">{category.name}</p>
+              <h2 className="mt-1 text-2xl font-black tracking-tight text-white">{category.name} tools</h2>
+            </div>
+            <ToolGrid cards={category.tools} label={`${category.name} tools`} />
+          </section>
+        ))}
       </section>
     </main>
   );
