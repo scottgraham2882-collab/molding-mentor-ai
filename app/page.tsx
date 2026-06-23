@@ -184,6 +184,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-teal-300 to-emerald-400",
   },
   {
+    title: "Digital First Piece Approval",
+    description:
+      "Create, save, view, edit, delete, filter, and print first-piece approvals with part, mold, machine, inspection, packaging, and disposition details.",
+    href: "/quality/first-piece-approval",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Audit Checklist System",
     description:
       "Create layered process, 5S, safety, mold setup, first article, and process sheet audits with pass/fail checks, corrective actions, saved records, filters, and print reports.",
