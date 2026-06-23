@@ -316,7 +316,7 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-sky-400",
   },
   {
-    title: "Troubleshooting Assistant",
+    title: "Troubleshooting Wizard",
     plainSubtitle: "Fix a molding problem",
     beginnerTitle: "Troubleshooting Wizard",
     beginnerExplanation: "Answer guided questions to find a good first fix.",
@@ -504,7 +504,7 @@ const dashboardCards: DashboardCard[] = [
     keywords: ["learning paths", "injection molding basics", "operator path", "setup technician", "process technician", "supervisor path"],
   },
   {
-    title: "Scientific Molding Calculator",
+    title: "Process Calculators",
     description:
       "Estimate clamp tonnage, total shot weight, and screw recovery time with mobile-friendly scientific molding calculator cards.",
     href: "/calculators",
@@ -989,7 +989,7 @@ const roleToolPicks: Record<ShopRole, RoleToolPick[]> = {
     { label: "Training", href: "/training/operator-safety-startup" },
   ],
   "Process Technician": [
-    { label: "Troubleshooting Assistant", href: "/troubleshooting" },
+    { label: "Troubleshooting Wizard", href: "/troubleshooting" },
     { label: "Defect Library", href: "/defects" },
     { label: "Scientific Molding Studies", href: "/scientific-molding/studies" },
     { label: "Process Calculators", href: "/calculators" },
@@ -1019,8 +1019,8 @@ const quickActions: QuickAction[] = [
     icon: "🆘",
   },
   {
-    label: "Report a Defect",
-    helper: "Find the defect and what to check next.",
+    label: "Open Defect Library",
+    helper: "Compare common defects and first checks.",
     href: "/defects",
     icon: "🚨",
   },
@@ -1118,6 +1118,13 @@ const recentCoachingTopics = [
   "Longer cycles after startup",
 ];
 
+const workflowSteps = [
+  { label: "Defect Library", href: "/defects", helper: "Name what you see." },
+  { label: "Troubleshooting Wizard", href: "/troubleshooting", helper: "Choose safe first checks." },
+  { label: "AI Coach", href: "/coach", helper: "Ask follow-up questions." },
+  { label: "Lesson Learned", href: "/knowledge-base", helper: "Save the fix." },
+  { label: "Knowledge Search", href: "/knowledge-search", helper: "Find it next time." },
+];
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -1422,6 +1429,33 @@ export default function Home() {
                 </section>
               </div>
             </div>
+          </div>
+        </section>
+
+
+        <section className="rounded-[2rem] border border-emerald-300/20 bg-slate-900/75 p-4 shadow-2xl shadow-emerald-950/20 sm:p-6" aria-labelledby="workflow-heading">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">Recommended workflow</p>
+              <h2 id="workflow-heading" className="mt-1 text-2xl font-black tracking-tight text-white">If you are not sure where to go, follow this path</h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">This connects the overlapping troubleshooting, coaching, and knowledge tools into one beginner-friendly sequence.</p>
+            </div>
+            <Link href="/start-here" className="rounded-full border border-emerald-300/40 px-4 py-2 text-sm font-black text-emerald-100 transition hover:bg-emerald-300/10 focus:outline-none focus:ring-4 focus:ring-emerald-300/20">Start-here guide →</Link>
+          </div>
+          <div className="mt-4 grid gap-3 md:grid-cols-5">
+            {workflowSteps.map((step, index) => (
+              <Link
+                key={step.href}
+                href={step.href}
+                className="group rounded-2xl border border-white/10 bg-slate-950/55 p-4 transition hover:border-emerald-300/50 hover:bg-emerald-300/10 focus:outline-none focus:ring-4 focus:ring-emerald-300/20"
+                onClick={() => trackRecentTool(step.href)}
+              >
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-300 text-sm font-black text-slate-950">{index + 1}</span>
+                <span className="mt-3 block text-base font-black text-white">{step.label}</span>
+                <span className="mt-1 block text-sm leading-5 text-slate-300">{step.helper}</span>
+                <span className="mt-3 block text-sm font-black text-emerald-100 group-hover:translate-x-1">Open →</span>
+              </Link>
+            ))}
           </div>
         </section>
 

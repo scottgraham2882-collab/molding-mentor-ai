@@ -134,7 +134,7 @@ export default function CaseStudiesPage() {
     <main className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <header className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-2xl shadow-cyan-950/30 sm:p-8">
-          <Link href="/" className="inline-flex rounded-full border border-cyan-300/30 px-4 py-2 text-sm font-semibold text-cyan-200 hover:bg-cyan-300/10">← Back to coach</Link>
+          <Link href="/" className="inline-flex rounded-full border border-cyan-300/30 px-4 py-2 text-sm font-semibold text-cyan-200 hover:bg-cyan-300/10">← Back home</Link>
           <p className="mt-8 text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Case Studies Library</p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">Save real molding troubleshooting stories</h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">Capture what happened, what changed, how the team investigated, and what a new technician should learn from the experience.</p>

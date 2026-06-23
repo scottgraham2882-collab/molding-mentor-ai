@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+
+import { RecommendedNextStep } from "../../components/RecommendedNextStep";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
 type Lesson = {
@@ -217,6 +219,13 @@ export default function KnowledgeBasePage() {
             <section className="mt-6 rounded-2xl border border-slate-200 p-4 print:hidden"><h3 className="text-xl font-black">Related Lessons</h3>{relatedLessons.length === 0 ? <p className="mt-2 text-sm text-slate-600">Add matching tags to other records to connect related lessons.</p> : null}<div className="mt-3 grid gap-3 md:grid-cols-3">{relatedLessons.map((lesson) => <button key={lesson.id} onClick={() => setSelectedLessonId(lesson.id)} className="rounded-2xl bg-slate-100 p-4 text-left font-bold text-slate-900" type="button">{lesson.title}</button>)}</div></section>
           </section>
         ) : null}
+
+        <RecommendedNextStep
+          label="Knowledge Search"
+          href="/knowledge-search"
+          reason="After saving a lesson learned, use search to confirm it is easy to find by defect, mold, machine, material, part number, or plain-language symptom."
+          related={[{ label: "Defect Library", href: "/defects" }, { label: "Troubleshooting Wizard", href: "/troubleshooting" }]}
+        />
       </div>
     </main>
   );

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
 
 import { LearnMoreAboutThis } from "../../components/LearnMoreAboutThis";
+import { RecommendedNextStep } from "../../components/RecommendedNextStep";
 import { defectGuides } from "../../lib/defect-data";
 
 type Message = {
@@ -49,7 +50,7 @@ const mentorLinks: MentorLink[] = [
   { label: "Defect Library", href: "/defects" },
   { label: "Troubleshooting Wizard", href: "/troubleshooting" },
   { label: "Related lesson", href: "/lessons/process-window" },
-  { label: "Knowledge Search", href: "/knowledge-base" },
+  { label: "Lessons Learned", href: "/knowledge-base" },
 ];
 
 const checkFirstItems = [
@@ -249,6 +250,13 @@ export default function CoachPage() {
             </section>
           </aside>
         </section>
+
+        <RecommendedNextStep
+          label="Lesson Learned"
+          href="/knowledge-base"
+          reason="When the issue is solved, save what happened, what caused it, and what fixed it so the next technician can find it faster."
+          related={[{ label: "Knowledge Search", href: "/knowledge-search" }, { label: "Troubleshooting Wizard", href: "/troubleshooting" }]}
+        />
       </div>
     </main>
   );
