@@ -21,6 +21,13 @@ type RoleToolPick = {
   href: string;
 };
 
+type QuickAction = {
+  label: string;
+  helper: string;
+  href: string;
+  icon: string;
+};
+
 const dashboardCards: DashboardCard[] = [
   {
     title: "User Profile",
@@ -913,6 +920,51 @@ const roleToolPicks: Record<ShopRole, RoleToolPick[]> = {
   ],
 };
 
+const quickActions: QuickAction[] = [
+  {
+    label: "Report a Defect",
+    helper: "Find the defect and what to check next.",
+    href: "/defects",
+    icon: "🚨",
+  },
+  {
+    label: "Upload Part Photo",
+    helper: "Use a part picture for defect help.",
+    href: "/photo-analysis",
+    icon: "📷",
+  },
+  {
+    label: "Start Shift Handoff",
+    helper: "Tell the next shift what changed.",
+    href: "/shift-handoff",
+    icon: "🤝",
+  },
+  {
+    label: "Log Downtime",
+    helper: "Record why the press stopped.",
+    href: "/downtime",
+    icon: "⏱️",
+  },
+  {
+    label: "Log Scrap",
+    helper: "Count bad parts and reasons.",
+    href: "/scrap",
+    icon: "🧾",
+  },
+  {
+    label: "Open Troubleshooting Wizard",
+    helper: "Answer questions and get next steps.",
+    href: "/troubleshooting",
+    icon: "🧭",
+  },
+  {
+    label: "View Production Board",
+    helper: "See machine status and floor issues.",
+    href: "/production/live-board",
+    icon: "📋",
+  },
+];
+
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -1093,6 +1145,40 @@ export default function Home() {
             </label>
           </div>
         </header>
+
+        <section className="rounded-[2rem] border border-cyan-300/20 bg-slate-900/80 p-4 shadow-2xl shadow-cyan-950/20 sm:p-6" aria-label="Quick actions">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Quick Actions</p>
+              <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Do the common floor tasks fast</h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
+                Big buttons for the jobs people need during a shift. Search, favorites, recent tools, Beginner Mode, and role tools stay below.
+              </p>
+            </div>
+            <p className="rounded-full border border-white/10 bg-slate-950/70 px-4 py-2 text-sm font-bold text-cyan-100">
+              {quickActions.length} shortcuts
+            </p>
+          </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {quickActions.map((action) => (
+              <Link
+                key={action.href}
+                href={action.href}
+                className="group flex min-h-28 items-center gap-4 rounded-[1.75rem] border border-white/10 bg-white/[0.07] p-4 text-left shadow-xl shadow-slate-950/25 transition hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-white/[0.12] focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
+                onClick={() => trackRecentTool(action.href)}
+              >
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-slate-950/70 text-3xl" aria-hidden="true">
+                  {action.icon}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-lg font-black leading-tight text-white">{action.label}</span>
+                  <span className="mt-1 block text-sm font-semibold leading-5 text-slate-300">{action.helper}</span>
+                </span>
+                <span className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-2 text-cyan-100 transition group-hover:border-cyan-300/50" aria-hidden="true">→</span>
+              </Link>
+            ))}
+          </div>
+        </section>
 
         <section aria-label="Main tool categories" className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {categories.map((category) => {
