@@ -163,7 +163,7 @@ export default function CoachPage() {
               </p>
             </div>
             <div className="rounded-2xl border border-cyan-300/20 bg-slate-900/70 p-4 text-sm leading-6 text-slate-300">
-              Mentor Mode is built for safe habits: inspect first, ask what changed, make one change at a time, and prove the result with parts and readings.
+              Think for yourself. Learn all you can. Ask for help before pride becomes the problem.
             </div>
           </div>
         </header>

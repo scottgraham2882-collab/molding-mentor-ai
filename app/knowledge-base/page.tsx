@@ -156,7 +156,7 @@ export default function KnowledgeBasePage() {
           <Link href="/" className="inline-flex rounded-full border border-cyan-300/30 px-4 py-2 text-sm font-bold text-cyan-100 hover:bg-cyan-300/10">← Back home</Link>
           <p className="mt-6 text-xs font-black uppercase tracking-[0.28em] text-cyan-200">Lessons Learned Knowledge Base</p>
           <h1 className="mt-3 text-4xl font-black tracking-tight text-white sm:text-6xl">Save shop-floor wisdom before it walks away.</h1>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">Capture what happened, what caused it, how the team fixed it, and what you would teach a new technician next time.</p>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">Capture what happened, what caused it, how the team fixed it, and what you would teach a new technician next time. Knowledge shared is knowledge preserved.</p>
         </header>
 
         <section className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_24rem] print:block">

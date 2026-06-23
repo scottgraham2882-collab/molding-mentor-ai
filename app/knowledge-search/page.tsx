@@ -164,7 +164,7 @@ export default function KnowledgeSearchPage() {
           <Link href="/" className="inline-flex rounded-full border border-cyan-300/30 px-4 py-2 text-sm font-bold text-cyan-100 hover:bg-cyan-300/10">← Back home</Link>
           <p className="mt-6 text-xs font-black uppercase tracking-[0.28em] text-cyan-200">Knowledge Search</p>
           <h1 className="mt-3 text-4xl font-black tracking-tight text-white sm:text-6xl">Find the right molding answer fast.</h1>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">Search defects, plain English symptoms, materials, mold numbers, machine numbers, part numbers, troubleshooting keywords, lessons, and scientific molding tools.</p>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">Search defects, plain English symptoms, materials, mold numbers, machine numbers, part numbers, troubleshooting keywords, lessons, and scientific molding tools. The goal is learning, not just finding answers.</p>
           <label className="mt-6 block">
             <span className="text-sm font-bold text-slate-200">What are you looking for?</span>
             <input
