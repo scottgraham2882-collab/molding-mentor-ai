@@ -52,6 +52,15 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-lime-400",
   },
   {
+    title: "I'm Having a Problem",
+    description:
+      "Pick the visible part problem and get plain-language first checks, what not to change first, and safe next steps.",
+    href: "/problem",
+    accent: "from-rose-300 to-cyan-400",
+    beginnerTitle: "I'm Having a Problem",
+    beginnerExplanation: "Start here when a molded part looks wrong and you need a safe first step.",
+  },
+  {
     title: "Process Sheet Builder",
     description:
       "Create, save, edit, print, and export injection molding process sheets for repeatable setups and shift handoffs.",
@@ -894,7 +903,7 @@ const validFavoriteHrefs = new Set(dashboardCards.flatMap((card) => (card.href ?
 const validToolHrefs = validFavoriteHrefs;
 const mostUsedHrefs = new Set(["/process-sheet-builder", "/production/live-board", "/scrap", "/oee", "/materials/resin-drying", "/calculators"]);
 const beginnerModeStorageKey = "moldingMentorBeginnerMode";
-const beginnerStartHrefs = new Set(["/troubleshooting", "/photo-analysis", "/defects", "/coach"]);
+const beginnerStartHrefs = new Set(["/problem", "/troubleshooting", "/photo-analysis", "/defects", "/coach"]);
 const selectedRoleStorageKey = "moldingMentorSelectedRole";
 const shopRoles: ShopRole[] = ["Operator", "Process Technician", "Supervisor", "Manager"];
 const roleHelpers: Record<ShopRole, string> = {
@@ -934,6 +943,12 @@ const roleToolPicks: Record<ShopRole, RoleToolPick[]> = {
 };
 
 const quickActions: QuickAction[] = [
+  {
+    label: "I'm Having a Problem",
+    helper: "Pick what you see and get safe first steps.",
+    href: "/problem",
+    icon: "🆘",
+  },
   {
     label: "Report a Defect",
     helper: "Find the defect and what to check next.",
