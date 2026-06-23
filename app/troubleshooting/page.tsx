@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { DefectEducationPanels } from "../../components/DefectEducationPanels";
 import { defectGuides } from "../../lib/defect-data";
 
 type WizardAnswers = {
@@ -222,6 +223,8 @@ export default function TroubleshootingPage() {
                   {safeActions.map((action) => <li key={action}>{action}</li>)}
                 </ul>
               </section>
+
+              <DefectEducationPanels defect={likelyDefect} compact />
             </div>
           </aside>
         </section>
