@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+
+import { FeedbackPrompt } from "../../components/FeedbackPrompt";
 import { useMemo, useState } from "react";
 
 import { DefectEducationPanels } from "../../components/DefectEducationPanels";
@@ -255,6 +257,8 @@ export default function TroubleshootingPage() {
           reason="Use the coach for follow-up questions after the wizard gives you the likely defect and first checks."
           related={[{ label: "Defect Library", href: "/defects" }, { label: "Save lesson learned", href: "/knowledge-base" }]}
         />
+
+        <FeedbackPrompt page="Troubleshooting Wizard" />
       </div>
     </main>
   );

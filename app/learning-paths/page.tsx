@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+
+import { FeedbackPrompt } from "../../components/FeedbackPrompt";
 import { useEffect, useMemo, useState } from "react";
 
 type LearningPath = {
@@ -189,6 +191,8 @@ export default function LearningPathsPage() {
             );
           })}
         </section>
+
+        <FeedbackPrompt page="Learning Paths" />
       </div>
     </main>
   );
