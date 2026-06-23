@@ -10,6 +10,8 @@ type DashboardCard = {
   status?: "Coming Soon";
   accent: string;
   keywords?: string[];
+  beginnerTitle?: string;
+  beginnerExplanation?: string;
 };
 
 const dashboardCards: DashboardCard[] = [
@@ -257,6 +259,8 @@ const dashboardCards: DashboardCard[] = [
   },
   {
     title: "AI Troubleshooting Coach",
+    beginnerTitle: "Ask Molding Coach",
+    beginnerExplanation: "Ask a plain-language question and get next steps.",
     description:
       "Chat through a molding problem to get targeted questions, likely root causes, corrective actions, and links to lessons and defect guides.",
     href: "/coach",
@@ -265,6 +269,8 @@ const dashboardCards: DashboardCard[] = [
 
   {
     title: "Defect Photo Analysis",
+    beginnerTitle: "Defect Photo Analysis",
+    beginnerExplanation: "Upload a part photo when you are not sure what defect you see.",
     description:
       "Upload a molded part photo, select material and defect category, then get an AI-style likely defect review with troubleshooting and lesson links.",
     href: "/photo-analysis",
@@ -272,6 +278,8 @@ const dashboardCards: DashboardCard[] = [
   },
   {
     title: "Defect Library",
+    beginnerTitle: "Defect Library",
+    beginnerExplanation: "Compare common defects, causes, and safe fixes.",
     description:
       "Review common injection molding defects, likely root causes, and corrective actions before changing the process.",
     href: "/defects",
@@ -279,6 +287,8 @@ const dashboardCards: DashboardCard[] = [
   },
   {
     title: "Troubleshooting Assistant",
+    beginnerTitle: "Troubleshooting Wizard",
+    beginnerExplanation: "Answer guided questions to find a good first fix.",
     description:
       "Use a guided workflow to collect evidence, isolate process variables, and validate the next corrective step.",
     href: "/troubleshooting",
@@ -697,24 +707,37 @@ function SimpleToolCard({
   card,
   compact = false,
   isFavorite = false,
+  beginnerMode = false,
+  isBeginnerStart = false,
   onToggleFavorite,
   onOpenTool,
 }: {
   card: DashboardCard;
   compact?: boolean;
   isFavorite?: boolean;
+  beginnerMode?: boolean;
+  isBeginnerStart?: boolean;
   onToggleFavorite?: (href: string) => void;
   onOpenTool?: (href: string) => void;
 }) {
+  const displayTitle = beginnerMode && card.beginnerTitle ? card.beginnerTitle : card.title;
   const category = getToolCategory(card);
-  const favoriteLabel = isFavorite ? `Remove ${card.title} from favorites` : `Add ${card.title} to favorites`;
+  const favoriteLabel = isFavorite ? `Remove ${displayTitle} from favorites` : `Add ${displayTitle} to favorites`;
   const content = (
     <>
       <div className="min-w-0 flex-1">
         <p className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-cyan-200/80">
           {categoryDetails[category].icon} {category}
         </p>
-        <h3 className={`${compact ? "mt-1 text-base" : "mt-2 text-lg"} font-black leading-tight text-white`}>{card.title}</h3>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <h3 className={`${compact ? "text-base" : "text-lg"} font-black leading-tight text-white`}>{displayTitle}</h3>
+          {isBeginnerStart ? (
+            <span className="rounded-full bg-amber-300 px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-[0.16em] text-slate-950">Start here</span>
+          ) : null}
+        </div>
+        {beginnerMode && card.beginnerExplanation ? (
+          <p className="mt-2 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 px-3 py-2 text-sm font-semibold leading-5 text-cyan-50">{card.beginnerExplanation}</p>
+        ) : null}
         <p className="mt-2 line-clamp-2 text-sm leading-5 text-slate-300">{card.description}</p>
       </div>
       <div className="flex shrink-0 items-center gap-2">
@@ -746,7 +769,7 @@ function SimpleToolCard({
     return (
       <Link
         href={card.href}
-        className={toolButtonClass(compact ? "min-h-20" : "")}
+        className={toolButtonClass(`${compact ? "min-h-20" : ""} ${isBeginnerStart ? "border-amber-300/70 bg-amber-300/10 shadow-amber-950/30 ring-2 ring-amber-300/25" : ""}`)}
         onClick={() => onOpenTool?.(card.href!)}
       >
         {content}
@@ -762,6 +785,8 @@ function ToolList({
   label,
   compact = false,
   favoriteHrefs,
+  beginnerMode = false,
+  beginnerStartHrefs = new Set<string>(),
   onToggleFavorite,
   onOpenTool,
 }: {
@@ -769,6 +794,8 @@ function ToolList({
   label: string;
   compact?: boolean;
   favoriteHrefs: Set<string>;
+  beginnerMode?: boolean;
+  beginnerStartHrefs?: Set<string>;
   onToggleFavorite: (href: string) => void;
   onOpenTool: (href: string) => void;
 }) {
@@ -780,6 +807,8 @@ function ToolList({
           card={card}
           compact={compact}
           isFavorite={Boolean(card.href && favoriteHrefs.has(card.href))}
+          beginnerMode={beginnerMode}
+          isBeginnerStart={Boolean(card.href && beginnerStartHrefs.has(card.href))}
           onToggleFavorite={onToggleFavorite}
           onOpenTool={onOpenTool}
         />
@@ -795,14 +824,25 @@ const maxRecentTools = 5;
 const validFavoriteHrefs = new Set(dashboardCards.flatMap((card) => (card.href ? [card.href] : [])));
 const validToolHrefs = validFavoriteHrefs;
 const mostUsedHrefs = new Set(["/process-sheet-builder", "/production/live-board", "/scrap", "/oee", "/materials/resin-drying", "/calculators"]);
+const beginnerModeStorageKey = "moldingMentorBeginnerMode";
+const beginnerStartHrefs = new Set(["/troubleshooting", "/photo-analysis", "/defects", "/coach"]);
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [favoriteTools, setFavoriteTools] = useState<string[]>(defaultFavoriteHrefs);
   const [recentToolHrefs, setRecentToolHrefs] = useState<string[]>([]);
   const [recentToolsHydrated, setRecentToolsHydrated] = useState(false);
+  const [beginnerMode, setBeginnerMode] = useState(false);
   const favoriteHrefSet = useMemo(() => new Set(favoriteTools), [favoriteTools]);
   const normalizedSearch = searchTerm.trim().toLowerCase();
+
+  useEffect(() => {
+    setBeginnerMode(window.localStorage.getItem(beginnerModeStorageKey) === "true");
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(beginnerModeStorageKey, String(beginnerMode));
+  }, [beginnerMode]);
 
   useEffect(() => {
     const savedFavorites = window.localStorage.getItem(homepageFavoritesStorageKey);
@@ -892,6 +932,7 @@ export default function Home() {
     .map((href) => dashboardCards.find((card) => card.href === href))
     .filter((card): card is DashboardCard => Boolean(card));
   const mostUsedTools = visibleCards.filter((card) => card.href && mostUsedHrefs.has(card.href));
+  const beginnerStartTools = dashboardCards.filter((card) => card.href && beginnerStartHrefs.has(card.href));
   const categories = categoryOrder.map((category) => ({
     name: category,
     tools: visibleCards.filter((card) => getToolCategory(card) === category),
@@ -908,6 +949,32 @@ export default function Home() {
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">
               Simple buttons for technicians and supervisors. Search by defect, job, material, training, report, or tool name.
             </p>
+            <div className="mt-6 flex flex-col gap-3 rounded-3xl border border-white/10 bg-slate-950/55 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm font-black text-white">Beginner Mode</p>
+                <p className="mt-1 text-sm leading-5 text-slate-300">Turn on simpler tool names, short explanations, and suggested starting points.</p>
+              </div>
+              <button
+                aria-pressed={beginnerMode}
+                className={`flex w-full items-center justify-between rounded-full border px-4 py-3 text-sm font-black transition focus:outline-none focus:ring-4 focus:ring-cyan-300/20 sm:w-48 ${
+                  beginnerMode
+                    ? "border-emerald-200/70 bg-emerald-300 text-slate-950"
+                    : "border-white/10 bg-slate-900 text-slate-200 hover:border-cyan-300/50"
+                }`}
+                type="button"
+                onClick={() => setBeginnerMode((current) => !current)}
+              >
+                <span>{beginnerMode ? "Beginner On" : "Beginner Off"}</span>
+                <span className={`h-6 w-11 rounded-full p-1 transition ${beginnerMode ? "bg-slate-950/25" : "bg-slate-950"}`} aria-hidden="true">
+                  <span className={`block h-4 w-4 rounded-full bg-white transition ${beginnerMode ? "translate-x-5" : "translate-x-0"}`} />
+                </span>
+              </button>
+            </div>
+            {beginnerMode ? (
+              <p className="mt-4 rounded-3xl border border-amber-300/30 bg-amber-300/10 p-4 text-sm font-bold leading-6 text-amber-50">
+                Not sure what the defect is? Start with the Troubleshooting Wizard or upload a photo.
+              </p>
+            ) : null}
             <label className="mt-7 block max-w-4xl">
               <span className="mb-2 block text-sm font-bold text-slate-200">What do you need help with?</span>
               <input
@@ -950,12 +1017,23 @@ export default function Home() {
             </div>
             <div className="mt-4">
               {visibleCards.length > 0 ? (
-                <ToolList cards={visibleCards} label="Matching search tools" favoriteHrefs={favoriteHrefSet} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
+                <ToolList cards={visibleCards} label="Matching search tools" favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
               ) : (
                 <p className="rounded-[1.5rem] border border-amber-300/30 bg-amber-300/10 p-6 text-center text-amber-50">
                   No tools found. Try searching troubleshooting, training, quality, material, or reports.
                 </p>
               )}
+            </div>
+          </section>
+        ) : null}
+
+        {beginnerMode ? (
+          <section className="rounded-[2rem] border border-amber-300/30 bg-gradient-to-br from-amber-300/15 via-slate-900/80 to-cyan-300/10 p-4 shadow-2xl shadow-amber-950/20 sm:p-6">
+            <p className="text-xs font-black uppercase tracking-[0.28em] text-amber-200">Start Here</p>
+            <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Best tools when you are new or unsure</h2>
+            <p className="mt-2 text-sm leading-6 text-amber-50/90">Not sure what the defect is? Start with the Troubleshooting Wizard or upload a photo.</p>
+            <div className="mt-4">
+              <ToolList cards={beginnerStartTools} label="Beginner start tools" favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
             </div>
           </section>
         ) : null}
@@ -966,7 +1044,7 @@ export default function Home() {
             <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Quick picks for the floor</h2>
             <div className="mt-3">
               {favorites.length > 0 ? (
-                <ToolList cards={favorites} label="Favorite tools" favoriteHrefs={favoriteHrefSet} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
+                <ToolList cards={favorites} label="Favorite tools" favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
               ) : (
                 <p className="rounded-[1.5rem] border border-dashed border-emerald-300/30 bg-emerald-300/10 p-6 text-sm leading-6 text-emerald-50">
                   No favorites saved yet. Tap the star on any tool card to keep it here on this device.
@@ -980,7 +1058,7 @@ export default function Home() {
             <div className="mt-3">
               {recentTools.length > 0 ? (
                 <div className="grid gap-3">
-                  <ToolList cards={recentTools} label="Recent tools" compact favoriteHrefs={favoriteHrefSet} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
+                  <ToolList cards={recentTools} label="Recent tools" compact favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
                   <button
                     className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm font-black text-slate-200 transition hover:border-rose-300/50 hover:text-rose-100 focus:outline-none focus:ring-4 focus:ring-rose-300/20"
                     type="button"
@@ -1001,7 +1079,7 @@ export default function Home() {
         <section>
           <p className="text-xs font-black uppercase tracking-[0.28em] text-amber-300">Most used tools</p>
           <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Common daily tasks</h2>
-          <div className="mt-3"><ToolList cards={mostUsedTools} label="Most used tools" favoriteHrefs={favoriteHrefSet} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} /></div>
+          <div className="mt-3"><ToolList cards={mostUsedTools} label="Most used tools" favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} /></div>
         </section>
 
         <section className="rounded-[2rem] border border-white/10 bg-slate-900/70 p-4 sm:p-6">
@@ -1019,7 +1097,7 @@ export default function Home() {
                   <h3 className="text-xl font-black text-white"><span aria-hidden="true">{categoryDetails[category.name].icon}</span> {category.name}</h3>
                   <span className="rounded-full bg-white/10 px-3 py-1 text-sm font-bold text-slate-300">{category.tools.length}</span>
                 </div>
-                {category.tools.length > 0 ? <ToolList cards={category.tools} label={`${category.name} tools`} compact favoriteHrefs={favoriteHrefSet} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} /> : <p className="text-sm text-slate-400">No matching tools in this category.</p>}
+                {category.tools.length > 0 ? <ToolList cards={category.tools} label={`${category.name} tools`} compact favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} /> : <p className="text-sm text-slate-400">No matching tools in this category.</p>}
               </section>
             ))}
           </div>
