@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 
 import { DefectEducationPanels } from "../../components/DefectEducationPanels";
+import { LearnMoreAboutThis } from "../../components/LearnMoreAboutThis";
 import { defectGuides } from "../../lib/defect-data";
 
 type WizardAnswers = {
@@ -225,6 +226,7 @@ export default function TroubleshootingPage() {
               </section>
 
               <DefectEducationPanels defect={likelyDefect} compact />
+              <LearnMoreAboutThis defectSlug={likelyDefect.slug} defectName={likelyDefect.name} />
             </div>
           </aside>
         </section>
