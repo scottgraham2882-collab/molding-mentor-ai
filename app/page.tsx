@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useMemo, useState } from "react";
 import { demoProgress, getProgressSummary } from "../lib/progress-data";
 
 type DashboardCard = {
@@ -559,13 +562,44 @@ const dashboardCards: DashboardCard[] = [
 
 ];
 
+const categoryOrder = ["Production", "Process", "Quality", "Training", "Materials", "Management", "Mold & Machine"];
+
+const categoryIcons: Record<string, string> = {
+  Production: "🏭",
+  Process: "⚙️",
+  Quality: "✅",
+  Training: "🎓",
+  Materials: "🧪",
+  Management: "📊",
+  "Mold & Machine": "🛠️",
+};
+
+function getToolCategory(card: DashboardCard) {
+  const href = card.href ?? "";
+  const title = card.title.toLowerCase();
+
+  if (href.startsWith("/production") || ["/oee", "/downtime", "/scrap", "/shift-handoff", "/startup-approval", "/mold-change"].includes(href)) return "Production";
+  if (href.startsWith("/quality") || ["/defects", "/photo-analysis"].includes(href)) return "Quality";
+  if (href.startsWith("/training") || href.startsWith("/lessons") || href.startsWith("/certifications") || href.startsWith("/employees")) return "Training";
+  if (href.startsWith("/materials")) return "Materials";
+  if (href.startsWith("/reports") || ["/plant-management", "/actions", "/documents", "/meetings", "/profile", "/account/login", "/account/register", "/dashboard"].includes(href)) return "Management";
+  if (href.startsWith("/molds") || href === "/machines" || title.includes("mold history") || title.includes("machine history") || href === "/maintenance") return "Mold & Machine";
+
+  return "Process";
+}
+
 function CardContent({ card }: { card: DashboardCard }) {
   return (
     <>
-      <div
-        className={`h-1.5 w-20 rounded-full bg-gradient-to-r ${card.accent}`}
-        aria-hidden="true"
-      />
+      <div className="flex items-center justify-between gap-3">
+        <div
+          className={`h-1.5 w-20 rounded-full bg-gradient-to-r ${card.accent}`}
+          aria-hidden="true"
+        />
+        <span className="rounded-2xl border border-white/10 bg-white/10 px-3 py-2 text-2xl" aria-hidden="true">
+          {categoryIcons[getToolCategory(card)]}
+        </span>
+      </div>
       <div className="mt-6 flex items-start justify-between gap-4">
         <h2 className="text-2xl font-bold tracking-tight text-white">{card.title}</h2>
         {card.status ? (
@@ -581,23 +615,6 @@ function CardContent({ card }: { card: DashboardCard }) {
       </div>
     </>
   );
-}
-
-const categoryOrder = ["Favorites", "Production", "Quality", "Setup", "Materials", "Training", "Reports", "People", "Utilities"];
-
-function getToolCategory(card: DashboardCard) {
-  const href = card.href ?? "";
-
-  if (["/coach", "/troubleshooting", "/defects", "/photo-analysis"].includes(href)) return "Favorites";
-  if (href.startsWith("/production") || ["/oee", "/downtime", "/scrap", "/shift-handoff", "/startup-approval"].includes(href)) return "Production";
-  if (href.startsWith("/quality")) return "Quality";
-  if (href.startsWith("/materials")) return "Materials";
-  if (href.startsWith("/training") || href.startsWith("/lessons") || href.startsWith("/certifications")) return "Training";
-  if (href.startsWith("/reports")) return "Reports";
-  if (href.startsWith("/employees") || href === "/plant-management") return "People";
-  if (href.includes("process") || href.includes("mold") || href.includes("machine") || href === "/work-instructions") return "Setup";
-
-  return "Utilities";
 }
 
 const favoriteHrefs = new Set(["/coach", "/troubleshooting", "/defects", "/process-sheet-builder"]);
@@ -630,13 +647,25 @@ function ToolGrid({ cards, label }: { cards: DashboardCard[]; label: string }) {
 }
 
 export default function Home() {
-  const favorites = dashboardCards.filter((card) => card.href && favoriteHrefs.has(card.href));
-  const recentTools = dashboardCards.filter((card) => card.href && recentHrefs.has(card.href));
-  const mostUsedTools = dashboardCards.filter((card) => card.href && mostUsedHrefs.has(card.href));
+  const [searchTerm, setSearchTerm] = useState("");
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const visibleCards = useMemo(() => {
+    if (!normalizedSearch) return dashboardCards;
+
+    return dashboardCards.filter((card) =>
+      [card.title, card.description, card.href ?? "", getToolCategory(card)]
+        .join(" ")
+        .toLowerCase()
+        .includes(normalizedSearch),
+    );
+  }, [normalizedSearch]);
+  const favorites = visibleCards.filter((card) => card.href && favoriteHrefs.has(card.href));
+  const recentTools = visibleCards.filter((card) => card.href && recentHrefs.has(card.href));
+  const mostUsedTools = visibleCards.filter((card) => card.href && mostUsedHrefs.has(card.href));
   const categories = categoryOrder.map((category) => ({
     name: category,
-    tools: dashboardCards.filter((card) => getToolCategory(card) === category),
-  })).filter((category) => category.tools.length > 0);
+    tools: visibleCards.filter((card) => getToolCategory(card) === category),
+  }));
 
   return (
     <main className="min-h-screen overflow-hidden bg-slate-950 px-4 py-5 text-slate-100 sm:px-6 lg:px-8">
@@ -649,7 +678,7 @@ export default function Home() {
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">Mobile-first access to every molding route, tool, calculator, checklist, lesson, report, and troubleshooting workflow without losing the simplified homepage layout.</p>
             <label className="mt-6 block max-w-3xl">
               <span className="sr-only">Search tools</span>
-              <input className="w-full rounded-2xl border border-cyan-300/30 bg-slate-950/80 px-5 py-4 text-base font-semibold text-white shadow-inner shadow-slate-950 placeholder:text-slate-400 focus:border-cyan-200 focus:outline-none focus:ring-4 focus:ring-cyan-300/20" placeholder="Search tools, defects, reports, materials, training..." type="search" />
+              <input className="w-full rounded-2xl border border-cyan-300/30 bg-slate-950/80 px-5 py-4 text-base font-semibold text-white shadow-inner shadow-slate-950 placeholder:text-slate-400 focus:border-cyan-200 focus:outline-none focus:ring-4 focus:ring-cyan-300/20" placeholder="Search tools, defects, reports, materials, training..." type="search" value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} />
             </label>
           </div>
         </header>
@@ -664,10 +693,10 @@ export default function Home() {
           ))}
         </section>
 
-        <section aria-label="Shop-floor friendly categories" className="flex gap-2 overflow-x-auto pb-1">
+        <section aria-label="Dashboard categories" className="flex gap-2 overflow-x-auto pb-1">
           {categories.map((category) => (
             <a key={category.name} href={`#${category.name.toLowerCase()}`} className="shrink-0 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100">
-              {category.name} <span className="text-slate-400">{category.tools.length}</span>
+              <span aria-hidden="true">{categoryIcons[category.name]}</span> {category.name} <span className="text-slate-400">{category.tools.length}</span>
             </a>
           ))}
         </section>
@@ -695,13 +724,23 @@ export default function Home() {
           </aside>
         </div>
 
+        {normalizedSearch && visibleCards.length === 0 ? (
+          <section className="rounded-[1.5rem] border border-amber-300/30 bg-amber-300/10 p-6 text-center text-amber-50">
+            No tools match “{searchTerm}”. Try a route, category, or tool name.
+          </section>
+        ) : null}
+
         {categories.map((category) => (
           <section key={category.name} id={category.name.toLowerCase()} className="scroll-mt-6">
             <div className="mb-3">
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">{category.name}</p>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300"><span aria-hidden="true">{categoryIcons[category.name]}</span> {category.name}</p>
               <h2 className="mt-1 text-2xl font-black tracking-tight text-white">{category.name} tools</h2>
             </div>
-            <ToolGrid cards={category.tools} label={`${category.name} tools`} />
+            {category.tools.length > 0 ? (
+              <ToolGrid cards={category.tools} label={`${category.name} tools`} />
+            ) : (
+              <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.04] p-5 text-sm text-slate-400">No matching tools in this category.</div>
+            )}
           </section>
         ))}
       </section>
