@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { ChangeEvent, useMemo, useState } from "react";
 
-type DefectCategory = "splay" | "short-shot" | "sink-warp" | "burns" | "contamination";
+import { defectGuides } from "../../lib/defect-data";
+
+type DefectCategory = string;
 
 type AnalysisResult = {
   likelyDefect: string;
@@ -15,118 +17,31 @@ type AnalysisResult = {
 
 const materials = ["ABS", "PP", "PE", "PC", "Nylon", "PBT", "Acetal", "TPE"];
 
-const defectCategories: { label: string; value: DefectCategory; helper: string }[] = [
-  { label: "Splay / silver streaks", value: "splay", helper: "Silver lines, moisture streaks, gas trails, surface splash" },
-  { label: "Short shot", value: "short-shot", helper: "Missing features, incomplete fill, thin flow-front edges" },
-  { label: "Sink / warp", value: "sink-warp", helper: "Depressions, bowing, twist, uneven shrink near ribs or bosses" },
-  { label: "Burn marks", value: "burns", helper: "Brown or black marks near end-of-fill, vents, ribs, or weld lines" },
-  { label: "Contamination", value: "contamination", helper: "Black specks, color streaks, delamination, foreign material" },
-];
+const defectCategories = defectGuides.map((defect) => ({
+  label: defect.name,
+  value: defect.slug,
+  helper: defect.description,
+}));
 
-const categoryAnalysis: Record<DefectCategory, Omit<AnalysisResult, "confidence">> = {
-  splay: {
-    likelyDefect: "Splay / silver streaking",
-    possibleCauses: [
-      "Moisture in the resin, colorant, or regrind stream.",
-      "Excessive screw decompression, high back pressure, or shear that pulls air or volatiles into the melt.",
-      "Restricted vents, poor surface polish, or trapped gas following the flow path.",
-    ],
-    processChecks: [
-      "Verify dryer temperature, dew point, hopper residence time, and material lot history for the selected resin.",
-      "Compare screw recovery time, back pressure, screw speed, and decompression against the approved process sheet.",
-      "Map the streak direction from gate to end-of-fill and confirm whether every cavity shows the same pattern.",
-    ],
-    correctiveActions: [
-      "Dry or replace suspect material before making major press changes.",
-      "Reduce decompression and make small, documented adjustments to screw speed or back pressure if drying checks pass.",
-      "Clean vents and review the affected cavity surface if the defect repeats in the same location.",
-    ],
-  },
-  "short-shot": {
-    likelyDefect: "Short shot / incomplete fill",
-    possibleCauses: [
-      "Low melt temperature, low injection speed, pressure limiting, or an undersized shot.",
-      "Blocked gate, cold slug, nozzle restriction, check-ring leakage, or insufficient venting.",
-      "Material viscosity shift from lot, moisture, regrind, or temperature variation.",
-    ],
-    processChecks: [
-      "Confirm cushion, transfer position, shot size, fill time, and peak pressure are repeatable.",
-      "Check whether the machine is reaching pressure limit before transfer.",
-      "Inspect gate, runner, nozzle tip, check ring, feed throat, and end-of-fill vents.",
-    ],
-    correctiveActions: [
-      "Restore shot size and transfer settings to the approved setup, then document any needed changes.",
-      "Increase injection speed or melt temperature in controlled steps only after restrictions are ruled out.",
-      "Clean or repair blocked flow paths and vents before compensating with excessive pressure.",
-    ],
-  },
-  "sink-warp": {
-    likelyDefect: "Sink marks / warpage",
-    possibleCauses: [
-      "Insufficient pack pressure or pack time before gate seal.",
-      "Uneven wall thickness, hot cores, blocked cooling circuits, or early ejection.",
-      "Unbalanced shrink from gate location, fiber orientation, or cavity-to-cavity cooling variation.",
-    ],
-    processChecks: [
-      "Review pack pressure, pack time, cushion, gate-seal evidence, cooling time, and ejection temperature.",
-      "Compare coolant temperature and flow across mold halves, cores, slides, and cavities.",
-      "Measure parts at a consistent time after molding using the same fixture or inspection method.",
-    ],
-    correctiveActions: [
-      "Run or repeat a gate-seal study before increasing hold time blindly.",
-      "Balance cooling and repair blocked circuits before extending cycle time.",
-      "Increase pack pressure/time in documented steps while watching for flash, sticking, or stress.",
-    ],
-  },
-  burns: {
-    likelyDefect: "Burn marks / trapped gas",
-    possibleCauses: [
-      "Poor venting, high injection speed, diesel effect at end-of-fill, or blocked vents.",
-      "Material degradation from excessive barrel temperature, residence time, screw speed, or back pressure.",
-      "Air traps around ribs, bosses, weld lines, or long flow paths.",
-    ],
-    processChecks: [
-      "Locate burns relative to end-of-fill, weld lines, vents, gates, and cavity number.",
-      "Check fill speed, peak pressure, barrel temperature profile, residence time, and purge condition.",
-      "Inspect vents, parting line, ejector pins, hot-runner drops, and shutoffs for contamination or damage.",
-    ],
-    correctiveActions: [
-      "Clean or improve vents and confirm clamp force is not sealing the vents shut.",
-      "Lower fill speed in the affected zone if venting is adequate and short shots do not appear.",
-      "Reduce melt temperature or residence time if purge material shows degradation.",
-    ],
-  },
-  contamination: {
-    likelyDefect: "Black specks / contamination",
-    possibleCauses: [
-      "Degraded resin, mixed material, dirty loaders, grinder contamination, or colorant issues.",
-      "Dead spots in the barrel, screw, nozzle, hot runner, or material-handling system.",
-      "Burning from trapped gas when dark marks repeat at end-of-fill.",
-    ],
-    processChecks: [
-      "Compare affected parts with purge patties, startup shots, and adjacent cavities.",
-      "Inspect hopper, loader, grinder, regrind containers, barrel, screw, nozzle, and hot-runner drops.",
-      "Confirm rear-zone temperature, screw speed, back pressure, and residence time are not degrading the resin.",
-    ],
-    correctiveActions: [
-      "Quarantine suspect resin, colorant, or regrind lots until the source is verified.",
-      "Purge and clean the material path from gaylord or dryer through nozzle and hot runner.",
-      "Lower temperatures or residence time if degradation is confirmed by purge evidence.",
-    ],
-  },
-};
+function findDefect(category: DefectCategory) {
+  return defectGuides.find((defect) => defect.slug === category) ?? defectGuides[0];
+}
 
 function buildAnalysis(material: string, category: DefectCategory, hasPhoto: boolean): AnalysisResult {
-  const base = categoryAnalysis[category];
+  const defect = findDefect(category);
+
   return {
-    ...base,
+    likelyDefect: defect.name,
+    possibleCauses: defect.causes,
+    processChecks: [...defect.checkFirst, ...defect.processAreas.map((area) => `Review related process area: ${area}.`)],
+    correctiveActions: defect.actions,
     confidence: hasPhoto ? `Moderate — image uploaded, ${material} selected, and category context supplied.` : "Low — upload a photo to improve the review context.",
   };
 }
 
 export default function PhotoAnalysisPage() {
   const [material, setMaterial] = useState(materials[0]);
-  const [category, setCategory] = useState<DefectCategory>("splay");
+  const [category, setCategory] = useState<DefectCategory>(defectGuides[0].slug);
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState("");
   const [analyzed, setAnalyzed] = useState(false);

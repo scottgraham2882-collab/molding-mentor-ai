@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
 
+import { defectGuides } from "../../lib/defect-data";
+
 type Message = {
   role: "user" | "assistant";
   content: string;
@@ -16,122 +18,17 @@ type KnowledgeItem = {
   lessons: { label: string; href: string }[];
 };
 
-const knowledgeBase: KnowledgeItem[] = [
-  {
-    keywords: ["short", "not filling", "incomplete", "underfill"],
-    defect: "Short shot / incomplete fill",
-    rootCauses: [
-      "Melt is freezing before end of fill because temperature, speed, or pressure is too low.",
-      "Material feed, check ring recovery, gates, runners, or vents are restricting flow.",
-      "The shot size, transfer position, or cushion does not leave enough plastic to pack the cavity.",
-    ],
-    correctiveActions: [
-      "Confirm material feed and cushion repeatability, then increase shot size or transfer later in small steps.",
-      "Raise injection speed or pressure limit only after verifying the process is pressure-limited.",
-      "Inspect blocked gates, cold runners, check ring wear, and end-of-fill vents before chasing settings.",
-    ],
-    lessons: [
-      { label: "Process Window Lesson", href: "/lessons/process-window" },
-      { label: "Defect Guide", href: "/defects" },
-      { label: "Shot Size Calculator", href: "/calculators/shot-size" },
-    ],
-  },
-  {
-    keywords: ["flash", "burr", "parting", "overflow"],
-    defect: "Flash",
-    rootCauses: [
-      "Clamp force or shutoff condition is not holding back cavity pressure.",
-      "Pack pressure, transfer position, or injection speed is driving peak cavity pressure too high.",
-      "Parting line, vent lands, inserts, or ejector pin areas are worn, dirty, damaged, or misaligned.",
-    ],
-    correctiveActions: [
-      "Inspect and clean parting-line shutoffs, vents, inserts, and ejector areas before reducing pack.",
-      "Verify clamp tonnage and mold alignment, then reduce pack pressure or transfer earlier in measured steps.",
-      "Use fill-only parts to separate fill pressure from pack pressure and avoid creating short shots.",
-    ],
-    lessons: [
-      { label: "Clamp Tonnage Calculator", href: "/calculators/clamp-tonnage" },
-      { label: "Decoupled Molding Lesson", href: "/lessons/decoupled-molding-1" },
-      { label: "Defect Guide", href: "/defects" },
-    ],
-  },
-  {
-    keywords: ["sink", "void", "depression", "shrink"],
-    defect: "Sink marks / void risk",
-    rootCauses: [
-      "The gate may be freezing before adequate pack pressure reaches thick sections.",
-      "Ribs, bosses, or wall transitions are cooling slower than nearby nominal walls.",
-      "Pack pressure, pack time, melt temperature, mold temperature, or cooling time is not balanced.",
-    ],
-    correctiveActions: [
-      "Run or review a gate-seal study, then increase pack time only until the gate is sealed.",
-      "Increase pack pressure in controlled increments while watching part weight, flash, and dimensions.",
-      "Check cooling flow around thick sections and review rib, boss, and wall-thickness design rules.",
-    ],
-    lessons: [
-      { label: "Gate Seal Study", href: "/lessons/gate-seal-study" },
-      { label: "Cycle Time Calculator", href: "/calculators/cycle-time" },
-      { label: "Defect Guide", href: "/defects" },
-    ],
-  },
-  {
-    keywords: ["splay", "streak", "silver", "moisture", "bubbles"],
-    defect: "Splay / streaking / bubbles",
-    rootCauses: [
-      "Resin moisture, volatile contamination, colorant, or regrind variation is entering the melt stream.",
-      "Excess decompression, poor feed-throat control, or turbulent flow is entraining air.",
-      "Screw speed, back pressure, residence time, or melt temperature is degrading the material.",
-    ],
-    correctiveActions: [
-      "Verify dryer temperature, dew point, drying time, material path, and moisture readings before changing the mold process.",
-      "Reduce suck-back, stabilize feed, and check for contamination or mixed resin at the hopper and loader.",
-      "Lower shear sources such as screw speed, back pressure, or aggressive fill speed if drying checks pass.",
-    ],
-    lessons: [
-      { label: "Resin Drying Guide", href: "/materials/resin-drying" },
-      { label: "Material Troubleshooter", href: "/materials/troubleshooter" },
-      { label: "Defect Guide", href: "/defects" },
-    ],
-  },
-  {
-    keywords: ["warp", "warpage", "bow", "twist", "dimension"],
-    defect: "Warpage / dimensional movement",
-    rootCauses: [
-      "Cooling is unbalanced across the mold, cavities, or part wall sections.",
-      "Pack profile, gate location, fiber orientation, or wall thickness is creating uneven shrinkage.",
-      "Parts are being ejected too hot or stressed by ejection, handling, or fixture conditions.",
-    ],
-    correctiveActions: [
-      "Compare coolant temperature, flow, and circuit cleanliness before changing pack or cooling time.",
-      "Adjust pack profile and cooling time while tracking dimensions at a consistent time after molding.",
-      "Review wall thickness, ribs, gate location, and fiber direction if process changes cannot stabilize the part.",
-    ],
-    lessons: [
-      { label: "Process Window Lesson", href: "/lessons/process-window" },
-      { label: "Cycle Time Calculator", href: "/calculators/cycle-time" },
-      { label: "Defect Guide", href: "/defects" },
-    ],
-  },
-  {
-    keywords: ["burn", "char", "black", "diesel", "speck"],
-    defect: "Burn marks / black specks",
-    rootCauses: [
-      "Trapped air or gas is compressing at end of fill because venting is poor or blocked.",
-      "Shear heat from high injection speed, screw speed, back pressure, or restrictive gates is degrading resin.",
-      "Residence time, barrel temperature, dead spots, or contamination is producing degraded material.",
-    ],
-    correctiveActions: [
-      "Clean and inspect vents at end-of-fill locations, then confirm they are not blocked by flash or residue.",
-      "Reduce shear contributors in one-variable steps and check whether burn location follows flow-end gas traps.",
-      "Purge, verify barrel temperature profile, reduce residence time, and inspect hot runner or screw dead spots.",
-    ],
-    lessons: [
-      { label: "Material Troubleshooter", href: "/materials/troubleshooter" },
-      { label: "Decoupled Molding Lesson", href: "/lessons/decoupled-molding-1" },
-      { label: "Defect Guide", href: "/defects" },
-    ],
-  },
-];
+const knowledgeBase: KnowledgeItem[] = defectGuides.map((defect) => ({
+  keywords: [defect.name.toLowerCase(), defect.slug.replaceAll("-", " "), ...defect.name.toLowerCase().split(" ")],
+  defect: defect.name,
+  rootCauses: defect.causes,
+  correctiveActions: defect.actions,
+  lessons: [
+    { label: "Troubleshooting Assistant", href: "/troubleshooting" },
+    { label: "Defect Guide", href: "/defects" },
+    { label: "Material Troubleshooter", href: "/materials/troubleshooter" },
+  ],
+}));
 
 const defaultQuestions = [
   "Which defect is visible, and where does it appear on the part or cavity layout?",
