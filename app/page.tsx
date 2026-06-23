@@ -417,6 +417,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Material Change Approval Form",
+    description:
+      "Create, save, edit, delete, filter, approve, reject, and print material change approvals with quality, technician, and supervisor sign-offs.",
+    href: "/materials/change-approval",
+    accent: "from-cyan-300 to-blue-400",
+  },
+  {
     title: "Material Defect Troubleshooter",
     description:
       "Select splay, bubbles, silver streaks, black specks, delamination, or brittleness to review material causes and corrective actions.",
