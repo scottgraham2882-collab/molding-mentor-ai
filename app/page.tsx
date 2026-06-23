@@ -542,6 +542,16 @@ const dashboardCards: DashboardCard[] = [
     href: "/certifications/certificate",
     accent: "from-emerald-300 to-cyan-400",
   },
+
+  {
+    title: "Lessons Learned Knowledge Base",
+    plainSubtitle: "Save fixes so the next technician learns faster",
+    description:
+      "Create, save, search, edit, delete, relate, and print lessons learned with root cause, solution, results, tags, and new-technician teaching notes.",
+    href: "/knowledge-base",
+    accent: "from-cyan-300 to-emerald-400",
+    keywords: ["lessons learned", "knowledge base", "root cause", "teach technician", "tribal knowledge"],
+  },
   {
     title: "Decoupled Molding Lesson",
     description:
@@ -668,6 +678,7 @@ const toolKeywordMap: Record<string, string[]> = {
   "/reports/daily": ["daily report", "shift report", "plant report", "production report"],
   "/reports/weekly": ["weekly report", "management review", "plant summary"],
   "/training/assignments": ["assign training", "due dates", "training status", "operator training"],
+  "/knowledge-base": ["lessons learned", "knowledge base", "root cause", "teach technician", "tribal knowledge", "saved fixes"],
   "/training/skills-matrix": ["skills", "qualified", "cross training", "matrix"],
 };
 
@@ -693,7 +704,7 @@ function getToolCategory(card: DashboardCard) {
   }
 
   if (href.startsWith("/quality")) return "Check Quality";
-  if (href.startsWith("/training") || href.startsWith("/lessons") || href.startsWith("/certifications") || href.startsWith("/employees")) return "Train Employees";
+  if (href.startsWith("/training") || href.startsWith("/lessons") || href === "/knowledge-base" || href.startsWith("/certifications") || href.startsWith("/employees")) return "Train Employees";
   if (href.startsWith("/materials")) return "Manage Materials";
 
   return "Reports & Management";
