@@ -504,6 +504,17 @@ const dashboardCards: DashboardCard[] = [
     keywords: ["learning paths", "injection molding basics", "operator path", "setup technician", "process technician", "supervisor path"],
   },
   {
+    title: "Real Shop-Floor Scenarios",
+    plainSubtitle: "Practice troubleshooting real molding problems",
+    description:
+      "Work through beginner-friendly scenarios for flash, short shots, splay, warpage, burn marks, and voids with revealable answers, explanations, and links to the Defect Library, AI Coach, and Troubleshooting Wizard.",
+    href: "/scenarios",
+    accent: "from-amber-300 to-cyan-400",
+    beginnerTitle: "Real Shop-Floor Scenarios",
+    beginnerExplanation: "Practice what to check first when a real defect shows up at the press.",
+    keywords: ["shop-floor scenarios", "troubleshooting practice", "real molding problems", "defect examples", "what changed", "beginner troubleshooting"],
+  },
+  {
     title: "Process Calculators",
     description:
       "Estimate clamp tonnage, total shot weight, and screw recovery time with mobile-friendly scientific molding calculator cards.",
@@ -743,6 +754,7 @@ const toolKeywordMap: Record<string, string[]> = {
   "/reports/weekly": ["weekly report", "management review", "plant summary"],
   "/training/assignments": ["assign training", "due dates", "training status", "operator training"],
   "/learning-paths": ["guided learning", "role path", "operator path", "setup technician path", "process technician path", "supervisor path", "lessons complete"],
+  "/scenarios": ["shop-floor scenarios", "troubleshooting practice", "real molding problems", "flash startup", "short shot material change", "splay color change", "warpage cycle time", "burn marks end of fill", "voids thick section"],
   "/knowledge-search": ["knowledge search", "search all", "defects", "troubleshooting", "materials", "scientific molding", "mold number", "machine number", "part number", "plain english"],
   "/knowledge-base": ["lessons learned", "knowledge base", "root cause", "teach technician", "tribal knowledge", "saved fixes"],
   "/mentor-notes": ["mentor notes", "teaching notes", "new technician", "supervisor notes", "topic", "defect", "machine", "mold", "tag", "tribal knowledge"],
@@ -771,7 +783,7 @@ function getToolCategory(card: DashboardCard) {
   }
 
   if (href.startsWith("/quality")) return "Check Quality";
-  if (href.startsWith("/training") || href.startsWith("/lessons") || href === "/knowledge-base" || href === "/knowledge-search" || href === "/mentor-notes" || href === "/learning-paths" || href.startsWith("/certifications") || href.startsWith("/employees")) return "Learn & Teach";
+  if (href.startsWith("/training") || href.startsWith("/lessons") || href === "/knowledge-base" || href === "/knowledge-search" || href === "/mentor-notes" || href === "/learning-paths" || href === "/scenarios" || href.startsWith("/certifications") || href.startsWith("/employees")) return "Learn & Teach";
   if (href.startsWith("/materials")) return "Manage Materials";
 
   return "Reports & Management";
