@@ -417,6 +417,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Material Inventory Tracker",
+    description:
+      "Add, save, view, edit, delete, filter, count, and print material inventory records with supplier lots, quantities, locations, expirations, and stock status.",
+    href: "/materials/inventory",
+    accent: "from-amber-300 to-emerald-400",
+  },
+  {
     title: "Material Drying Log",
     description:
       "Create, save, edit, delete, filter, and print material drying records with dryer settings, dew point, duration, operator notes, and browser storage.",
