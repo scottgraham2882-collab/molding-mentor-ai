@@ -112,6 +112,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-emerald-400",
   },
   {
+    title: "Production Schedule Board",
+    description:
+      "Create, save, edit, filter, delete, and print production schedule entries with planned-versus-actual quantities and job status tracking.",
+    href: "/production/schedule",
+    accent: "from-emerald-300 to-cyan-400",
+  },
+  {
     title: "Meeting Notes & Follow-Up Tracker",
     description:
       "Create, save, edit, delete, filter, and print meeting notes with attendees, decisions, action items, owners, due dates, and follow-up notes.",
@@ -507,12 +514,12 @@ export default function Home() {
         </section>
 
         <div>
-          <p className="text-sm font-black uppercase tracking-[0.28em] text-emerald-300">Management Tools</p>
-          <h2 className="mt-2 text-3xl font-black tracking-tight text-white">Run the plant from one mobile-first workspace</h2>
+          <p className="text-sm font-black uppercase tracking-[0.28em] text-emerald-300">Production Tools</p>
+          <h2 className="mt-2 text-3xl font-black tracking-tight text-white">Run production from one mobile-first workspace</h2>
         </div>
 
         <section
-          aria-label="Management Tools"
+          aria-label="Production Tools"
           className="grid gap-4 sm:grid-cols-2 lg:gap-6"
         >
           {dashboardCards.map((card) => {
