@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { DefectEducationPanels } from "../../components/DefectEducationPanels";
+import { LearnMoreAboutThis } from "../../components/LearnMoreAboutThis";
 import { RecommendedNextSteps } from "../../components/RecommendedNextSteps";
 import { defectGuides, troubleshootingHref } from "../../lib/defect-data";
 
@@ -50,6 +51,7 @@ export default function DefectsPage() {
                   <TagList title="Related process areas" items={defect.processAreas} />
                   <TagList title="Related material checks" items={defect.materialChecks} />
                   <DefectEducationPanels defect={defect} compact />
+                  <LearnMoreAboutThis defectSlug={defect.slug} defectName={defect.name} />
                   <RecommendedNextSteps defectSlug={defect.slug} contextLabel={defect.name} />
                 </div>
                 <Link href={troubleshootingHref} className="rounded-2xl border border-cyan-300/30 px-4 py-3 text-center text-sm font-black text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/10">

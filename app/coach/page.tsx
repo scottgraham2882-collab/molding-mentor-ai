@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
 
+import { LearnMoreAboutThis } from "../../components/LearnMoreAboutThis";
 import { defectGuides } from "../../lib/defect-data";
 
 type Message = {
@@ -13,6 +14,7 @@ type Message = {
 type KnowledgeItem = {
   keywords: string[];
   defect: string;
+  defectSlug: string;
   rootCauses: string[];
   correctiveActions: string[];
   lessons: { label: string; href: string }[];
@@ -21,6 +23,7 @@ type KnowledgeItem = {
 const knowledgeBase: KnowledgeItem[] = defectGuides.map((defect) => ({
   keywords: [defect.name.toLowerCase(), defect.slug.replaceAll("-", " "), ...defect.name.toLowerCase().split(" ")],
   defect: defect.name,
+  defectSlug: defect.slug,
   rootCauses: defect.causes,
   correctiveActions: defect.actions,
   lessons: [
@@ -186,6 +189,10 @@ export default function CoachPage() {
                 ))}
               </ol>
             </section>
+
+            {matchedGuide ? (
+              <LearnMoreAboutThis defectSlug={matchedGuide.defectSlug} defectName={matchedGuide.defect} />
+            ) : null}
 
             <section className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-xl shadow-slate-950/20 backdrop-blur sm:p-6">
               <h2 className="text-2xl font-bold text-white">Relevant links</h2>

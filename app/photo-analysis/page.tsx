@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ChangeEvent, useMemo, useState } from "react";
 
+import { LearnMoreAboutThis } from "../../components/LearnMoreAboutThis";
 import { RecommendedNextSteps } from "../../components/RecommendedNextSteps";
 import { defectGuides } from "../../lib/defect-data";
 
@@ -141,6 +142,7 @@ export default function PhotoAnalysisPage() {
                 </div>
               </div>
               <aside className="space-y-4">
+                <LearnMoreAboutThis defectSlug={result.defectSlug} defectName={result.likelyDefect} />
                 <RecommendedNextSteps defectSlug={result.defectSlug} contextLabel={`${result.likelyDefect} photo analysis`} />
                 <div className="rounded-3xl border border-white/10 bg-white/10 p-5">
                   <h3 className="text-xl font-bold text-white">Need more context?</h3>
