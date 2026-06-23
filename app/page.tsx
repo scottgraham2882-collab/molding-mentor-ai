@@ -410,6 +410,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-teal-300 to-cyan-400",
   },
   {
+    title: "Material Lot Traceability Tracker",
+    description:
+      "Create, save, edit, filter, delete, and print resin lot traceability records from receiving through drying and production output.",
+    href: "/materials/lot-traceability",
+    accent: "from-emerald-300 to-cyan-400",
+  },
+  {
     title: "Material Defect Troubleshooter",
     description:
       "Select splay, bubbles, silver streaks, black specks, delamination, or brittleness to review material causes and corrective actions.",
