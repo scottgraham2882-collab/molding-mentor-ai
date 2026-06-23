@@ -1004,6 +1004,20 @@ const quickActions: QuickAction[] = [
   },
 ];
 
+const coachStarterQuestions = [
+  "I have flash near the gate.",
+  "My parts are warped.",
+  "I'm getting silver streaks.",
+  "Cycle time increased after startup.",
+];
+
+const recentCoachingTopics = [
+  "Flash after a mold change",
+  "Warp on flat parts",
+  "Splay and silver streaks",
+  "Longer cycles after startup",
+];
+
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -1184,6 +1198,98 @@ export default function Home() {
             </label>
           </div>
         </header>
+
+        <section
+          className="relative overflow-hidden rounded-[2rem] border border-cyan-200/30 bg-gradient-to-br from-cyan-300/20 via-slate-900 to-emerald-300/15 p-4 shadow-2xl shadow-cyan-950/30 sm:p-6 lg:p-8"
+          aria-labelledby="ask-molding-coach-heading"
+        >
+          <div className="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-cyan-300/20 blur-3xl" />
+          <div className="absolute -bottom-24 -left-16 h-64 w-64 rounded-full bg-emerald-300/20 blur-3xl" />
+          <div className="relative grid gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
+            <div className="rounded-[1.75rem] border border-white/10 bg-slate-950/55 p-5 shadow-xl shadow-slate-950/20 sm:p-6">
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-200">AI mentor</p>
+              <h2 id="ask-molding-coach-heading" className="mt-2 text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
+                Ask the Molding Coach
+              </h2>
+              <p className="mt-3 max-w-2xl text-lg font-semibold leading-7 text-cyan-50">
+                Describe your molding problem in plain English.
+              </p>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
+                The coach helps you slow down, ask better questions, and learn the likely cause before changing settings. It feels more like a mentor than a search box.
+              </p>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                <Link
+                  href="/coach"
+                  className="group flex min-h-16 items-center justify-between rounded-2xl bg-cyan-300 px-5 py-4 text-left text-base font-black text-slate-950 shadow-xl shadow-cyan-950/30 transition hover:-translate-y-0.5 hover:bg-cyan-200 focus:outline-none focus:ring-4 focus:ring-cyan-300/30"
+                  onClick={() => trackRecentTool("/coach")}
+                >
+                  <span>Open AI Coach</span>
+                  <span className="transition group-hover:translate-x-1" aria-hidden="true">→</span>
+                </Link>
+                <Link
+                  href="/troubleshooting"
+                  className="group flex min-h-16 items-center justify-between rounded-2xl border border-emerald-300/40 bg-emerald-300/10 px-5 py-4 text-left text-base font-black text-emerald-50 transition hover:-translate-y-0.5 hover:border-emerald-200 hover:bg-emerald-300/20 focus:outline-none focus:ring-4 focus:ring-emerald-300/20"
+                  onClick={() => trackRecentTool("/troubleshooting")}
+                >
+                  <span>Troubleshooting Wizard</span>
+                  <span className="transition group-hover:translate-x-1" aria-hidden="true">→</span>
+                </Link>
+              </div>
+            </div>
+
+            <div className="grid gap-3">
+              <section className="rounded-[1.5rem] border border-white/10 bg-white/[0.07] p-4">
+                <h3 className="text-lg font-black text-white">Suggested starter questions</h3>
+                <div className="mt-3 grid gap-2">
+                  {coachStarterQuestions.map((question) => (
+                    <Link
+                      key={question}
+                      href="/coach"
+                      className="rounded-2xl border border-cyan-300/20 bg-slate-950/55 px-4 py-3 text-sm font-bold leading-5 text-cyan-50 transition hover:border-cyan-200 hover:bg-cyan-300/10 focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
+                      onClick={() => trackRecentTool("/coach")}
+                    >
+                      “{question}”
+                    </Link>
+                  ))}
+                </div>
+              </section>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <section className="rounded-[1.5rem] border border-white/10 bg-slate-950/55 p-4">
+                  <h3 className="text-lg font-black text-white">Recent coaching topics</h3>
+                  <ul className="mt-3 space-y-2 text-sm font-semibold leading-5 text-slate-300">
+                    {recentCoachingTopics.map((topic) => (
+                      <li key={topic} className="flex gap-2">
+                        <span className="text-emerald-300" aria-hidden="true">•</span>
+                        <span>{topic}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+                <section className="rounded-[1.5rem] border border-white/10 bg-slate-950/55 p-4">
+                  <h3 className="text-lg font-black text-white">More ways to learn</h3>
+                  <div className="mt-3 grid gap-2">
+                    <Link
+                      href="/photo-analysis"
+                      className="rounded-2xl border border-sky-300/30 px-4 py-3 text-sm font-black text-sky-100 transition hover:border-sky-200 hover:bg-sky-300/10 focus:outline-none focus:ring-4 focus:ring-sky-300/20"
+                      onClick={() => trackRecentTool("/photo-analysis")}
+                    >
+                      Defect Photo Analysis →
+                    </Link>
+                    <Link
+                      href="/defects"
+                      className="rounded-2xl border border-white/10 px-4 py-3 text-sm font-black text-slate-100 transition hover:border-cyan-300/40 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
+                      onClick={() => trackRecentTool("/defects")}
+                    >
+                      Defect Library →
+                    </Link>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <section className="rounded-[2rem] border border-cyan-300/20 bg-slate-900/80 p-4 shadow-2xl shadow-cyan-950/20 sm:p-6" aria-label="Quick actions">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
