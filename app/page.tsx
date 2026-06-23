@@ -777,6 +777,7 @@ function ToolList({
 
 const defaultFavoriteHrefs = ["/troubleshooting", "/coach", "/defects", "/production/live-board", "/quality/first-piece-approval", "/materials/resin-drying"];
 const homepageFavoritesStorageKey = "moldingMentorHomepageFavorites";
+const validFavoriteHrefs = new Set(dashboardCards.flatMap((card) => (card.href ? [card.href] : [])));
 const recentHrefs = new Set(["/shift-handoff", "/process-sheet-builder", "/mold-change", "/quality/containment", "/materials/drying-log", "/training/assignments"]);
 const mostUsedHrefs = new Set(["/process-sheet-builder", "/production/live-board", "/scrap", "/oee", "/materials/resin-drying", "/calculators"]);
 
@@ -796,12 +797,10 @@ export default function Home() {
 
       if (Array.isArray(parsedFavorites)) {
         const validFavorites = parsedFavorites.filter((href): href is string =>
-          typeof href === "string" && dashboardCards.some((card) => card.href === href),
+          typeof href === "string" && validFavoriteHrefs.has(href),
         );
 
-        if (validFavorites.length > 0) {
-          setFavoriteTools(Array.from(new Set(validFavorites)));
-        }
+        setFavoriteTools(Array.from(new Set(validFavorites)));
       }
     } catch {
       window.localStorage.removeItem(homepageFavoritesStorageKey);
@@ -827,7 +826,7 @@ export default function Home() {
     return dashboardCards.filter((card) => matchesToolSearch(card, normalizedSearch));
   }, [normalizedSearch]);
 
-  const favorites = visibleCards.filter((card) => card.href && favoriteHrefSet.has(card.href));
+  const favorites = dashboardCards.filter((card) => card.href && favoriteHrefSet.has(card.href));
   const recentTools = visibleCards.filter((card) => card.href && recentHrefs.has(card.href));
   const mostUsedTools = visibleCards.filter((card) => card.href && mostUsedHrefs.has(card.href));
   const categories = categoryOrder.map((category) => ({
@@ -902,7 +901,15 @@ export default function Home() {
           <section className="xl:col-span-2">
             <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">Favorites</p>
             <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Quick picks for the floor</h2>
-            <div className="mt-3"><ToolList cards={favorites} label="Favorite tools" favoriteHrefs={favoriteHrefSet} onToggleFavorite={toggleFavorite} /></div>
+            <div className="mt-3">
+              {favorites.length > 0 ? (
+                <ToolList cards={favorites} label="Favorite tools" favoriteHrefs={favoriteHrefSet} onToggleFavorite={toggleFavorite} />
+              ) : (
+                <p className="rounded-[1.5rem] border border-dashed border-emerald-300/30 bg-emerald-300/10 p-6 text-sm leading-6 text-emerald-50">
+                  No favorites saved yet. Tap the star on any tool card to keep it here on this device.
+                </p>
+              )}
+            </div>
           </section>
           <section>
             <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Recent tools</p>
