@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { DefectEducationPanels } from "../../components/DefectEducationPanels";
 import { LearnMoreAboutThis } from "../../components/LearnMoreAboutThis";
+import { RecommendedNextStep } from "../../components/RecommendedNextStep";
 import { RecommendedNextSteps } from "../../components/RecommendedNextSteps";
 import { defectGuides, troubleshootingHref } from "../../lib/defect-data";
 
@@ -14,7 +15,7 @@ export default function DefectsPage() {
             href="/"
             className="inline-flex items-center rounded-full border border-cyan-300/30 px-4 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-200 hover:bg-cyan-300/10"
           >
-            ← Back to coach
+            ← Back home
           </Link>
           <p className="mt-8 text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">
             Defect Library
@@ -61,6 +62,13 @@ export default function DefectsPage() {
             </article>
           ))}
         </section>
+
+        <RecommendedNextStep
+          label="Troubleshooting Wizard"
+          href={troubleshootingHref}
+          reason="After you identify the closest defect, answer the guided questions to choose a safe first check before changing the press."
+          related={[{ label: "Ask AI Coach", href: "/coach" }, { label: "Search knowledge", href: "/knowledge-search" }]}
+        />
       </div>
     </main>
   );

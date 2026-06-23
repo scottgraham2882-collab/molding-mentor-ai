@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 
 import { DefectEducationPanels } from "../../components/DefectEducationPanels";
 import { LearnMoreAboutThis } from "../../components/LearnMoreAboutThis";
+import { RecommendedNextStep } from "../../components/RecommendedNextStep";
 import { defectGuides } from "../../lib/defect-data";
 
 type WizardAnswers = {
@@ -234,19 +235,26 @@ export default function TroubleshootingPage() {
         <section className="mt-6 rounded-3xl border border-white/10 bg-white/10 p-5 shadow-xl shadow-slate-950/20 backdrop-blur sm:p-6">
           <div className="grid gap-3 sm:grid-cols-3">
             <Link href="/defects" className="rounded-2xl border border-cyan-300/30 bg-slate-900/70 p-4 font-black text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/10">
-              Link to Defect Library →
+              Defect Library →
               <span className="mt-1 block text-sm font-medium leading-5 text-slate-300">Read the full guide for this defect.</span>
             </Link>
             <Link href="/coach" className="rounded-2xl border border-cyan-300/30 bg-slate-900/70 p-4 font-black text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/10">
-              Link to AI Molding Coach →
+              AI Coach →
               <span className="mt-1 block text-sm font-medium leading-5 text-slate-300">Ask follow-up questions about the process.</span>
             </Link>
             <Link href="/photo-analysis" className="rounded-2xl border border-cyan-300/30 bg-slate-900/70 p-4 font-black text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/10">
-              Link to Defect Photo Analysis →
+              Defect Photo Analysis →
               <span className="mt-1 block text-sm font-medium leading-5 text-slate-300">Use a part photo if the defect name is uncertain.</span>
             </Link>
           </div>
         </section>
+
+        <RecommendedNextStep
+          label="AI Coach"
+          href="/coach"
+          reason="Use the coach for follow-up questions after the wizard gives you the likely defect and first checks."
+          related={[{ label: "Defect Library", href: "/defects" }, { label: "Save lesson learned", href: "/knowledge-base" }]}
+        />
       </div>
     </main>
   );

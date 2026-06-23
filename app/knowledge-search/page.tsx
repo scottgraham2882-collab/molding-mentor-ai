@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+
+import { RecommendedNextStep } from "../../components/RecommendedNextStep";
 import { useEffect, useMemo, useState } from "react";
 
 import { defectGuides, troubleshootingHref } from "../../lib/defect-data";
@@ -199,6 +201,13 @@ export default function KnowledgeSearchPage() {
             </section>
           ) : null)}
         </section>
+
+        <RecommendedNextStep
+          label="Troubleshooting Wizard"
+          href={troubleshootingHref}
+          reason="When search points to a likely defect or topic, use the wizard to turn that information into safe first checks and next actions."
+          related={[{ label: "AI Coach", href: "/coach" }, { label: "Save lesson learned", href: "/knowledge-base" }]}
+        />
       </div>
     </main>
   );

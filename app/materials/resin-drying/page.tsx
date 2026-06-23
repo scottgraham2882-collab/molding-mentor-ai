@@ -78,7 +78,7 @@ export default function ResinDryingGuidePage() {
               href="/"
               className="inline-flex items-center rounded-full border border-cyan-300/30 px-4 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-200 hover:bg-cyan-300/10"
             >
-              ← Back to coach
+              ← Back home
             </Link>
             <p className="mt-8 text-sm font-semibold uppercase tracking-[0.3em] text-teal-300">
               Material Guides
