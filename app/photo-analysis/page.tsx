@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { ChangeEvent, useMemo, useState } from "react";
 
+import { RecommendedNextSteps } from "../../components/RecommendedNextSteps";
 import { defectGuides } from "../../lib/defect-data";
 
 type DefectCategory = string;
 
 type AnalysisResult = {
   likelyDefect: string;
+  defectSlug: string;
   confidence: string;
   possibleCauses: string[];
   processChecks: string[];
@@ -32,6 +34,7 @@ function buildAnalysis(material: string, category: DefectCategory, hasPhoto: boo
 
   return {
     likelyDefect: defect.name,
+    defectSlug: defect.slug,
     possibleCauses: defect.causes,
     processChecks: [...defect.checkFirst, ...defect.processAreas.map((area) => `Review related process area: ${area}.`)],
     correctiveActions: defect.actions,
@@ -137,11 +140,11 @@ export default function PhotoAnalysisPage() {
                   <section className="md:col-span-2"><h3 className="font-bold text-white">Corrective actions</h3><ul className="mt-3 space-y-2 text-sm leading-6 text-slate-300">{result.correctiveActions.map((item) => <li key={item}>• {item}</li>)}</ul></section>
                 </div>
               </div>
-              <aside className="rounded-3xl border border-white/10 bg-white/10 p-5">
-                <h3 className="text-xl font-bold text-white">Open next</h3>
-                <div className="mt-4 flex flex-col gap-3">
-                  <Link href="/defects" className="rounded-2xl border border-cyan-300/30 px-4 py-3 text-center font-bold text-cyan-100 transition hover:bg-cyan-300/10">Defect Library →</Link>
-                  <Link href="/troubleshooting" className="rounded-2xl border border-emerald-300/30 px-4 py-3 text-center font-bold text-emerald-100 transition hover:bg-emerald-300/10">Troubleshooting Assistant →</Link>
+              <aside className="space-y-4">
+                <RecommendedNextSteps defectSlug={result.defectSlug} contextLabel={`${result.likelyDefect} photo analysis`} />
+                <div className="rounded-3xl border border-white/10 bg-white/10 p-5">
+                  <h3 className="text-xl font-bold text-white">Need more context?</h3>
+                  <Link href="/defects" className="mt-4 block rounded-2xl border border-cyan-300/30 px-4 py-3 text-center font-bold text-cyan-100 transition hover:bg-cyan-300/10">Open Defect Library →</Link>
                 </div>
               </aside>
             </div>
