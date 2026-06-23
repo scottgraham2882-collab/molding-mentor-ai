@@ -581,6 +581,18 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-emerald-400",
     keywords: ["lessons learned", "knowledge base", "root cause", "teach technician", "tribal knowledge"],
   },
+
+  {
+    title: "Mentor Notes",
+    plainSubtitle: "Leave simple teaching notes for newer employees",
+    description:
+      "Create, save, search, filter, edit, and delete mentor notes with topic, defect, machine, mold, tags, lessons learned, new-technician advice, and common mistakes to avoid.",
+    href: "/mentor-notes",
+    accent: "from-emerald-300 to-cyan-400",
+    beginnerTitle: "Mentor Notes",
+    beginnerExplanation: "Read practical advice from experienced techs and supervisors before making changes.",
+    keywords: ["mentor notes", "teaching notes", "new technician", "supervisor notes", "tribal knowledge", "training"],
+  },
   {
     title: "Case Studies Library",
     plainSubtitle: "Preserve real troubleshooting experiences",
@@ -641,7 +653,7 @@ const categoryOrder = [
   "Troubleshoot a Problem",
   "Run Production",
   "Check Quality",
-  "Train Employees",
+  "Learn & Teach",
   "Manage Materials",
   "Reports & Management",
 ];
@@ -665,7 +677,7 @@ const categoryDetails: Record<string, { icon: string; helper: string; cta: strin
     cta: "Check parts",
     accent: "from-teal-300 to-emerald-400",
   },
-  "Train Employees": {
+  "Learn & Teach": {
     icon: "🎓",
     helper: "Assign training, build skills, and print certificates.",
     cta: "Open training",
@@ -689,7 +701,7 @@ const categoryQuickLinks: Record<string, string> = {
   "Troubleshoot a Problem": "/troubleshooting",
   "Run Production": "/production/live-board",
   "Check Quality": "/quality/first-piece-approval",
-  "Train Employees": "/training/assignments",
+  "Learn & Teach": "/training/assignments",
   "Manage Materials": "/materials/resin-drying",
   "Reports & Management": "/reports/daily",
 };
@@ -698,7 +710,7 @@ const categoryKeywords: Record<string, string[]> = {
   "Troubleshoot a Problem": ["troubleshooting", "fix", "defect", "scrap", "short shot", "flash", "sink", "warp", "machine alarm", "root cause"],
   "Run Production": ["production", "run", "setup", "startup", "mold change", "handoff", "schedule", "process sheet", "downtime", "oee"],
   "Check Quality": ["quality", "first piece", "first article", "inspection", "hold", "containment", "audit", "capa", "corrective action"],
-  "Train Employees": ["training", "employee", "operator", "technician", "supervisor", "skills", "certification", "lesson", "quiz", "safety"],
+  "Learn & Teach": ["training", "employee", "operator", "technician", "supervisor", "skills", "certification", "lesson", "quiz", "safety"],
   "Manage Materials": ["material", "resin", "drying", "dryer", "lot", "inventory", "color change", "purge", "moisture", "supplier"],
   "Reports & Management": ["report", "management", "daily", "weekly", "kpi", "meeting", "document", "action item", "mold history", "machine history"],
 };
@@ -721,6 +733,7 @@ const toolKeywordMap: Record<string, string[]> = {
   "/learning-paths": ["guided learning", "role path", "operator path", "setup technician path", "process technician path", "supervisor path", "lessons complete"],
   "/knowledge-search": ["knowledge search", "search all", "defects", "troubleshooting", "materials", "scientific molding", "mold number", "machine number", "part number", "plain english"],
   "/knowledge-base": ["lessons learned", "knowledge base", "root cause", "teach technician", "tribal knowledge", "saved fixes"],
+  "/mentor-notes": ["mentor notes", "teaching notes", "new technician", "supervisor notes", "topic", "defect", "machine", "mold", "tag", "tribal knowledge"],
   "/training/skills-matrix": ["skills", "qualified", "cross training", "matrix"],
 };
 
@@ -746,7 +759,7 @@ function getToolCategory(card: DashboardCard) {
   }
 
   if (href.startsWith("/quality")) return "Check Quality";
-  if (href.startsWith("/training") || href.startsWith("/lessons") || href === "/knowledge-base" || href === "/knowledge-search" || href === "/learning-paths" || href.startsWith("/certifications") || href.startsWith("/employees")) return "Train Employees";
+  if (href.startsWith("/training") || href.startsWith("/lessons") || href === "/knowledge-base" || href === "/knowledge-search" || href === "/mentor-notes" || href === "/learning-paths" || href.startsWith("/certifications") || href.startsWith("/employees")) return "Learn & Teach";
   if (href.startsWith("/materials")) return "Manage Materials";
 
   return "Reports & Management";
