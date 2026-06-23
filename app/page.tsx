@@ -12,6 +12,7 @@ type DashboardCard = {
   keywords?: string[];
   beginnerTitle?: string;
   beginnerExplanation?: string;
+  plainSubtitle?: string;
 };
 
 type ShopRole = "Operator" | "Process Technician" | "Supervisor" | "Manager";
@@ -74,6 +75,7 @@ const dashboardCards: DashboardCard[] = [
 
   {
     title: "Process Change Log",
+    plainSubtitle: "Record what setting was changed",
     description:
       "Create before-and-after process change records with reasons, results, notes, browser storage, filters, editing, deletion, and print view.",
     href: "/process-change-log",
@@ -131,6 +133,7 @@ const dashboardCards: DashboardCard[] = [
   },
   {
     title: "Shift Handoff Logs",
+    plainSubtitle: "Tell the next shift what happened",
     description:
       "Record machine status, open issues, process changes, quality holds, downtime notes, and instructions for the next shift.",
     href: "/shift-handoff",
@@ -188,6 +191,7 @@ const dashboardCards: DashboardCard[] = [
   },
   {
     title: "Downtime Tracker",
+    plainSubtitle: "Log why the machine stopped",
     description:
       "Log downtime events, edit saved entries, and review total minutes with reason-code summaries from browser storage.",
     href: "/downtime",
@@ -266,6 +270,7 @@ const dashboardCards: DashboardCard[] = [
   },
   {
     title: "Scrap Tracker",
+    plainSubtitle: "Track bad parts",
     description:
       "Add, edit, and review scrap entries with total quantity and defect-type summaries stored in this browser.",
     href: "/scrap",
@@ -283,6 +288,7 @@ const dashboardCards: DashboardCard[] = [
 
   {
     title: "Defect Photo Analysis",
+    plainSubtitle: "Upload a picture of a bad part",
     beginnerTitle: "Defect Photo Analysis",
     beginnerExplanation: "Upload a part photo when you are not sure what defect you see.",
     description:
@@ -292,6 +298,7 @@ const dashboardCards: DashboardCard[] = [
   },
   {
     title: "Defect Library",
+    plainSubtitle: "Look up what a defect means",
     beginnerTitle: "Defect Library",
     beginnerExplanation: "Compare common defects, causes, and safe fixes.",
     description:
@@ -301,6 +308,7 @@ const dashboardCards: DashboardCard[] = [
   },
   {
     title: "Troubleshooting Assistant",
+    plainSubtitle: "Fix a molding problem",
     beginnerTitle: "Troubleshooting Wizard",
     beginnerExplanation: "Answer guided questions to find a good first fix.",
     description:
@@ -346,6 +354,7 @@ const dashboardCards: DashboardCard[] = [
   },
   {
     title: "Training Assignment Manager",
+    plainSubtitle: "See who needs training",
     description:
       "Assign modules, track due dates, status, quiz scores, supervisor notes, completion percentage, and print training reports.",
     href: "/training/assignments",
@@ -696,6 +705,7 @@ function getToolKeywords(card: DashboardCard) {
   return [
     card.title,
     card.description,
+    card.plainSubtitle ?? "",
     card.href ?? "",
     category,
     ...(categoryKeywords[category] ?? []),
@@ -751,6 +761,9 @@ function SimpleToolCard({
             <span className="rounded-full bg-amber-300 px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-[0.16em] text-slate-950">Start here</span>
           ) : null}
         </div>
+        {card.plainSubtitle ? (
+          <p className="mt-1 text-sm font-black leading-5 text-emerald-100 sm:text-[0.95rem]">{card.plainSubtitle}</p>
+        ) : null}
         {beginnerMode && card.beginnerExplanation ? (
           <p className="mt-2 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 px-3 py-2 text-sm font-semibold leading-5 text-cyan-50">{card.beginnerExplanation}</p>
         ) : null}
