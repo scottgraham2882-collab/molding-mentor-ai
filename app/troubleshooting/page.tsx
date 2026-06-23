@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { RecommendedNextSteps } from "../../components/RecommendedNextSteps";
 import { defectGuides } from "../../lib/defect-data";
 
 const intakeQuestions = [
@@ -34,6 +35,7 @@ const troubleshootingSteps = [
 
 const quickPaths = defectGuides.map((defect) => ({
   symptom: defect.name,
+  slug: defect.slug,
   action: `Check first: ${defect.checkFirst[0]} Corrective action: ${defect.actions[0]}`,
 }));
 
@@ -122,6 +124,9 @@ export default function TroubleshootingPage() {
               <article key={path.symptom} className="rounded-2xl border border-white/10 bg-slate-900/70 p-4">
                 <h3 className="text-lg font-bold text-cyan-200">{path.symptom}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-300">{path.action}</p>
+                <div className="mt-4">
+                  <RecommendedNextSteps defectSlug={path.slug} contextLabel={`${path.symptom} troubleshooting`} />
+                </div>
               </article>
             ))}
           </div>
