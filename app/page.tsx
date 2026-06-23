@@ -126,6 +126,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Real-Time Production Board",
+    description:
+      "Add, save, edit, delete, filter, and print live machine status cards with cycle times, quantities, scrap, downtime, issues, next actions, and status counts.",
+    href: "/production/live-board",
+    accent: "from-cyan-300 to-blue-400",
+  },
+  {
     title: "Production Run Log",
     description:
       "Create, save, edit, filter, delete, and print production run logs with automatic run time, total parts, scrap percentage, and parts-per-hour calculations.",
@@ -542,12 +549,12 @@ export default function Home() {
         </section>
 
         <div>
-          <p className="text-sm font-black uppercase tracking-[0.28em] text-emerald-300">Process Tools</p>
-          <h2 className="mt-2 text-3xl font-black tracking-tight text-white">Run process control from one mobile-first workspace</h2>
+          <p className="text-sm font-black uppercase tracking-[0.28em] text-emerald-300">Process & Production Tools</p>
+          <h2 className="mt-2 text-3xl font-black tracking-tight text-white">Run process and production control from one mobile-first workspace</h2>
         </div>
 
         <section
-          aria-label="Process Tools"
+          aria-label="Process and Production Tools"
           className="grid gap-4 sm:grid-cols-2 lg:gap-6"
         >
           {dashboardCards.map((card) => {
