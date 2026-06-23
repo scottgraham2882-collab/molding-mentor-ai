@@ -1108,12 +1108,35 @@ const primaryActions: QuickAction[] = [
   },
 ];
 
-const commonProblems = [
-  { label: "Flash", href: "/defects?search=flash" },
-  { label: "Short Shot", href: "/defects?search=short%20shot" },
-  { label: "Splay", href: "/defects?search=splay" },
-  { label: "Warpage", href: "/defects?search=warpage" },
-  { label: "Burn Marks", href: "/defects?search=burn%20marks" },
+const quickStartProblems = [
+  { label: "Flash", helper: "Extra plastic on the edge", query: "flash" },
+  { label: "Short Shot", helper: "Part did not fill all the way", query: "short shot" },
+  { label: "Splay", helper: "Silver streaks or splash marks", query: "splay" },
+  { label: "Burn Marks", helper: "Brown or black burn spots", query: "burn marks" },
+  { label: "Warpage", helper: "Part is bent or twisted", query: "warpage" },
+  { label: "Sink Marks", helper: "Dents over thick areas", query: "sink marks" },
+  { label: "Voids", helper: "Air pockets inside the part", query: "voids" },
+  { label: "Weld Lines", helper: "Weak line where flow meets", query: "weld lines" },
+  { label: "Other", helper: "Not sure what to call it", query: "defect" },
+];
+
+const quickStartActions = [
+  { label: "Troubleshooting Wizard", helper: "Answer quick questions", href: "/troubleshooting", icon: "🧭" },
+  { label: "Photo Analysis", helper: "Use a part picture", href: "/photo-analysis", icon: "📷" },
+  { label: "Ask the Molding Coach", helper: "Ask in plain words", href: "/coach", icon: "💬" },
+  { label: "Defect Library", helper: "See causes and first checks", href: "/defects", icon: "📚" },
+];
+
+const mostViewedProblemsThisWeek = [
+  { label: "Flash at parting line", helper: "Check clamp, mold shutoff, and pack pressure", href: "/defects?search=flash" },
+  { label: "Short shot after startup", helper: "Check feed, cushion, transfer, and vents", href: "/defects?search=short%20shot" },
+  { label: "Splay after material change", helper: "Check dry time, moisture, and barrel temps", href: "/defects?search=splay" },
+];
+
+const recentlySolvedProblems = [
+  { label: "Burn marks at end of fill", helper: "Slowed fill slightly and cleaned vents", href: "/defects?search=burn%20marks" },
+  { label: "Sink on thick boss", helper: "Checked gate seal and added hold support", href: "/defects?search=sink%20marks" },
+  { label: "Warp after faster cycle", helper: "Checked cooling time and water flow first", href: "/defects?search=warpage" },
 ];
 
 const coachStarterQuestions = [
@@ -1145,6 +1168,7 @@ export default function Home() {
   const [recentToolsHydrated, setRecentToolsHydrated] = useState(false);
   const [beginnerMode, setBeginnerMode] = useState(false);
   const [selectedRole, setSelectedRole] = useState<ShopRole>("Operator");
+  const [selectedQuickStartProblem, setSelectedQuickStartProblem] = useState(quickStartProblems[0]);
   const favoriteHrefSet = useMemo(() => new Set(favoriteTools), [favoriteTools]);
   const normalizedSearch = searchTerm.trim().toLowerCase();
 
@@ -1311,25 +1335,93 @@ export default function Home() {
               </div>
             </section>
 
-            <section className="mt-6 rounded-[1.5rem] border border-amber-300/20 bg-slate-950/55 p-4" aria-labelledby="common-problems-heading">
+            <section className="mt-6 rounded-[1.5rem] border border-amber-300/25 bg-slate-950/60 p-4 shadow-xl shadow-slate-950/20" aria-labelledby="quick-start-troubleshooting-heading">
               <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.24em] text-amber-200">Most Common Problems</p>
-                  <h2 id="common-problems-heading" className="text-xl font-black text-white">Tap the defect you see</h2>
+                  <p className="text-xs font-black uppercase tracking-[0.24em] text-amber-200">Quick Start Troubleshooting</p>
+                  <h2 id="quick-start-troubleshooting-heading" className="text-2xl font-black text-white">What are you seeing?</h2>
+                  <p className="mt-1 text-sm font-semibold leading-5 text-slate-300">Tap the closest problem. Then pick the fastest help path. No forms, no setup.</p>
                 </div>
-                <Link href="/defects" className="text-sm font-black text-cyan-100 hover:text-cyan-50" onClick={() => trackRecentTool("/defects")}>Open full defect guide →</Link>
+                <p className="rounded-full border border-emerald-300/30 bg-emerald-300/10 px-3 py-2 text-sm font-black text-emerald-100">Help in under 15 seconds</p>
               </div>
-              <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
-                {commonProblems.map((problem) => (
-                  <Link
-                    key={problem.label}
-                    href={problem.href}
-                    className="rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-4 text-center text-base font-black text-white transition hover:border-amber-200/70 hover:bg-amber-300/15 focus:outline-none focus:ring-4 focus:ring-amber-300/20"
-                    onClick={() => trackRecentTool("/defects")}
-                  >
-                    {problem.label}
-                  </Link>
-                ))}
+
+              <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {quickStartProblems.map((problem) => {
+                  const isSelected = selectedQuickStartProblem.label === problem.label;
+
+                  return (
+                    <button
+                      key={problem.label}
+                      aria-pressed={isSelected}
+                      className={`min-h-20 rounded-2xl border p-4 text-left transition focus:outline-none focus:ring-4 focus:ring-amber-300/20 ${
+                        isSelected
+                          ? "border-amber-200 bg-amber-300 text-slate-950 shadow-lg shadow-amber-950/25"
+                          : "border-white/10 bg-white/[0.07] text-white hover:border-amber-200/70 hover:bg-amber-300/15"
+                      }`}
+                      type="button"
+                      onClick={() => setSelectedQuickStartProblem(problem)}
+                    >
+                      <span className="block text-xl font-black leading-tight">{problem.label}</span>
+                      <span className={`mt-1 block text-sm font-semibold leading-5 ${isSelected ? "text-slate-800" : "text-slate-300"}`}>{problem.helper}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="mt-4 rounded-[1.25rem] border border-cyan-300/20 bg-cyan-300/10 p-4">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.2em] text-cyan-200">Quick actions for</p>
+                    <h3 className="text-xl font-black text-white">{selectedQuickStartProblem.label}</h3>
+                  </div>
+                  <p className="text-sm font-semibold text-cyan-50">Start with the one that fits what you have right now.</p>
+                </div>
+                <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                  {quickStartActions.map((action) => {
+                    const href = action.href === "/defects" ? `/defects?search=${encodeURIComponent(selectedQuickStartProblem.query)}` : action.href;
+
+                    return (
+                      <Link
+                        key={action.label}
+                        href={href}
+                        className="group flex min-h-24 items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/65 p-3 text-left transition hover:-translate-y-0.5 hover:border-cyan-200/70 hover:bg-cyan-300/15 focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
+                        onClick={() => trackRecentTool(action.href)}
+                      >
+                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-2xl" aria-hidden="true">{action.icon}</span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-base font-black leading-tight text-white">{action.label}</span>
+                          <span className="mt-1 block text-sm font-semibold leading-5 text-slate-300">{action.helper}</span>
+                        </span>
+                        <span className="text-cyan-100 transition group-hover:translate-x-1" aria-hidden="true">→</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-4 grid gap-3 lg:grid-cols-2">
+                <section className="rounded-[1.25rem] border border-white/10 bg-white/[0.06] p-4">
+                  <h3 className="text-lg font-black text-white">Most Viewed Problems This Week</h3>
+                  <div className="mt-3 grid gap-2">
+                    {mostViewedProblemsThisWeek.map((problem) => (
+                      <Link key={problem.label} href={problem.href} className="rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 transition hover:border-amber-200/60 hover:bg-amber-300/10 focus:outline-none focus:ring-4 focus:ring-amber-300/20" onClick={() => trackRecentTool("/defects")}>
+                        <span className="block font-black text-white">{problem.label}</span>
+                        <span className="mt-1 block text-sm font-semibold text-slate-300">{problem.helper}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+                <section className="rounded-[1.25rem] border border-white/10 bg-white/[0.06] p-4">
+                  <h3 className="text-lg font-black text-white">Recently Solved Problems</h3>
+                  <div className="mt-3 grid gap-2">
+                    {recentlySolvedProblems.map((problem) => (
+                      <Link key={problem.label} href={problem.href} className="rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 transition hover:border-emerald-200/60 hover:bg-emerald-300/10 focus:outline-none focus:ring-4 focus:ring-emerald-300/20" onClick={() => trackRecentTool("/defects")}>
+                        <span className="block font-black text-white">{problem.label}</span>
+                        <span className="mt-1 block text-sm font-semibold text-slate-300">{problem.helper}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
               </div>
             </section>
 
