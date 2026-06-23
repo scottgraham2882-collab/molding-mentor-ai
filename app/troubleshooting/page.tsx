@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { defectGuides } from "../../lib/defect-data";
+
 const intakeQuestions = [
   "What defect are you seeing, and where does it appear on the part?",
   "When did the issue start: material lot change, tool maintenance, setup change, or gradual drift?",
@@ -30,24 +32,10 @@ const troubleshootingSteps = [
   },
 ];
 
-const quickPaths = [
-  {
-    symptom: "Short shots",
-    action: "Verify material feed and drying, then evaluate shot size, fill speed, transfer position, vents, and blocked gates.",
-  },
-  {
-    symptom: "Flash",
-    action: "Inspect parting-line shutoffs and clamp tonnage before reducing peak cavity pressure or pack intensity.",
-  },
-  {
-    symptom: "Splay or streaks",
-    action: "Confirm moisture, contamination, decompression, screw recovery, and shear heat before increasing temperatures.",
-  },
-  {
-    symptom: "Warpage",
-    action: "Compare mold temperatures, cooling flow, pack profile, ejection timing, wall thickness, and fiber orientation.",
-  },
-];
+const quickPaths = defectGuides.map((defect) => ({
+  symptom: defect.name,
+  action: `Check first: ${defect.checkFirst[0]} Corrective action: ${defect.actions[0]}`,
+}));
 
 export default function TroubleshootingPage() {
   return (
