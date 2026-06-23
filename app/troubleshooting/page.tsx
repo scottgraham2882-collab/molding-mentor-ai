@@ -1,7 +1,8 @@
 import Link from "next/link";
 
+import { DefectEducationPanels } from "../../components/DefectEducationPanels";
 import { RecommendedNextSteps } from "../../components/RecommendedNextSteps";
-import { type DefectGuide, defectGuides } from "../../lib/defect-data";
+import { defectGuides } from "../../lib/defect-data";
 
 const intakeQuestions = [
   "What defect are you seeing, and where does it appear on the part?",
@@ -125,7 +126,7 @@ export default function TroubleshootingPage() {
               <article key={path.symptom} className="rounded-2xl border border-white/10 bg-slate-900/70 p-4">
                 <h3 className="text-lg font-bold text-cyan-200">{path.symptom}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-300">{path.action}</p>
-                <EducationPanels defect={path.defect} />
+                <DefectEducationPanels defect={path.defect} compact />
                 <div className="mt-4">
                   <RecommendedNextSteps defectSlug={path.slug} contextLabel={`${path.symptom} troubleshooting`} />
                 </div>
@@ -135,55 +136,5 @@ export default function TroubleshootingPage() {
         </section>
       </div>
     </main>
-  );
-}
-
-function EducationPanels({ defect }: { defect: DefectGuide }) {
-  if (!defect.whyThisHappens && !defect.teachNewTechnician) {
-    return null;
-  }
-
-  return (
-    <div className="mt-4 space-y-3">
-      {defect.whyThisHappens ? (
-        <details className="group rounded-2xl border border-amber-300/20 bg-amber-300/10 p-4">
-          <summary className="cursor-pointer list-none text-sm font-black text-amber-100">
-            Why This Happens <span className="float-right group-open:hidden">+</span><span className="float-right hidden group-open:inline">−</span>
-          </summary>
-          <div className="mt-4 space-y-3 text-sm leading-6 text-slate-200">
-            <p><strong className="text-white">Simple:</strong> {defect.whyThisHappens.simple}</p>
-            <p><strong className="text-white">Scientific:</strong> {defect.whyThisHappens.scientific}</p>
-            <CompactList title="Misconceptions" items={defect.whyThisHappens.misconceptions} />
-            <CompactList title="Often tried first" items={defect.whyThisHappens.unhelpfulFirstMoves} />
-            <CompactList title="Techs check first" items={defect.whyThisHappens.experiencedTechChecks} />
-          </div>
-        </details>
-      ) : null}
-
-      {defect.teachNewTechnician ? (
-        <details className="group rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-4">
-          <summary className="cursor-pointer list-none text-sm font-black text-emerald-100">
-            Teach a New Technician <span className="float-right group-open:hidden">+</span><span className="float-right hidden group-open:inline">−</span>
-          </summary>
-          <CompactList title="Key lessons" items={defect.teachNewTechnician} className="mt-4" />
-        </details>
-      ) : null}
-    </div>
-  );
-}
-
-function CompactList({ title, items, className = "" }: { title: string; items: string[]; className?: string }) {
-  return (
-    <div className={className}>
-      <h4 className="text-xs font-black uppercase tracking-[0.14em] text-slate-100">{title}</h4>
-      <ul className="mt-2 space-y-2 text-slate-300">
-        {items.map((item) => (
-          <li key={item} className="flex gap-2">
-            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-white/60" />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }

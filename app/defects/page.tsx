@@ -1,7 +1,8 @@
 import Link from "next/link";
 
+import { DefectEducationPanels } from "../../components/DefectEducationPanels";
 import { RecommendedNextSteps } from "../../components/RecommendedNextSteps";
-import { type DefectGuide, defectGuides, troubleshootingHref } from "../../lib/defect-data";
+import { defectGuides, troubleshootingHref } from "../../lib/defect-data";
 
 export default function DefectsPage() {
   return (
@@ -48,7 +49,7 @@ export default function DefectsPage() {
                   <Checklist title="Corrective actions" items={defect.actions} accent="bg-emerald-300" titleColor="text-emerald-300" />
                   <TagList title="Related process areas" items={defect.processAreas} />
                   <TagList title="Related material checks" items={defect.materialChecks} />
-                  <EducationPanels defect={defect} />
+                  <DefectEducationPanels defect={defect} />
                   <RecommendedNextSteps defectSlug={defect.slug} contextLabel={defect.name} />
                 </div>
                 <Link href={troubleshootingHref} className="rounded-2xl border border-cyan-300/30 px-4 py-3 text-center text-sm font-black text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/10">
@@ -60,56 +61,6 @@ export default function DefectsPage() {
         </section>
       </div>
     </main>
-  );
-}
-
-function EducationPanels({ defect }: { defect: DefectGuide }) {
-  if (!defect.whyThisHappens && !defect.teachNewTechnician) {
-    return null;
-  }
-
-  return (
-    <section className="space-y-3">
-      {defect.whyThisHappens ? (
-        <details className="group rounded-2xl border border-amber-300/20 bg-amber-300/10 p-4">
-          <summary className="cursor-pointer list-none text-sm font-black uppercase tracking-[0.18em] text-amber-200">
-            Why This Happens <span className="float-right text-amber-100/80 group-open:hidden">+</span><span className="float-right hidden text-amber-100/80 group-open:inline">−</span>
-          </summary>
-          <div className="mt-4 space-y-4 text-sm leading-6 text-slate-200">
-            <p><strong className="text-white">Simple:</strong> {defect.whyThisHappens.simple}</p>
-            <p><strong className="text-white">Scientific molding:</strong> {defect.whyThisHappens.scientific}</p>
-            <MiniList title="Common misconceptions" items={defect.whyThisHappens.misconceptions} />
-            <MiniList title="Operators often try first" items={defect.whyThisHappens.unhelpfulFirstMoves} />
-            <MiniList title="Experienced techs look at first" items={defect.whyThisHappens.experiencedTechChecks} />
-          </div>
-        </details>
-      ) : null}
-
-      {defect.teachNewTechnician ? (
-        <details className="group rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-4">
-          <summary className="cursor-pointer list-none text-sm font-black uppercase tracking-[0.18em] text-emerald-200">
-            Teach a New Technician <span className="float-right text-emerald-100/80 group-open:hidden">+</span><span className="float-right hidden text-emerald-100/80 group-open:inline">−</span>
-          </summary>
-          <MiniList title="Shop-floor lessons" items={defect.teachNewTechnician} className="mt-4" />
-        </details>
-      ) : null}
-    </section>
-  );
-}
-
-function MiniList({ title, items, className = "" }: { title: string; items: string[]; className?: string }) {
-  return (
-    <div className={className}>
-      <h4 className="text-xs font-black uppercase tracking-[0.16em] text-slate-100">{title}</h4>
-      <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-300">
-        {items.map((item) => (
-          <li key={item} className="flex gap-2">
-            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-white/60" />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
 
