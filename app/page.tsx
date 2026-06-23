@@ -564,6 +564,15 @@ const dashboardCards: DashboardCard[] = [
   },
 
   {
+    title: "Knowledge Search",
+    plainSubtitle: "Find answers across defects, lessons, materials, and molding tools",
+    description:
+      "Search defect names, plain-English symptoms, material names, mold numbers, machine numbers, part numbers, troubleshooting keywords, lessons, and scientific molding topics.",
+    href: "/knowledge-search",
+    accent: "from-cyan-300 to-blue-400",
+    keywords: ["knowledge search", "search", "defects", "troubleshooting", "materials", "scientific molding", "mold number", "machine number", "part number"],
+  },
+  {
     title: "Lessons Learned Knowledge Base",
     plainSubtitle: "Save fixes so the next technician learns faster",
     description:
@@ -699,6 +708,7 @@ const toolKeywordMap: Record<string, string[]> = {
   "/reports/weekly": ["weekly report", "management review", "plant summary"],
   "/training/assignments": ["assign training", "due dates", "training status", "operator training"],
   "/learning-paths": ["guided learning", "role path", "operator path", "setup technician path", "process technician path", "supervisor path", "lessons complete"],
+  "/knowledge-search": ["knowledge search", "search all", "defects", "troubleshooting", "materials", "scientific molding", "mold number", "machine number", "part number", "plain english"],
   "/knowledge-base": ["lessons learned", "knowledge base", "root cause", "teach technician", "tribal knowledge", "saved fixes"],
   "/training/skills-matrix": ["skills", "qualified", "cross training", "matrix"],
 };
@@ -725,7 +735,7 @@ function getToolCategory(card: DashboardCard) {
   }
 
   if (href.startsWith("/quality")) return "Check Quality";
-  if (href.startsWith("/training") || href.startsWith("/lessons") || href === "/knowledge-base" || href === "/learning-paths" || href.startsWith("/certifications") || href.startsWith("/employees")) return "Train Employees";
+  if (href.startsWith("/training") || href.startsWith("/lessons") || href === "/knowledge-base" || href === "/knowledge-search" || href === "/learning-paths" || href.startsWith("/certifications") || href.startsWith("/employees")) return "Train Employees";
   if (href.startsWith("/materials")) return "Manage Materials";
 
   return "Reports & Management";
@@ -1045,7 +1055,7 @@ const primaryActions: QuickAction[] = [
   {
     label: "Search Knowledge",
     helper: "Find saved fixes, defect guides, tools, and lessons.",
-    href: "/knowledge-base",
+    href: "/knowledge-search",
     icon: "🔍",
   },
 ];
