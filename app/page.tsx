@@ -1004,6 +1004,48 @@ const quickActions: QuickAction[] = [
   },
 ];
 
+
+const primaryActions: QuickAction[] = [
+  {
+    label: "Troubleshoot a Defect",
+    helper: "Answer a few questions and get the safest first checks.",
+    href: "/troubleshooting",
+    icon: "🔎",
+  },
+  {
+    label: "Analyze a Defect Photo",
+    helper: "Upload a part photo when you are not sure what you see.",
+    href: "/photo-analysis",
+    icon: "📷",
+  },
+  {
+    label: "Ask the Molding Coach",
+    helper: "Describe the issue in plain words and get next steps.",
+    href: "/coach",
+    icon: "💬",
+  },
+  {
+    label: "Learn Injection Molding",
+    helper: "Start lessons and training built for shop-floor teams.",
+    href: "/lessons",
+    icon: "🎓",
+  },
+  {
+    label: "Search Knowledge",
+    helper: "Find saved fixes, defect guides, tools, and lessons.",
+    href: "/knowledge-base",
+    icon: "🔍",
+  },
+];
+
+const commonProblems = [
+  { label: "Flash", href: "/defects?search=flash" },
+  { label: "Short Shot", href: "/defects?search=short%20shot" },
+  { label: "Splay", href: "/defects?search=splay" },
+  { label: "Warpage", href: "/defects?search=warpage" },
+  { label: "Burn Marks", href: "/defects?search=burn%20marks" },
+];
+
 const coachStarterQuestions = [
   "I have flash near the gate.",
   "My parts are warped.",
@@ -1143,27 +1185,76 @@ export default function Home() {
   return (
     <main className="min-h-screen overflow-hidden bg-slate-950 px-4 py-5 text-slate-100 sm:px-6 lg:px-8">
       <section className="mx-auto flex w-full max-w-7xl flex-col gap-6">
-        <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/90 p-5 shadow-2xl shadow-cyan-950/30 sm:p-8 lg:p-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.24),transparent_40%),radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.18),transparent_34%)]" />
+        <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/90 p-4 shadow-2xl shadow-cyan-950/30 sm:p-6 lg:p-8">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.20),transparent_36%),radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.16),transparent_32%)]" />
           <div className="relative">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300 sm:text-sm">Shop-floor home</p>
-            <h1 className="mt-3 text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-7xl">Find the right molding tool fast.</h1>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">
-              Simple buttons for technicians and supervisors. Search by defect, job, material, training, report, or tool name.
-            </p>
-            <div className="mt-6">
-              <Link
-                href="/start-here"
-                className="inline-flex w-full items-center justify-between rounded-full bg-gradient-to-r from-amber-300 to-cyan-300 px-6 py-4 text-base font-black text-slate-950 shadow-2xl shadow-cyan-950/30 transition hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-amber-300/30 sm:w-auto sm:min-w-72"
-              >
-                <span>Start Here</span>
-                <span aria-hidden="true">→</span>
-              </Link>
-            </div>
-            <div className="mt-6 flex flex-col gap-3 rounded-3xl border border-white/10 bg-slate-950/55 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300 sm:text-sm">Molding Mentor</p>
+            <div className="mt-3 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
               <div>
-                <p className="text-sm font-black text-white">Beginner Mode</p>
-                <p className="mt-1 text-sm leading-5 text-slate-300">Turn on simpler tool names, short explanations, and suggested starting points.</p>
+                <h1 className="text-3xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">What do you need help with today?</h1>
+                <p className="mt-3 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
+                  Pick the task that matches the problem on the floor. Every button uses plain shop-floor language and keeps the full toolset one tap away.
+                </p>
+              </div>
+              <label className="block">
+                <span className="mb-2 block text-sm font-bold text-slate-200">Search any tool, defect, material, or lesson</span>
+                <input
+                  className="w-full rounded-3xl border border-cyan-300/40 bg-slate-950/85 px-5 py-4 text-base font-semibold text-white shadow-inner shadow-slate-950 placeholder:text-slate-400 focus:border-cyan-200 focus:outline-none focus:ring-4 focus:ring-cyan-300/20 sm:text-lg"
+                  placeholder="Try flash, splay, dryer, first piece..."
+                  type="search"
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                />
+              </label>
+            </div>
+
+            <section className="mt-6" aria-labelledby="primary-actions-heading">
+              <h2 id="primary-actions-heading" className="sr-only">Primary actions</h2>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+                {primaryActions.map((action) => (
+                  <Link
+                    key={action.href}
+                    href={action.href}
+                    className="group flex min-h-36 flex-col justify-between rounded-[1.5rem] border border-white/10 bg-white/[0.08] p-4 text-left shadow-xl shadow-slate-950/25 transition hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-white/[0.13] focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
+                    onClick={() => trackRecentTool(action.href)}
+                  >
+                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-slate-950/70 text-2xl" aria-hidden="true">{action.icon}</span>
+                    <span>
+                      <span className="mt-4 block text-lg font-black leading-tight text-white">{action.label}</span>
+                      <span className="mt-2 block text-sm font-semibold leading-5 text-slate-300">{action.helper}</span>
+                    </span>
+                    <span className="mt-4 font-black text-cyan-100 transition group-hover:translate-x-1" aria-hidden="true">Start →</span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            <section className="mt-6 rounded-[1.5rem] border border-amber-300/20 bg-slate-950/55 p-4" aria-labelledby="common-problems-heading">
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.24em] text-amber-200">Most Common Problems</p>
+                  <h2 id="common-problems-heading" className="text-xl font-black text-white">Tap the defect you see</h2>
+                </div>
+                <Link href="/defects" className="text-sm font-black text-cyan-100 hover:text-cyan-50" onClick={() => trackRecentTool("/defects")}>Open full defect guide →</Link>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
+                {commonProblems.map((problem) => (
+                  <Link
+                    key={problem.label}
+                    href={problem.href}
+                    className="rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-4 text-center text-base font-black text-white transition hover:border-amber-200/70 hover:bg-amber-300/15 focus:outline-none focus:ring-4 focus:ring-amber-300/20"
+                    onClick={() => trackRecentTool("/defects")}
+                  >
+                    {problem.label}
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            <div className="mt-6 flex flex-col gap-3 rounded-3xl border border-white/10 bg-slate-950/45 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm font-black text-white">New to molding?</p>
+                <p className="mt-1 text-sm leading-5 text-slate-300">Turn on simpler names and suggested starting points.</p>
               </div>
               <button
                 aria-pressed={beginnerMode}
@@ -1181,21 +1272,6 @@ export default function Home() {
                 </span>
               </button>
             </div>
-            {beginnerMode ? (
-              <p className="mt-4 rounded-3xl border border-amber-300/30 bg-amber-300/10 p-4 text-sm font-bold leading-6 text-amber-50">
-                Not sure what the defect is? Start with the Troubleshooting Wizard or upload a photo.
-              </p>
-            ) : null}
-            <label className="mt-7 block max-w-4xl">
-              <span className="mb-2 block text-sm font-bold text-slate-200">What do you need help with?</span>
-              <input
-                className="w-full rounded-3xl border border-cyan-300/40 bg-slate-950/85 px-5 py-5 text-lg font-semibold text-white shadow-inner shadow-slate-950 placeholder:text-slate-400 focus:border-cyan-200 focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
-                placeholder="What do you need help with?"
-                type="search"
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-              />
-            </label>
           </div>
         </header>
 
