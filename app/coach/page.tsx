@@ -11,13 +11,18 @@ type Message = {
   content: string;
 };
 
+type MentorLink = {
+  label: string;
+  href: string;
+};
+
 type KnowledgeItem = {
   keywords: string[];
   defect: string;
   defectSlug: string;
   rootCauses: string[];
   correctiveActions: string[];
-  lessons: { label: string; href: string }[];
+  lessons: MentorLink[];
 };
 
 const knowledgeBase: KnowledgeItem[] = defectGuides.map((defect) => ({
@@ -34,10 +39,29 @@ const knowledgeBase: KnowledgeItem[] = defectGuides.map((defect) => ({
 }));
 
 const defaultQuestions = [
-  "Which defect is visible, and where does it appear on the part or cavity layout?",
-  "Did the issue start after a resin lot, colorant, regrind, dryer, tool, or setup change?",
-  "What changed in fill time, transfer position, cushion, peak pressure, pack, cooling, or clamp readings?",
+  "What changed since the last good parts?",
+  "Where is the defect on the part, runner, gate, or cavity layout?",
+  "When did it start: startup, after break, after lot change, or during the run?",
   "Can you compare a good part and bad part by weight, dimensions, photos, and cavity number?",
+];
+
+const mentorLinks: MentorLink[] = [
+  { label: "Defect Library", href: "/defects" },
+  { label: "Troubleshooting Wizard", href: "/troubleshooting" },
+  { label: "Related lesson", href: "/lessons/process-window" },
+  { label: "Knowledge Search", href: "/knowledge-base" },
+];
+
+const checkFirstItems = [
+  "Look at the part, gate area, runner, vents, and the cavity number before touching the press.",
+  "Verify material handling: resin lot, drying, moisture, regrind, color, and contamination risk.",
+  "Compare actual readings to the approved process sheet: fill time, cushion, transfer, peak pressure, pack, cooling, and mold water.",
+];
+
+const safeFirstActions = [
+  "Make one small change at a time and write it down.",
+  "Run enough parts to see the real result before making another move.",
+  "If the change helps, confirm it with part weight, dimensions, photos, and repeat parts.",
 ];
 
 function findMatch(problem: string) {
@@ -51,25 +75,40 @@ function findMatch(problem: string) {
 function buildCoachReply(problem: string) {
   const match = findMatch(problem);
   const questions = [
-    `For ${match.defect.toLowerCase()}, what cavity, location, and frequency are you seeing?`,
-    "What are the current fill time, transfer position, cushion, peak pressure, pack pressure/time, and cooling time readings?",
-    "Did the symptom appear after a material, dryer, mold maintenance, water, machine, or setup change?",
+    "What changed since the last good parts: material, dryer, color, regrind, mold work, water, setup, or operator coverage?",
+    `Where is the ${match.defect.toLowerCase()} showing up: gate, end of fill, parting line, ribs, boss, one cavity, or all cavities?`,
+    "When did it start: at startup, after a break, after a lot change, after a process adjustment, or slowly over the run?",
   ];
 
-  return `Likely defect: ${match.defect}\n\nTroubleshooting questions:\n${questions
-    .map((question, index) => `${index + 1}. ${question}`)
-    .join("\n")}\n\nPossible root causes:\n${match.rootCauses
-    .map((cause) => `• ${cause}`)
-    .join("\n")}\n\nRecommended corrective actions:\n${match.correctiveActions
-    .map((action) => `• ${action}`)
-    .join("\n")}\n\nNext step: change one variable at a time, document the result, and use the linked lessons below to validate the cause before locking in a new setup.`;
+  return `Simple Summary — What this sounds like
+This sounds like ${match.defect.toLowerCase()}. Treat that as a starting point, not a final answer. Prove it with the part, the mold, the material, and the process readings.
+
+Questions to Ask
+${questions.map((question, index) => `${index + 1}. ${question}`).join("\n")}
+
+Check First — before changing settings
+${checkFirstItems.map((item) => `• ${item}`).join("\n")}
+
+What Not To Change First
+• Do not start by chasing random temperatures, speeds, or pressures.
+• Do not make big setting changes before you know what changed.
+• Do not hide the defect with extra pack, clamp, or heat until you inspect material, mold, and actual readings.
+
+Why This Happens
+${match.defect} usually shows up when the plastic, mold, machine, or setup is no longer behaving like the approved process. Common causes include ${match.rootCauses.slice(0, 3).join(", ").toLowerCase()}. Your job is to find the change that made the process unstable.
+
+Safe First Actions
+${safeFirstActions.map((action) => `• ${action}`).join("\n")}
+
+Learn More
+${mentorLinks.map((link) => `• ${link.label}: ${link.href}`).join("\n")}`;
 }
 
 const starterMessages: Message[] = [
   {
     role: "assistant",
     content:
-      "Describe the molding problem in plain language. I will ask troubleshooting questions, suggest likely root causes, recommend corrective actions, and point you to relevant lessons and guides.",
+      "Describe the molding problem in plain language. Mentor Mode will answer like an experienced process technician: what it sounds like, what to ask, what to check first, what not to change first, why it happens, and safe first actions.",
   },
 ];
 
@@ -109,19 +148,19 @@ export default function CoachPage() {
             ← Back home
           </Link>
           <p className="mt-8 text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">
-            AI Troubleshooting Coach
+            AI Troubleshooting Coach · Mentor Mode
           </p>
           <div className="mt-3 grid gap-4 lg:grid-cols-[1fr_18rem] lg:items-end">
             <div>
               <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-                Chat through a molding problem
+                Learn how to troubleshoot like a process tech
               </h1>
               <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">
-                Enter the symptom you are seeing. The coach will ask targeted questions, rank likely root causes, recommend corrective actions, and connect you to relevant training and defect guides.
+                Enter the symptom you are seeing. The coach explains the next move in simple shop-floor language so newer technicians know what to ask, what to inspect, and what not to change too soon.
               </p>
             </div>
             <div className="rounded-2xl border border-cyan-300/20 bg-slate-900/70 p-4 text-sm leading-6 text-slate-300">
-              Use the response as a troubleshooting checklist. Validate every change with part data, process readings, and one-variable-at-a-time discipline.
+              Mentor Mode is built for safe habits: inspect first, ask what changed, make one change at a time, and prove the result with parts and readings.
             </div>
           </div>
         </header>
@@ -162,14 +201,14 @@ export default function CoachPage() {
                   id="problem"
                   value={input}
                   onChange={(event) => setInput(event.target.value)}
-                  placeholder="Describe defect, location, timing, material, and process readings..."
+                  placeholder="Tell the coach the defect, where it is, when it started, and what changed..."
                   className="min-h-24 flex-1 rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/60 focus:ring-4 focus:ring-cyan-300/10 sm:min-h-14"
                 />
                 <button
                   type="submit"
                   className="rounded-2xl bg-cyan-300 px-6 py-3 text-base font-black text-slate-950 transition hover:bg-cyan-200 focus:outline-none focus:ring-4 focus:ring-cyan-300/30"
                 >
-                  Ask coach
+                  Ask mentor
                 </button>
               </div>
             </form>
@@ -177,7 +216,7 @@ export default function CoachPage() {
 
           <aside className="space-y-4">
             <section className="rounded-3xl border border-cyan-300/20 bg-slate-900/70 p-5 shadow-xl shadow-slate-950/20 sm:p-6">
-              <h2 className="text-2xl font-bold text-white">Start with these questions</h2>
+              <h2 className="text-2xl font-bold text-white">Mentor Mode questions</h2>
               <ol className="mt-5 space-y-3 text-sm leading-6 text-slate-300">
                 {defaultQuestions.map((question, index) => (
                   <li key={question} className="flex gap-3">
@@ -197,11 +236,7 @@ export default function CoachPage() {
             <section className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-xl shadow-slate-950/20 backdrop-blur sm:p-6">
               <h2 className="text-2xl font-bold text-white">Relevant links</h2>
               <div className="mt-5 flex flex-col gap-3">
-                {(matchedGuide?.lessons ?? [
-                  { label: "Defect Guide", href: "/defects" },
-                  { label: "Troubleshooting Assistant", href: "/troubleshooting" },
-                  { label: "Lessons", href: "/lessons" },
-                ]).map((lesson) => (
+                {mentorLinks.map((lesson) => (
                   <Link
                     key={lesson.href}
                     href={lesson.href}
