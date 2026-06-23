@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { FeedbackPrompt } from "../../components/FeedbackPrompt";
+
 import { DefectEducationPanels } from "../../components/DefectEducationPanels";
 import { LearnMoreAboutThis } from "../../components/LearnMoreAboutThis";
 import { RecommendedNextStep } from "../../components/RecommendedNextStep";
@@ -69,6 +71,8 @@ export default function DefectsPage() {
           reason="After you identify the closest defect, answer the guided questions to choose a safe first check before changing the press."
           related={[{ label: "Ask AI Coach", href: "/coach" }, { label: "Search knowledge", href: "/knowledge-search" }]}
         />
+
+        <FeedbackPrompt page="Defect Library" />
       </div>
     </main>
   );

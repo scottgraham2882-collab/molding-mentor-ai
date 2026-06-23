@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+
+import { FeedbackPrompt } from "../../components/FeedbackPrompt";
 import { FormEvent, useMemo, useState } from "react";
 
 import { LearnMoreAboutThis } from "../../components/LearnMoreAboutThis";
@@ -257,6 +259,8 @@ export default function CoachPage() {
           reason="When the issue is solved, save what happened, what caused it, and what fixed it so the next technician can find it faster."
           related={[{ label: "Knowledge Search", href: "/knowledge-search" }, { label: "Troubleshooting Wizard", href: "/troubleshooting" }]}
         />
+
+        <FeedbackPrompt page="AI Coach" />
       </div>
     </main>
   );
