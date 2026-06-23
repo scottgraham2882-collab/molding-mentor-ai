@@ -126,6 +126,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-cyan-300 to-emerald-400",
   },
   {
+    title: "Production Job Traveler",
+    description:
+      "Create, save, edit, delete, status-track, and print job travelers from material verification through final approval.",
+    href: "/production/job-traveler",
+    accent: "from-cyan-300 to-blue-400",
+  },
+  {
     title: "Meeting Notes & Follow-Up Tracker",
     description:
       "Create, save, edit, delete, filter, and print meeting notes with attendees, decisions, action items, owners, due dates, and follow-up notes.",
