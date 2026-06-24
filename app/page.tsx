@@ -618,6 +618,18 @@ const dashboardCards: DashboardCard[] = [
   },
 
   {
+    title: "Molding Dictionary",
+    plainSubtitle: "Look up molding words in plain language",
+    description:
+      "Search common injection molding terms, review shop-floor examples, connect related concepts, and save plant-specific definitions.",
+    href: "/molding-dictionary",
+    accent: "from-cyan-300 to-emerald-400",
+    beginnerTitle: "Molding Dictionary",
+    beginnerExplanation: "Look up molding words when you are not sure what a term means.",
+    keywords: ["dictionary", "glossary", "terms", "definitions", "molding words", "plain language"],
+  },
+
+  {
     title: "Knowledge Search",
     plainSubtitle: "Find answers across defects, lessons, materials, and molding tools",
     description:
@@ -770,6 +782,7 @@ const toolKeywordMap: Record<string, string[]> = {
   "/learning-paths": ["guided learning", "role path", "operator path", "setup technician path", "process technician path", "supervisor path", "lessons complete"],
   "/scenarios": ["shop-floor scenarios", "troubleshooting practice", "real molding problems", "flash startup", "short shot material change", "splay color change", "warpage cycle time", "burn marks end of fill", "voids thick section"],
   "/knowledge-search": ["knowledge search", "search all", "defects", "troubleshooting", "materials", "scientific molding", "mold number", "machine number", "part number", "plain english"],
+  "/molding-dictionary": ["molding dictionary", "glossary", "terms", "definitions", "plain language", "cushion", "transfer", "gate seal", "splay", "short shot", "flash"],
   "/knowledge-base": ["lessons learned", "knowledge base", "root cause", "teach technician", "tribal knowledge", "saved fixes"],
   "/knowledge-vault": ["knowledge vault", "production floor", "problem", "root cause", "fix", "prevention", "submitted by", "lessons learned", "collaborate"],
   "/mentor-notes": ["mentor notes", "teaching notes", "new technician", "supervisor notes", "topic", "defect", "machine", "mold", "tag", "tribal knowledge"],
@@ -798,7 +811,7 @@ function getToolCategory(card: DashboardCard) {
     return "Learn Molding";
   }
 
-  if (href === "/knowledge-search" || href === "/case-studies" || href === "/knowledge-base" || href === "/knowledge-vault") {
+  if (href === "/knowledge-search" || href === "/molding-dictionary" || href === "/case-studies" || href === "/knowledge-base" || href === "/knowledge-vault") {
     return "Search Knowledge";
   }
 
@@ -996,7 +1009,7 @@ function RoleToolList({
 const importantToolHrefsByCategory: Record<string, Set<string>> = {
   "Fix a Problem": new Set(["/troubleshooting", "/coach", "/photo-analysis", "/defects"]),
   "Learn Molding": new Set(["/learning-paths", "/lessons", "/scientific-molding/studies", "/scenarios"]),
-  "Search Knowledge": new Set(["/knowledge-search", "/case-studies", "/knowledge-base"]),
+  "Search Knowledge": new Set(["/knowledge-search", "/molding-dictionary", "/case-studies", "/knowledge-base"]),
   "More Tools": new Set(["/process-sheet-builder", "/production/live-board", "/scrap", "/oee", "/materials/resin-drying", "/calculators"]),
 };
 
