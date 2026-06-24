@@ -1,10 +1,7 @@
 import Link from "next/link";
+import { getTools, type ToolMetadata } from "../../lib/tool-registry";
 
-type ToolCard = {
-  name: string;
-  description: string;
-  href: string;
-};
+type ToolCard = ToolMetadata;
 
 type ToolCategory = {
   title: string;
@@ -12,116 +9,24 @@ type ToolCategory = {
   tools: ToolCard[];
 };
 
-const categories: ToolCategory[] = [
-  {
-    title: "Start Here",
-    purpose: "Simple first stops for people who are new, unsure, or trying to find the right next tool.",
-    tools: [
-      { name: "Start Here", description: "Pick your role and need to get three clear tools to open first.", href: "/start-here" },
-      { name: "Mission", description: "Review the people-first principles behind Molding Mentor AI.", href: "/mission" },
-      { name: "Main Dashboard", description: "Return to the simple homepage with the most common starting points.", href: "/" },
-    ],
-  },
-  {
-    title: "Learning",
-    purpose: "Build molding knowledge with plain-language references, lessons, examples, and roadmaps.",
-    tools: [
-      { name: "Molding Dictionary", description: "Look up molding terms in simple language with shop-floor examples.", href: "/molding-dictionary" },
-      { name: "Lessons", description: "Study practical scientific molding concepts in short learning modules.", href: "/lessons" },
-      { name: "Learning Roadmaps", description: "Follow role-based learning paths for operators, technicians, and supervisors.", href: "/roadmaps" },
-      { name: "Case Studies", description: "Learn from realistic molding situations, decisions, and outcomes.", href: "/case-studies" },
-      { name: "Knowledge Checks", description: "Check understanding after lessons and training conversations.", href: "/knowledge-checks" },
-    ],
-  },
-  {
-    title: "Troubleshooting",
-    purpose: "Help teams slow down, understand the problem, and choose safe first checks.",
-    tools: [
-      { name: "Troubleshooting Wizard", description: "Answer guided questions to narrow likely causes and corrective actions.", href: "/troubleshooting" },
-      { name: "Defect Guide", description: "Match common part defects to likely molding, material, mold, and machine causes.", href: "/defects" },
-      { name: "Root Cause Coach", description: "Work through root cause thinking before jumping to process changes.", href: "/root-cause-coach" },
-      { name: "What Changed?", description: "Review recent changes that may explain a new molding problem.", href: "/root-cause/what-changed" },
-      { name: "Process Adjustment Guide", description: "Use a structured approach when process adjustment is truly needed.", href: "/process-adjustment-guide" },
-    ],
-  },
-  {
-    title: "Knowledge & Collaboration",
-    purpose: "Preserve what people learn and help shifts, teams, and departments stay aligned.",
-    tools: [
-      { name: "Knowledge Vault", description: "Save problems, causes, fixes, and prevention notes for future teams.", href: "/knowledge-vault" },
-      { name: "Knowledge Search", description: "Find saved notes, lessons, and shop-floor knowledge quickly.", href: "/knowledge-search" },
-      { name: "Shift Handoff", description: "Capture machine status, open issues, and instructions for the next shift.", href: "/shift-handoff" },
-      { name: "Work Instructions", description: "Create and share clear steps for repeatable work.", href: "/work-instructions" },
-      { name: "Meetings", description: "Keep action items and team discussion points in one place.", href: "/meetings" },
-    ],
-  },
-  {
-    title: "Training",
-    purpose: "Assign learning, track progress, and support people as they grow into new roles.",
-    tools: [
-      { name: "Training Assignments", description: "Give employees the right training work and keep next steps visible.", href: "/training/assignments" },
-      { name: "Training Plan Builder", description: "Build simple development plans around roles and skill gaps.", href: "/training/plan-builder" },
-      { name: "Skills Matrix", description: "See who is trained, where coverage is strong, and where support is needed.", href: "/training/skills-matrix" },
-      { name: "Role Paths", description: "Open training paths for operators, process technicians, and supervisors.", href: "/training/role-paths" },
-      { name: "Certifications", description: "Track certification progress, renewals, and printable records.", href: "/certifications" },
-    ],
-  },
-  {
-    title: "Quality",
-    purpose: "Support first-piece checks, containment, corrective action, audits, and customer quality work.",
-    tools: [
-      { name: "First Piece Approval", description: "Confirm quality requirements before production continues.", href: "/quality/first-piece-approval" },
-      { name: "Quality Hold / Containment", description: "Control suspect product and document containment steps.", href: "/quality/containment" },
-      { name: "Corrective Action", description: "Track fixes and prevention steps so quality issues do not repeat.", href: "/quality/corrective-action" },
-      { name: "8D Report", description: "Organize team-based problem solving for serious quality events.", href: "/quality/8d-report" },
-      { name: "Quality Audits", description: "Review audit findings and follow-up actions in a simple format.", href: "/quality/audits" },
-    ],
-  },
-  {
-    title: "Materials",
-    purpose: "Help teams manage resin, drying, color changes, inventory, and traceability.",
-    tools: [
-      { name: "Resin Drying", description: "Review drying guidance before moisture-sensitive material is processed.", href: "/materials/resin-drying" },
-      { name: "Drying Log", description: "Record drying activity so material history is easy to understand.", href: "/materials/drying-log" },
-      { name: "Lot Traceability", description: "Connect material lots to jobs, parts, and production records.", href: "/materials/lot-traceability" },
-      { name: "Color Change", description: "Plan and document color changes to reduce confusion and waste.", href: "/materials/color-change" },
-      { name: "Materials Troubleshooter", description: "Check material-related causes when defects or processing problems appear.", href: "/materials/troubleshooter" },
-    ],
-  },
-  {
-    title: "Production",
-    purpose: "Keep daily production work visible, organized, and easier to hand off.",
-    tools: [
-      { name: "Live Production Board", description: "See what is running, what needs attention, and current production status.", href: "/production/live-board" },
-      { name: "Run Log", description: "Record production events, notes, and issues during the run.", href: "/production/run-log" },
-      { name: "Production Schedule", description: "Review planned jobs and upcoming production work.", href: "/production/schedule" },
-      { name: "Job Traveler", description: "Keep job instructions, routing, and requirements easy to follow.", href: "/production/job-traveler" },
-      { name: "Startup Approval", description: "Verify startup conditions before committing to full production.", href: "/startup-approval" },
-    ],
-  },
-  {
-    title: "Maintenance",
-    purpose: "Support machine, mold, and maintenance work with clear records and practical checklists.",
-    tools: [
-      { name: "Maintenance", description: "Review maintenance needs, notes, and follow-up work.", href: "/maintenance" },
-      { name: "Molds", description: "Keep mold information, status, and related records easy to find.", href: "/molds" },
-      { name: "Mold PM Scheduler", description: "Plan preventive maintenance for molds before problems interrupt production.", href: "/molds/pm-scheduler" },
-      { name: "Machines", description: "Review machine information and shop-floor equipment details.", href: "/machines" },
-      { name: "Mold Change", description: "Follow mold change steps and reduce missed handoff details.", href: "/mold-change" },
-    ],
-  },
-  {
-    title: "Management",
-    purpose: "Give leaders simple places to review plant work, reports, actions, and improvement priorities.",
-    tools: [
-      { name: "Plant Management", description: "Review core plant management areas without crowding operator tools.", href: "/plant-management" },
-      { name: "KPI Dashboard", description: "Review key performance indicators for production, quality, and downtime.", href: "/reports/kpi-dashboard" },
-      { name: "Daily Report", description: "Check daily production, scrap, downtime, and team notes.", href: "/reports/daily" },
-      { name: "Weekly Report", description: "Review trends and follow-up priorities across the week.", href: "/reports/weekly" },
-      { name: "Actions", description: "Track practical follow-up items from meetings, problems, and improvement work.", href: "/actions" },
-    ],
-  },
-];
+const categoryDefinitions = [
+  { title: "Start Here", purpose: "Simple first stops for people who are new, unsure, or trying to find the right next tool.", hrefs: ["/start-here", "/mission", "/"] },
+  { title: "Learning", purpose: "Build molding knowledge with plain-language references, lessons, examples, and roadmaps.", hrefs: ["/molding-dictionary", "/lessons", "/roadmaps", "/case-studies", "/knowledge-checks"] },
+  { title: "Troubleshooting", purpose: "Help teams slow down, understand the problem, and choose safe first checks.", hrefs: ["/troubleshooting", "/defects", "/root-cause-coach", "/root-cause/what-changed", "/process-adjustment-guide"] },
+  { title: "Knowledge & Collaboration", purpose: "Preserve what people learn and help shifts, teams, and departments stay aligned.", hrefs: ["/knowledge-vault", "/knowledge-search", "/shift-handoff", "/work-instructions", "/meetings"] },
+  { title: "Training", purpose: "Assign learning, track progress, and support people as they grow into new roles.", hrefs: ["/training/assignments", "/training/plan-builder", "/training/skills-matrix", "/training/role-paths", "/certifications"] },
+  { title: "Quality", purpose: "Support first-piece checks, containment, corrective action, audits, and customer quality work.", hrefs: ["/quality/first-piece-approval", "/quality/containment", "/quality/corrective-action", "/quality/8d-report", "/quality/audits"] },
+  { title: "Materials", purpose: "Help teams manage resin, drying, color changes, inventory, and traceability.", hrefs: ["/materials/resin-drying", "/materials/drying-log", "/materials/lot-traceability", "/materials/color-change", "/materials/troubleshooter"] },
+  { title: "Production", purpose: "Keep daily production work visible, organized, and easier to hand off.", hrefs: ["/production/live-board", "/production/run-log", "/production/schedule", "/production/job-traveler", "/startup-approval"] },
+  { title: "Maintenance", purpose: "Support machine, mold, and maintenance work with clear records and practical checklists.", hrefs: ["/maintenance", "/molds", "/molds/pm-scheduler", "/machines", "/mold-change"] },
+  { title: "Management", purpose: "Give leaders simple places to review plant work, reports, actions, and improvement priorities.", hrefs: ["/plant-management", "/reports/kpi-dashboard", "/reports/daily", "/reports/weekly", "/actions"] },
+] as const;
+
+const categories: ToolCategory[] = categoryDefinitions.map((category) => ({
+  title: category.title,
+  purpose: category.purpose,
+  tools: getTools(category.hrefs),
+}));
 
 const missionPillars = ["Help People Learn", "Help People Troubleshoot", "Preserve Knowledge", "Support Collaboration", "Keep It Simple"];
 
@@ -184,7 +89,7 @@ export default function AllToolsPage() {
               {category.tools.map((tool) => (
                 <Link key={tool.href} href={tool.href} className="group flex min-h-44 flex-col justify-between rounded-2xl border border-slate-200 bg-slate-50 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-cyan-50 focus:outline-none focus:ring-4 focus:ring-cyan-200">
                   <span>
-                    <span className="block text-xl font-black text-slate-950">{tool.name}</span>
+                    <span className="block text-xl font-black text-slate-950">{tool.title}</span>
                     <span className="mt-2 block text-sm leading-6 text-slate-600">{tool.description}</span>
                   </span>
                   <span className="mt-5 flex items-center justify-between text-sm font-black text-cyan-700">

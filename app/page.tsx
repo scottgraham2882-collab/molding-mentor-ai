@@ -1,10 +1,7 @@
 import Link from "next/link";
+import { getTools, type ToolMetadata } from "../lib/tool-registry";
 
-type NavigationCard = {
-  title: string;
-  description: string;
-  href: string;
-};
+type NavigationCard = ToolMetadata;
 
 type NavigationGroup = {
   title: string;
@@ -16,85 +13,17 @@ const navigationGroups: NavigationGroup[] = [
   {
     title: "Learning",
     description: "Build molding knowledge one clear step at a time.",
-    cards: [
-      {
-        title: "Molding Dictionary",
-        description: "Look up molding terms in plain language with shop-floor examples.",
-        href: "/molding-dictionary",
-      },
-      {
-        title: "Lessons",
-        description: "Review practical lessons for scientific molding and process thinking.",
-        href: "/lessons",
-      },
-      {
-        title: "Training Modules",
-        description: "Open role-based training modules for operators, technicians, and supervisors.",
-        href: "/training/role-paths",
-      },
-      {
-        title: "Learning Roadmaps",
-        description: "Follow simple role-based roadmaps for operators, process technicians, and supervisors.",
-        href: "/roadmaps",
-      },
-      {
-        title: "Learning Plans",
-        description: "Track role-based training plans and recommended next steps for molding team development.",
-        href: "/learning-plans",
-      },
-    ],
+    cards: getTools(["/molding-dictionary", "/lessons", "/training/role-paths", "/roadmaps", "/learning-plans"]),
   },
   {
     title: "Troubleshooting",
     description: "Find a safe first step before changing the process.",
-    cards: [
-      {
-        title: "Ask Coach",
-        description: "Ask a molding question in plain words and review suggested next checks.",
-        href: "/coach",
-      },
-      {
-        title: "Troubleshooting Wizard",
-        description: "Answer guided questions to narrow down likely causes and corrective steps.",
-        href: "/troubleshooting",
-      },
-      {
-        title: "Checklists",
-        description: "Use simple checklists for repeatable production, quality, and training work.",
-        href: "/checklists",
-      },
-      {
-        title: "Process Guide",
-        description: "Follow a structured sequence for verifying and adjusting the molding process.",
-        href: "/process-adjustment-guide",
-      },
-      {
-        title: "Root Cause Coach",
-        description: "Work through root cause thinking so the team fixes the real problem.",
-        href: "/root-cause-coach",
-      },
-    ],
+    cards: getTools(["/coach", "/troubleshooting", "/checklists", "/process-adjustment-guide", "/root-cause-coach"]),
   },
   {
     title: "Knowledge & Collaboration",
     description: "Preserve what the team learns and keep shifts aligned.",
-    cards: [
-      {
-        title: "Knowledge Vault",
-        description: "Save problems, causes, fixes, and prevention notes for future learning.",
-        href: "/knowledge-vault",
-      },
-      {
-        title: "Shift Handoff",
-        description: "Capture machine status, open issues, and instructions for the next shift.",
-        href: "/shift-handoff",
-      },
-      {
-        title: "Skills Matrix",
-        description: "Review team skills and qualification coverage for training conversations.",
-        href: "/training/skills-matrix",
-      },
-    ],
+    cards: getTools(["/knowledge-vault", "/shift-handoff", "/training/skills-matrix"]),
   },
 ];
 
