@@ -75,6 +75,14 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-emerald-300 to-cyan-400",
   },
   {
+    title: "Process Adjustment Guide",
+    description:
+      "Choose a molding symptom and review safe adjustment sequences, tradeoffs, and validation checks before changing the press.",
+    href: "/process-adjustment-guide",
+    accent: "from-amber-300 to-cyan-400",
+    keywords: ["process adjustment", "settings", "short shot", "flash", "sink", "splay", "warp"],
+  },
+  {
     title: "Electronic Process Sheet Approval",
     description:
       "Review and approve process sheet changes before a setup is used again.",
