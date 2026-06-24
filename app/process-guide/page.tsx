@@ -1,111 +1,99 @@
 import Link from "next/link";
 
-const guideSteps = [
+const defectGuides = [
   {
-    title: "1. Verify the approved setup",
-    intent: "Start from the documented process sheet before changing any settings.",
-    checks: ["Confirm part, mold, machine, material, color, and revision.", "Compare actual temperatures, times, pressures, and positions to the approved sheet.", "Record anything that is different before making corrections."],
+    defect: "Short Shot",
+    description: "The part is not completely filled or has missing detail.",
+    first: "Confirm the basics: material feed, cushion, shot size, transfer position, and whether the mold is venting normally.",
+    next: "If the setup matches the approved sheet, review fill speed, melt temperature, mold temperature, and any blocked gates or runners.",
+    avoid: "Do not raise hold pressure first. A short shot is usually a fill, feed, transfer, venting, or restriction issue.",
+    note: "Start by proving the press can deliver a full, repeatable first-stage fill before tuning pack and hold.",
   },
   {
-    title: "2. Confirm material condition",
-    intent: "Material issues often look like process problems, especially with hygroscopic resins.",
-    checks: ["Check resin lot, dryer temperature, drying time, dew point, and hopper residence time.", "Look for contamination, excessive regrind, colorant changes, or open containers.", "Document lot numbers so quality can trace suspect production if needed."],
+    defect: "Flash",
+    description: "Thin extra plastic appears at the parting line, vents, inserts, or shutoffs.",
+    first: "Check that the mold is fully closing, clamp force is correct, parting line is clean, and no debris is holding the tool open.",
+    next: "Review transfer position, hold pressure, fill speed, melt temperature, and signs of mold wear or damaged shutoffs.",
+    avoid: "Do not immediately lower clamp safety, over-tighten the process window, or mask a mold problem with random pressure changes.",
+    note: "Flash can be a process symptom or a tooling warning. Protect the mold and involve tooling when evidence points to wear or damage.",
   },
   {
-    title: "3. Establish a stable fill",
-    intent: "A repeatable first stage gives every later adjustment a reliable foundation.",
-    checks: ["Verify cushion, shot size, transfer position, and fill time stability.", "Use short shots when needed to confirm balanced fill and no hesitation.", "Avoid changing hold pressure to fix a fill-speed or transfer-position issue."],
+    defect: "Sink Marks",
+    description: "Depressions or dull spots form where the part shrinks after packing or cooling.",
+    first: "Check gate seal, hold pressure, hold time, cushion consistency, and whether the part weight is stable.",
+    next: "Review cooling time, mold temperature, melt temperature, wall thickness, ribs, bosses, and packing balance across cavities.",
+    avoid: "Do not raise fill speed first. Sink is usually controlled by packing, gate seal, cooling, and part design conditions.",
+    note: "Use part weight and gate seal thinking to separate a packing problem from a cooling or design limitation.",
   },
   {
-    title: "4. Validate pack and hold",
-    intent: "Hold pressure and time should control weight, sink, voids, and gate freeze without overpacking.",
-    checks: ["Review part weight trend and cavity balance before changing pack settings.", "Run or reference a gate seal study when hold time is in question.", "Watch for flash, high clamp load, sticking, or dimensional growth after pack changes."],
+    defect: "Burn Marks",
+    description: "Dark streaks, brown spots, or charred areas appear on the molded part.",
+    first: "Look for trapped air: check vents, fill pattern, end-of-fill areas, injection speed, and whether material is degrading.",
+    next: "Review barrel temperatures, residence time, screw speed, back pressure, decompression, contamination, and blocked vents.",
+    avoid: "Do not simply add more pressure first. More pressure can make trapped air and shear heat worse.",
+    note: "Burns often tell you gas cannot escape or material is getting too hot for too long. Find the source before chasing settings.",
   },
   {
-    title: "5. Protect cooling and recovery",
-    intent: "Cooling, mold temperature, and screw recovery drive cycle consistency and part stability.",
-    checks: ["Confirm water circuits, flow, actual mold temperature, and cooling time.", "Keep recovery complete before mold open with a consistent screw recovery time.", "Investigate drifting melt temperature, back pressure, screw speed, and decompression changes."],
+    defect: "Warpage",
+    description: "The part twists, bows, cups, or changes shape after ejection.",
+    first: "Check cooling balance, water flow, mold temperature, cooling time, ejection, and how parts are handled after molding.",
+    next: "Review pack balance, fill pattern, material shrink behavior, wall thickness, fixture needs, and cavity-to-cavity differences.",
+    avoid: "Do not change melt temperature first unless there is clear evidence it is outside the approved process window.",
+    note: "Warpage is usually about uneven shrink. Compare hot and cold areas, then make one controlled change at a time.",
   },
-  {
-    title: "6. Prove the correction",
-    intent: "A change is only complete when the defect is reduced and the process remains repeatable.",
-    checks: ["Run enough cycles after the change for the process to stabilize.", "Inspect the original defect and any risk areas created by the adjustment.", "Update the change log or approval workflow when the new setting should remain in use."],
-  },
-];
-
-const commonSignals = [
-  { symptom: "Short shot", firstChecks: "Material feed, shot size, transfer position, fill speed, venting, cushion." },
-  { symptom: "Flash", firstChecks: "Clamp force, parting line condition, transfer point, hold pressure, material viscosity." },
-  { symptom: "Sink or voids", firstChecks: "Gate seal, hold pressure/time, wall thickness, melt temperature, cooling." },
-  { symptom: "Splay or silver streaks", firstChecks: "Drying, contamination, barrel temperature, screw decompression, shear." },
-  { symptom: "Warp", firstChecks: "Cooling balance, mold temperature, pack balance, ejection, part handling." },
 ];
 
 export default function ProcessGuidePage() {
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100 sm:px-6 lg:px-8">
-      <section className="mx-auto flex w-full max-w-6xl flex-col gap-6">
-        <header className="rounded-[2rem] border border-white/10 bg-slate-900/90 p-5 shadow-2xl shadow-cyan-950/30 sm:p-8">
-          <Link href="/" className="text-sm font-bold text-cyan-300">← Dashboard</Link>
-          <div className="mt-5 grid gap-6 lg:grid-cols-[1fr_20rem] lg:items-end">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-300">Process control</p>
-              <h1 className="mt-3 text-4xl font-black tracking-tight text-white sm:text-5xl">Process Guide</h1>
-              <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300 sm:text-base">
-                Use this shop-floor sequence to check the process in a safe order, avoid random adjustments, and document what changed.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-cyan-300/30 bg-cyan-300/10 p-4 text-sm leading-6 text-cyan-100">
-              Golden rule: change one thing at a time, let the press stabilize, then verify the part before moving on.
-            </div>
+      <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
+        <header className="rounded-3xl border border-white/10 bg-slate-900 p-5 shadow-2xl shadow-slate-950/40 sm:p-8">
+          <Link href="/" className="text-sm font-bold text-cyan-300">
+            ← Dashboard
+          </Link>
+          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-300">
+            Feature #9 MVP
+          </p>
+          <h1 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-5xl">
+            Process Adjustment Guide
+          </h1>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">
+            A simple, people-first guide for deciding what to check before changing an injection molding process. Use it to learn, troubleshoot,
+            preserve shop knowledge, and support clear team conversations.
+          </p>
+          <div className="mt-5 rounded-2xl border border-cyan-300/30 bg-cyan-300/10 p-4 text-sm font-semibold leading-6 text-cyan-100">
+            Keep it simple: verify the approved setup, change one thing at a time, let the process stabilize, and write down what you learned.
           </div>
         </header>
 
-        <section className="grid gap-5 lg:grid-cols-2">
-          {guideSteps.map((step) => (
-            <article key={step.title} className="rounded-[1.5rem] border border-white/10 bg-white/[0.06] p-5 shadow-xl shadow-slate-950/30 sm:p-6">
-              <h2 className="text-xl font-bold text-white">{step.title}</h2>
-              <p className="mt-2 text-sm leading-6 text-emerald-100">{step.intent}</p>
-              <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-300">
-                {step.checks.map((check) => (
-                  <li key={check} className="flex gap-3">
-                    <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-cyan-300" />
-                    <span>{check}</span>
-                  </li>
-                ))}
-              </ul>
+        <section className="grid gap-4 md:grid-cols-2">
+          {defectGuides.map((guide) => (
+            <article key={guide.defect} className="rounded-3xl border border-white/10 bg-white/[0.06] p-5 shadow-xl shadow-slate-950/30 sm:p-6">
+              <div className="flex flex-col gap-2 border-b border-white/10 pb-4">
+                <h2 className="text-2xl font-black text-white">{guide.defect}</h2>
+                <p className="text-sm leading-6 text-slate-300">{guide.description}</p>
+              </div>
+
+              <div className="mt-5 space-y-4 text-sm leading-6">
+                <div>
+                  <h3 className="font-black uppercase tracking-wide text-emerald-300">1. What to check first</h3>
+                  <p className="mt-1 text-slate-200">{guide.first}</p>
+                </div>
+                <div>
+                  <h3 className="font-black uppercase tracking-wide text-cyan-300">2. What to check next</h3>
+                  <p className="mt-1 text-slate-200">{guide.next}</p>
+                </div>
+                <div>
+                  <h3 className="font-black uppercase tracking-wide text-amber-300">3. What not to change first</h3>
+                  <p className="mt-1 text-slate-200">{guide.avoid}</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-4">
+                  <h3 className="font-black uppercase tracking-wide text-violet-300">4. Simple reminder note</h3>
+                  <p className="mt-1 text-slate-200">{guide.note}</p>
+                </div>
+              </div>
             </article>
           ))}
-        </section>
-
-        <section className="rounded-[1.5rem] border border-white/10 bg-slate-900/80 p-5 shadow-xl shadow-slate-950/30 sm:p-6">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300">Quick defect triage</p>
-              <h2 className="mt-2 text-2xl font-black text-white">Common signals and first checks</h2>
-            </div>
-            <Link href="/process-change-log" className="rounded-full bg-cyan-300 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-cyan-200">
-              Open Change Log
-            </Link>
-          </div>
-          <div className="mt-5 overflow-hidden rounded-2xl border border-white/10">
-            <table className="w-full border-collapse text-left text-sm">
-              <thead className="bg-white/10 text-slate-200">
-                <tr>
-                  <th className="px-4 py-3 font-bold">Signal</th>
-                  <th className="px-4 py-3 font-bold">Check before adjusting</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/10 text-slate-300">
-                {commonSignals.map((row) => (
-                  <tr key={row.symptom}>
-                    <td className="px-4 py-3 font-semibold text-white">{row.symptom}</td>
-                    <td className="px-4 py-3 leading-6">{row.firstChecks}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
         </section>
       </section>
     </main>
