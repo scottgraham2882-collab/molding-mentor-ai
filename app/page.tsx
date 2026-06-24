@@ -66,7 +66,7 @@ const navigationGroups: NavigationGroup[] = [
       {
         title: "Process Guide",
         description: "Follow a structured sequence for verifying and adjusting the molding process.",
-        href: "/process-guide",
+        href: "/process-adjustment-guide",
       },
       {
         title: "Root Cause Coach",
@@ -92,7 +92,7 @@ const navigationGroups: NavigationGroup[] = [
       {
         title: "Skills Matrix",
         description: "Review team skills and qualification coverage for training conversations.",
-        href: "/skills-matrix",
+        href: "/training/skills-matrix",
       },
     ],
   },
