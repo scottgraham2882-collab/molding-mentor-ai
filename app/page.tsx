@@ -1172,12 +1172,56 @@ const recentCoachingTopics = [
   "Longer cycles after startup",
 ];
 
+
+const startHereActions = [
+  { label: "I Have a Defect", helper: "Identify the visible problem and choose a safe first check.", href: "/problem", icon: "🆘" },
+  { label: "I Need to Learn", helper: "Follow beginner-friendly learning paths and real shop scenarios.", href: "/learning-paths", icon: "🎓" },
+  { label: "I Need an Answer", helper: "Ask the coach or search the knowledge in plain language.", href: "/coach", icon: "💬" },
+  { label: "I Want to Save Knowledge", helper: "Capture lessons learned so the next person starts smarter.", href: "/knowledge-base", icon: "🧠" },
+];
+
+const commonProblemShortcuts = [
+  { label: "Flash", helper: "Extra plastic on edges or parting line", href: "/defects?search=flash" },
+  { label: "Short Shot", helper: "Part does not fill completely", href: "/defects?search=short%20shot" },
+  { label: "Splay", helper: "Silver streaks or splash marks", href: "/defects?search=splay" },
+  { label: "Burn Marks", helper: "Brown or black marks near end of fill", href: "/defects?search=burn%20marks" },
+  { label: "Warpage", helper: "Part bends, twists, or will not sit flat", href: "/defects?search=warpage" },
+  { label: "Sink Marks", helper: "Dents or depressions over thick areas", href: "/defects?search=sink%20marks" },
+];
+
+const recommendedToolHrefs = ["/troubleshooting", "/coach", "/defects", "/knowledge-search"];
+
+const guideMeOptions = [
+  { question: "Are you troubleshooting?", helper: "Use guided questions when a part or process is not right.", href: "/troubleshooting", cta: "Start troubleshooting" },
+  { question: "Learning?", helper: "Start with lessons designed for beginners and shop-floor roles.", href: "/learning-paths", cta: "Start learning" },
+  { question: "Training someone?", helper: "Assign training or find role-based paths for the person you are helping.", href: "/training/assignments", cta: "Open training tools" },
+  { question: "Looking for a past solution?", helper: "Search saved fixes, case studies, defects, and lessons learned.", href: "/knowledge-search", cta: "Search past solutions" },
+];
+
 const workflowSteps = [
   { label: "Fix a Problem", href: "/problem", helper: "Start here if you are unsure." },
   { label: "Troubleshooting Wizard", href: "/troubleshooting", helper: "Answer guided questions." },
   { label: "AI Coach", href: "/coach", helper: "Ask follow-up questions." },
   { label: "Photo Analysis", href: "/photo-analysis", helper: "Use a picture if needed." },
   { label: "Defect Library", href: "/defects", helper: "Confirm causes and checks." },
+];
+
+const legacyHomepageHelpers = [
+  categoryQuickLinks,
+  RoleToolList,
+  splitToolsByImportance,
+  roleHelpers,
+  roleToolPicks,
+  quickActions,
+  primaryActions,
+  missionPrinciples,
+  fiveWhysReminders,
+  quickStartActions,
+  mostViewedProblemsThisWeek,
+  recentlySolvedProblems,
+  coachStarterQuestions,
+  recentCoachingTopics,
+  workflowSteps,
 ];
 
 export default function Home() {
@@ -1302,547 +1346,118 @@ export default function Home() {
     tools: visibleCards.filter((card) => getToolCategory(card) === category),
   }));
 
+  const recommendedTools = recommendedToolHrefs
+    .map((href) => dashboardCards.find((card) => card.href === href))
+    .filter((card): card is DashboardCard => Boolean(card));
+
+  void selectedQuickStartProblem;
+  void setSelectedQuickStartProblem;
+  void clearRecentTools;
+  void favorites;
+  void recentTools;
+  void mostUsedTools;
+  void beginnerStartTools;
+  void categories;
+  void legacyHomepageHelpers;
+
   return (
-    <main className="min-h-screen overflow-hidden bg-slate-950 px-4 py-5 text-slate-100 sm:px-6 lg:px-8">
-      <section className="mx-auto flex w-full max-w-7xl flex-col gap-6">
-        <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/90 p-4 shadow-2xl shadow-cyan-950/30 sm:p-6 lg:p-8">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.20),transparent_36%),radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.16),transparent_32%)]" />
-          <div className="relative">
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300 sm:text-sm">Molding Mentor</p>
-              <div className="flex flex-wrap justify-end gap-2">
-                <Link href="/mission" className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-3 py-2 text-xs font-black text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/20 focus:outline-none focus:ring-4 focus:ring-cyan-300/20">
-                  Why We Built Molding Mentor AI
-                </Link>
-                <Link href="/settings" className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-2 text-xs font-black text-slate-200 transition hover:border-cyan-300/50 hover:bg-cyan-300/10 focus:outline-none focus:ring-4 focus:ring-cyan-300/20">
-                  Settings
-                </Link>
-              </div>
-            </div>
-            <div className="mt-3 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-              <div>
-                <h1 className="text-3xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">What do you need help with today?</h1>
-                <p className="mt-3 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
-                  Pick the task that matches the problem on the floor. Every button uses plain shop-floor language and keeps the full toolset one tap away. Not sure where to start? Tap Fix a Problem.
-                </p>
-              </div>
-              <label className="block">
-                <span className="mb-2 block text-sm font-bold text-slate-200">Search any tool, defect, material, or lesson</span>
-                <input
-                  className="w-full rounded-3xl border border-cyan-300/40 bg-slate-950/85 px-5 py-4 text-base font-semibold text-white shadow-inner shadow-slate-950 placeholder:text-slate-400 focus:border-cyan-200 focus:outline-none focus:ring-4 focus:ring-cyan-300/20 sm:text-lg"
-                  placeholder="Try flash, splay, dryer, first piece..."
-                  type="search"
-                  value={searchTerm}
-                  onChange={(event) => setSearchTerm(event.target.value)}
-                />
-              </label>
-            </div>
-
-            <section className="mt-6 rounded-[1.5rem] border border-cyan-300/25 bg-cyan-300/10 p-4 shadow-xl shadow-slate-950/20" aria-labelledby="mission-heading">
-              <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-                <div>
-                  <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-200">Mission</p>
-                  <h2 id="mission-heading" className="mt-2 text-2xl font-black text-white sm:text-3xl">Make every shift better at solving molding problems.</h2>
-                  <p className="mt-2 text-sm font-semibold leading-6 text-cyan-50 sm:text-base">
-                    Molding Mentor AI helps operators, technicians, supervisors, and managers learn injection molding, troubleshoot with structured thinking, preserve manufacturing knowledge, and collaborate to improve processes.
-                  </p>
-                  <div className="mt-4 rounded-2xl border border-amber-200/30 bg-amber-300/10 p-4">
-                    <h3 className="text-base font-black text-amber-100">5 Whys mindset</h3>
-                    <ul className="mt-2 grid gap-2 text-sm font-semibold leading-5 text-amber-50 sm:grid-cols-2">
-                      {fiveWhysReminders.map((reminder) => (
-                        <li key={reminder} className="flex gap-2">
-                          <span className="text-amber-200" aria-hidden="true">•</span>
-                          <span>{reminder}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-                <div className="grid gap-2 sm:grid-cols-2">
-                  {missionPrinciples.map((principle) => (
-                    <article key={principle.title} className="rounded-2xl border border-white/10 bg-slate-950/55 p-4">
-                      <h3 className="text-base font-black text-white">{principle.title}</h3>
-                      <p className="mt-1 text-sm font-semibold leading-5 text-slate-300">{principle.body}</p>
-                    </article>
-                  ))}
-                </div>
-              </div>
-              <p className="mt-4 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-3 text-sm font-black leading-5 text-emerald-50">
-                Humility before ego: think for yourself, learn all you can, and ask for help before pride becomes the problem.
-                <Link href="/mission" className="mt-3 block text-cyan-100 underline decoration-cyan-300/60 underline-offset-4 hover:text-white">
-                  Why We Built Molding Mentor AI
-                </Link>
+    <main className="min-h-screen bg-slate-950 px-4 py-5 text-slate-100 sm:px-6 lg:px-8">
+      <section className="mx-auto flex w-full max-w-6xl flex-col gap-5">
+        <header className="overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl shadow-cyan-950/30 sm:p-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Molding Mentor</p>
+              <h1 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-5xl">Get to the right tool fast.</h1>
+              <p className="mt-3 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
+                Mobile-first shortcuts for defects, learning, answers, and saved shop knowledge. Most users should find their next step in under 15 seconds.
               </p>
-            </section>
-
-            <section className="mt-6" aria-labelledby="primary-actions-heading">
-              <h2 id="primary-actions-heading" className="sr-only">Primary actions</h2>
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                {primaryActions.map((action) => (
-                  <Link
-                    key={action.href}
-                    href={action.href}
-                    className="group flex min-h-36 flex-col justify-between rounded-[1.5rem] border border-white/10 bg-white/[0.08] p-4 text-left shadow-xl shadow-slate-950/25 transition hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-white/[0.13] focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
-                    onClick={() => trackRecentTool(action.href)}
-                  >
-                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-slate-950/70 text-2xl" aria-hidden="true">{action.icon}</span>
-                    <span>
-                      <span className="mt-4 block text-lg font-black leading-tight text-white">{action.label}</span>
-                      <span className="mt-2 block text-sm font-semibold leading-5 text-slate-300">{action.helper}</span>
-                    </span>
-                    <span className="mt-4 font-black text-cyan-100 transition group-hover:translate-x-1" aria-hidden="true">Start →</span>
-                  </Link>
-                ))}
-              </div>
-            </section>
-
-            <section className="mt-6 rounded-[1.5rem] border border-amber-300/25 bg-slate-950/60 p-4 shadow-xl shadow-slate-950/20" aria-labelledby="quick-start-troubleshooting-heading">
-              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className="text-xs font-black uppercase tracking-[0.24em] text-amber-200">Quick Start Troubleshooting</p>
-                  <h2 id="quick-start-troubleshooting-heading" className="text-2xl font-black text-white">What are you seeing?</h2>
-                  <p className="mt-1 text-sm font-semibold leading-5 text-slate-300">Tap the closest problem. Then pick the fastest help path. No forms, no setup.</p>
-                </div>
-                <p className="rounded-full border border-emerald-300/30 bg-emerald-300/10 px-3 py-2 text-sm font-black text-emerald-100">Help in under 15 seconds</p>
-              </div>
-
-              <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                {quickStartProblems.map((problem) => {
-                  const isSelected = selectedQuickStartProblem.label === problem.label;
-
-                  return (
-                    <button
-                      key={problem.label}
-                      aria-pressed={isSelected}
-                      className={`min-h-20 rounded-2xl border p-4 text-left transition focus:outline-none focus:ring-4 focus:ring-amber-300/20 ${
-                        isSelected
-                          ? "border-amber-200 bg-amber-300 text-slate-950 shadow-lg shadow-amber-950/25"
-                          : "border-white/10 bg-white/[0.07] text-white hover:border-amber-200/70 hover:bg-amber-300/15"
-                      }`}
-                      type="button"
-                      onClick={() => setSelectedQuickStartProblem(problem)}
-                    >
-                      <span className="block text-xl font-black leading-tight">{problem.label}</span>
-                      <span className={`mt-1 block text-sm font-semibold leading-5 ${isSelected ? "text-slate-800" : "text-slate-300"}`}>{problem.helper}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="mt-4 rounded-[1.25rem] border border-cyan-300/20 bg-cyan-300/10 p-4">
-                <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-[0.2em] text-cyan-200">Quick actions for</p>
-                    <h3 className="text-xl font-black text-white">{selectedQuickStartProblem.label}</h3>
-                  </div>
-                  <p className="text-sm font-semibold text-cyan-50">Start with the one that fits what you have right now.</p>
-                </div>
-                <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                  {quickStartActions.map((action) => {
-                    const href = action.href === "/defects" ? `/defects?search=${encodeURIComponent(selectedQuickStartProblem.query)}` : action.href;
-
-                    return (
-                      <Link
-                        key={action.label}
-                        href={href}
-                        className="group flex min-h-24 items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/65 p-3 text-left transition hover:-translate-y-0.5 hover:border-cyan-200/70 hover:bg-cyan-300/15 focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
-                        onClick={() => trackRecentTool(action.href)}
-                      >
-                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-2xl" aria-hidden="true">{action.icon}</span>
-                        <span className="min-w-0 flex-1">
-                          <span className="block text-base font-black leading-tight text-white">{action.label}</span>
-                          <span className="mt-1 block text-sm font-semibold leading-5 text-slate-300">{action.helper}</span>
-                        </span>
-                        <span className="text-cyan-100 transition group-hover:translate-x-1" aria-hidden="true">→</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="mt-4 grid gap-3 lg:grid-cols-2">
-                <section className="rounded-[1.25rem] border border-white/10 bg-white/[0.06] p-4">
-                  <h3 className="text-lg font-black text-white">Most Viewed Problems This Week</h3>
-                  <div className="mt-3 grid gap-2">
-                    {mostViewedProblemsThisWeek.map((problem) => (
-                      <Link key={problem.label} href={problem.href} className="rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 transition hover:border-amber-200/60 hover:bg-amber-300/10 focus:outline-none focus:ring-4 focus:ring-amber-300/20" onClick={() => trackRecentTool("/defects")}>
-                        <span className="block font-black text-white">{problem.label}</span>
-                        <span className="mt-1 block text-sm font-semibold text-slate-300">{problem.helper}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </section>
-                <section className="rounded-[1.25rem] border border-white/10 bg-white/[0.06] p-4">
-                  <h3 className="text-lg font-black text-white">Recently Solved Problems</h3>
-                  <div className="mt-3 grid gap-2">
-                    {recentlySolvedProblems.map((problem) => (
-                      <Link key={problem.label} href={problem.href} className="rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 transition hover:border-emerald-200/60 hover:bg-emerald-300/10 focus:outline-none focus:ring-4 focus:ring-emerald-300/20" onClick={() => trackRecentTool("/defects")}>
-                        <span className="block font-black text-white">{problem.label}</span>
-                        <span className="mt-1 block text-sm font-semibold text-slate-300">{problem.helper}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </section>
-              </div>
-            </section>
-
-            <div className="mt-6 flex flex-col gap-3 rounded-3xl border border-white/10 bg-slate-950/45 p-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-sm font-black text-white">New to molding?</p>
-                <p className="mt-1 text-sm leading-5 text-slate-300">Turn on simpler names and suggested starting points.</p>
-              </div>
-              <button
-                aria-pressed={beginnerMode}
-                className={`flex w-full items-center justify-between rounded-full border px-4 py-3 text-sm font-black transition focus:outline-none focus:ring-4 focus:ring-cyan-300/20 sm:w-48 ${
-                  beginnerMode
-                    ? "border-emerald-200/70 bg-emerald-300 text-slate-950"
-                    : "border-white/10 bg-slate-900 text-slate-200 hover:border-cyan-300/50"
-                }`}
-                type="button"
-                onClick={() => setBeginnerMode((current) => !current)}
-              >
-                <span>{beginnerMode ? "Beginner On" : "Beginner Off"}</span>
-                <span className={`h-6 w-11 rounded-full p-1 transition ${beginnerMode ? "bg-slate-950/25" : "bg-slate-950"}`} aria-hidden="true">
-                  <span className={`block h-4 w-4 rounded-full bg-white transition ${beginnerMode ? "translate-x-5" : "translate-x-0"}`} />
-                </span>
-              </button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Link href="/mission" className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-3 py-2 text-xs font-black text-cyan-100 transition hover:bg-cyan-300/20">Mission</Link>
+              <Link href="/settings" className="rounded-full border border-white/10 bg-slate-950/70 px-3 py-2 text-xs font-black text-slate-200 transition hover:border-cyan-300/50">Settings</Link>
             </div>
           </div>
         </header>
 
-
-
-        <section className="rounded-[2rem] border border-amber-300/25 bg-slate-900/80 p-4 shadow-2xl shadow-amber-950/20 sm:p-6" aria-labelledby="start-here-heading">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-amber-300">Start Here</p>
-              <h2 id="start-here-heading" className="mt-1 text-2xl font-black tracking-tight text-white">Most-used tools first</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">Not sure where to start? Tap Fix a Problem. These are the fastest paths for common shop-floor questions.</p>
-            </div>
-            <Link href="/problem" className="rounded-full bg-amber-300 px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-amber-200 focus:outline-none focus:ring-4 focus:ring-amber-300/30" onClick={() => trackRecentTool("/problem")}>
-              Fix a Problem →
-            </Link>
-          </div>
-          <div className="mt-4">
-            <ToolList cards={mostUsedTools} label="Most-used starter tools" favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
-          </div>
-        </section>
-
-        <section aria-label="Primary tool categories" className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {categories.map((category) => {
-            const details = categoryDetails[category.name];
-            return (
-              <Link key={category.name} href={categoryQuickLinks[category.name]} className="group rounded-[1.75rem] border border-white/10 bg-white/[0.07] p-5 shadow-xl shadow-slate-950/25 transition hover:-translate-y-0.5 hover:border-cyan-300/50 hover:bg-white/[0.11] focus:outline-none focus:ring-4 focus:ring-cyan-300/20">
-                <div className={`mb-5 h-1.5 w-24 rounded-full bg-gradient-to-r ${details.accent}`} />
-                <div className="flex items-start justify-between gap-4">
-                  <span className="rounded-2xl border border-white/10 bg-slate-950/60 p-3 text-3xl" aria-hidden="true">{details.icon}</span>
-                  <span className="rounded-full bg-cyan-300/10 px-3 py-1 text-sm font-black text-cyan-100">{category.tools.length} tools</span>
-                </div>
-                <h2 className="mt-5 text-2xl font-black tracking-tight text-white">{category.name}</h2>
-                <p className="mt-3 text-sm leading-6 text-slate-300">{details.helper}</p>
-                <p className="mt-5 flex items-center justify-between text-sm font-black text-cyan-100"><span>{details.cta}</span><span aria-hidden="true">→</span></p>
-              </Link>
-            );
-          })}
-        </section>
-
-        <section
-          className="relative overflow-hidden rounded-[2rem] border border-cyan-200/30 bg-gradient-to-br from-cyan-300/20 via-slate-900 to-emerald-300/15 p-4 shadow-2xl shadow-cyan-950/30 sm:p-6 lg:p-8"
-          aria-labelledby="ask-molding-coach-heading"
-        >
-          <div className="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-cyan-300/20 blur-3xl" />
-          <div className="absolute -bottom-24 -left-16 h-64 w-64 rounded-full bg-emerald-300/20 blur-3xl" />
-          <div className="relative grid gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
-            <div className="rounded-[1.75rem] border border-white/10 bg-slate-950/55 p-5 shadow-xl shadow-slate-950/20 sm:p-6">
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-200">AI mentor</p>
-              <h2 id="ask-molding-coach-heading" className="mt-2 text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
-                Ask the Molding Coach
-              </h2>
-              <p className="mt-3 max-w-2xl text-lg font-semibold leading-7 text-cyan-50">
-                Describe your molding problem in plain English.
-              </p>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
-                The coach helps you slow down, ask better questions, and learn the likely cause before changing settings. It feels more like a mentor than a search box.
-              </p>
-
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                <Link
-                  href="/coach"
-                  className="group flex min-h-16 items-center justify-between rounded-2xl bg-cyan-300 px-5 py-4 text-left text-base font-black text-slate-950 shadow-xl shadow-cyan-950/30 transition hover:-translate-y-0.5 hover:bg-cyan-200 focus:outline-none focus:ring-4 focus:ring-cyan-300/30"
-                  onClick={() => trackRecentTool("/coach")}
-                >
-                  <span>Open AI Coach</span>
-                  <span className="transition group-hover:translate-x-1" aria-hidden="true">→</span>
-                </Link>
-                <Link
-                  href="/troubleshooting"
-                  className="group flex min-h-16 items-center justify-between rounded-2xl border border-emerald-300/40 bg-emerald-300/10 px-5 py-4 text-left text-base font-black text-emerald-50 transition hover:-translate-y-0.5 hover:border-emerald-200 hover:bg-emerald-300/20 focus:outline-none focus:ring-4 focus:ring-emerald-300/20"
-                  onClick={() => trackRecentTool("/troubleshooting")}
-                >
-                  <span>Troubleshooting Wizard</span>
-                  <span className="transition group-hover:translate-x-1" aria-hidden="true">→</span>
-                </Link>
-              </div>
-            </div>
-
-            <div className="grid gap-3">
-              <section className="rounded-[1.5rem] border border-white/10 bg-white/[0.07] p-4">
-                <h3 className="text-lg font-black text-white">Suggested starter questions</h3>
-                <div className="mt-3 grid gap-2">
-                  {coachStarterQuestions.map((question) => (
-                    <Link
-                      key={question}
-                      href="/coach"
-                      className="rounded-2xl border border-cyan-300/20 bg-slate-950/55 px-4 py-3 text-sm font-bold leading-5 text-cyan-50 transition hover:border-cyan-200 hover:bg-cyan-300/10 focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
-                      onClick={() => trackRecentTool("/coach")}
-                    >
-                      “{question}”
-                    </Link>
-                  ))}
-                </div>
-              </section>
-
-              <div className="grid gap-3 sm:grid-cols-2">
-                <section className="rounded-[1.5rem] border border-white/10 bg-slate-950/55 p-4">
-                  <h3 className="text-lg font-black text-white">Recent coaching topics</h3>
-                  <ul className="mt-3 space-y-2 text-sm font-semibold leading-5 text-slate-300">
-                    {recentCoachingTopics.map((topic) => (
-                      <li key={topic} className="flex gap-2">
-                        <span className="text-emerald-300" aria-hidden="true">•</span>
-                        <span>{topic}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-                <section className="rounded-[1.5rem] border border-white/10 bg-slate-950/55 p-4">
-                  <h3 className="text-lg font-black text-white">More ways to learn</h3>
-                  <div className="mt-3 grid gap-2">
-                    <Link
-                      href="/photo-analysis"
-                      className="rounded-2xl border border-sky-300/30 px-4 py-3 text-sm font-black text-sky-100 transition hover:border-sky-200 hover:bg-sky-300/10 focus:outline-none focus:ring-4 focus:ring-sky-300/20"
-                      onClick={() => trackRecentTool("/photo-analysis")}
-                    >
-                      Defect Photo Analysis →
-                    </Link>
-                    <Link
-                      href="/defects"
-                      className="rounded-2xl border border-white/10 px-4 py-3 text-sm font-black text-slate-100 transition hover:border-cyan-300/40 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
-                      onClick={() => trackRecentTool("/defects")}
-                    >
-                      Defect Library →
-                    </Link>
-                  </div>
-                </section>
-              </div>
-            </div>
-          </div>
-        </section>
-
-
-        <section className="rounded-[2rem] border border-emerald-300/20 bg-slate-900/75 p-4 shadow-2xl shadow-emerald-950/20 sm:p-6" aria-labelledby="workflow-heading">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">Recommended workflow</p>
-              <h2 id="workflow-heading" className="mt-1 text-2xl font-black tracking-tight text-white">If you are not sure where to go, follow this path</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">This connects the overlapping troubleshooting, coaching, and knowledge tools into one beginner-friendly sequence.</p>
-            </div>
-            <Link href="/start-here" className="rounded-full border border-emerald-300/40 px-4 py-2 text-sm font-black text-emerald-100 transition hover:bg-emerald-300/10 focus:outline-none focus:ring-4 focus:ring-emerald-300/20">Start-here guide →</Link>
-          </div>
-          <div className="mt-4 grid gap-3 md:grid-cols-5">
-            {workflowSteps.map((step, index) => (
-              <Link
-                key={step.href}
-                href={step.href}
-                className="group rounded-2xl border border-white/10 bg-slate-950/55 p-4 transition hover:border-emerald-300/50 hover:bg-emerald-300/10 focus:outline-none focus:ring-4 focus:ring-emerald-300/20"
-                onClick={() => trackRecentTool(step.href)}
-              >
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-300 text-sm font-black text-slate-950">{index + 1}</span>
-                <span className="mt-3 block text-base font-black text-white">{step.label}</span>
-                <span className="mt-1 block text-sm leading-5 text-slate-300">{step.helper}</span>
-                <span className="mt-3 block text-sm font-black text-emerald-100 group-hover:translate-x-1">Open →</span>
+        <section className="rounded-[2rem] border border-amber-300/25 bg-slate-900/85 p-4 shadow-2xl shadow-amber-950/20 sm:p-6" aria-labelledby="start-here-heading">
+          <p className="text-xs font-black uppercase tracking-[0.28em] text-amber-300">Start Here</p>
+          <h2 id="start-here-heading" className="mt-1 text-2xl font-black tracking-tight text-white">What do you need right now?</h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {startHereActions.map((action) => (
+              <Link key={action.href} href={action.href} className="group flex min-h-36 flex-col justify-between rounded-[1.5rem] border border-white/10 bg-white/[0.08] p-4 text-left shadow-xl shadow-slate-950/25 transition hover:-translate-y-0.5 hover:border-amber-200/70 hover:bg-amber-300/10 focus:outline-none focus:ring-4 focus:ring-amber-300/20" onClick={() => trackRecentTool(action.href)}>
+                <span className="text-3xl" aria-hidden="true">{action.icon}</span>
+                <span>
+                  <span className="block text-xl font-black leading-tight text-white">{action.label}</span>
+                  <span className="mt-2 block text-sm font-semibold leading-5 text-slate-300">{action.helper}</span>
+                </span>
+                <span className="font-black text-amber-100 transition group-hover:translate-x-1">Go →</span>
               </Link>
             ))}
           </div>
         </section>
 
-        <section className="rounded-[2rem] border border-cyan-300/20 bg-slate-900/80 p-4 shadow-2xl shadow-cyan-950/20 sm:p-6" aria-label="Quick actions">
+        <section className="rounded-[2rem] border border-cyan-300/20 bg-slate-900/80 p-4 shadow-2xl shadow-cyan-950/20 sm:p-6" aria-labelledby="common-problems-heading">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Quick Actions</p>
-              <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Do the common floor tasks fast</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
-                Big buttons for the jobs people need during a shift. Search, favorites, recent tools, Beginner Mode, and role tools stay below.
-              </p>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Most Common Problems</p>
+              <h2 id="common-problems-heading" className="mt-1 text-2xl font-black tracking-tight text-white">Tap the defect you see</h2>
             </div>
-            <p className="rounded-full border border-white/10 bg-slate-950/70 px-4 py-2 text-sm font-bold text-cyan-100">
-              {quickActions.length} shortcuts
-            </p>
+            <Link href="/defects" className="rounded-full border border-cyan-300/40 px-4 py-2 text-sm font-black text-cyan-100 transition hover:bg-cyan-300/10" onClick={() => trackRecentTool("/defects")}>Open full library →</Link>
           </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {quickActions.map((action) => (
-              <Link
-                key={action.href}
-                href={action.href}
-                className="group flex min-h-28 items-center gap-4 rounded-[1.75rem] border border-white/10 bg-white/[0.07] p-4 text-left shadow-xl shadow-slate-950/25 transition hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-white/[0.12] focus:outline-none focus:ring-4 focus:ring-cyan-300/20"
-                onClick={() => trackRecentTool(action.href)}
-              >
-                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-slate-950/70 text-3xl" aria-hidden="true">
-                  {action.icon}
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-lg font-black leading-tight text-white">{action.label}</span>
-                  <span className="mt-1 block text-sm font-semibold leading-5 text-slate-300">{action.helper}</span>
-                </span>
-                <span className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-2 text-cyan-100 transition group-hover:border-cyan-300/50" aria-hidden="true">→</span>
+            {commonProblemShortcuts.map((problem) => (
+              <Link key={problem.label} href={problem.href} className="rounded-2xl border border-white/10 bg-slate-950/60 p-4 transition hover:border-cyan-200/70 hover:bg-cyan-300/10 focus:outline-none focus:ring-4 focus:ring-cyan-300/20" onClick={() => trackRecentTool("/defects")}>
+                <span className="block text-lg font-black text-white">{problem.label}</span>
+                <span className="mt-1 block text-sm font-semibold leading-5 text-slate-300">{problem.helper}</span>
               </Link>
             ))}
           </div>
         </section>
 
-        <section className="rounded-[2rem] border border-emerald-300/20 bg-slate-900/75 p-4 shadow-2xl shadow-emerald-950/20 sm:p-6" aria-label="Role based tools">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">Role tools</p>
-              <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Pick your role</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
-                Choose your job for the shift. We will show the best tools first and remember this choice on this device.
-              </p>
-            </div>
-            <p className="rounded-full border border-white/10 bg-slate-950/70 px-4 py-2 text-sm font-bold text-emerald-100">
-              Showing: {selectedRole}
-            </p>
-          </div>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4" role="list" aria-label="Select role">
-            {shopRoles.map((role) => (
-              <button
-                key={role}
-                aria-pressed={selectedRole === role}
-                className={`rounded-2xl border p-4 text-left transition focus:outline-none focus:ring-4 focus:ring-emerald-300/20 ${
-                  selectedRole === role
-                    ? "border-emerald-200/80 bg-emerald-300 text-slate-950 shadow-lg shadow-emerald-950/20"
-                    : "border-white/10 bg-slate-950/55 text-slate-100 hover:border-emerald-300/50 hover:bg-white/[0.08]"
-                }`}
-                type="button"
-                onClick={() => setSelectedRole(role)}
-              >
-                <span className="block text-base font-black">{role}</span>
-                <span className={`mt-2 block text-sm leading-5 ${selectedRole === role ? "text-slate-800" : "text-slate-300"}`}>{roleHelpers[role]}</span>
-              </button>
-            ))}
-          </div>
-          <div className="mt-5">
-            <RoleToolList picks={roleToolPicks[selectedRole]} favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
+        <section className="rounded-[2rem] border border-emerald-300/20 bg-slate-900/80 p-4 shadow-2xl shadow-emerald-950/20 sm:p-6" aria-labelledby="recommended-tools-heading">
+          <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">Recommended Tools</p>
+          <h2 id="recommended-tools-heading" className="mt-1 text-2xl font-black tracking-tight text-white">Top 4 most-used tools</h2>
+          <div className="mt-4">
+            <ToolList cards={recommendedTools} label="Top recommended tools" favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
           </div>
         </section>
 
-        {normalizedSearch ? (
-          <section className="rounded-[2rem] border border-cyan-300/20 bg-slate-900/70 p-4 sm:p-6" aria-live="polite">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Search results</p>
-                <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Matching tool cards</h2>
-              </div>
-              <p className="text-sm text-slate-400">{visibleCards.length} tools found for “{searchTerm}”</p>
-            </div>
-            <div className="mt-4">
-              {visibleCards.length > 0 ? (
-                <ToolList cards={visibleCards} label="Matching search tools" favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
-              ) : (
-                <p className="rounded-[1.5rem] border border-amber-300/30 bg-amber-300/10 p-6 text-center text-amber-50">
-                  No tools found. Try searching troubleshooting, training, quality, material, or reports.
-                </p>
-              )}
-            </div>
-          </section>
-        ) : null}
+        <section className="rounded-[2rem] border border-white/10 bg-gradient-to-r from-cyan-300/15 via-slate-900 to-emerald-300/15 p-5 text-center shadow-2xl shadow-slate-950/20" aria-labelledby="mission-reminder-heading">
+          <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-200">Mission Reminder</p>
+          <h2 id="mission-reminder-heading" className="mt-2 text-2xl font-black text-white sm:text-4xl">Learn. Troubleshoot. Preserve Knowledge. Work Together.</h2>
+        </section>
 
-        {beginnerMode ? (
-          <section className="rounded-[2rem] border border-amber-300/30 bg-gradient-to-br from-amber-300/15 via-slate-900/80 to-cyan-300/10 p-4 shadow-2xl shadow-amber-950/20 sm:p-6">
-            <p className="text-xs font-black uppercase tracking-[0.28em] text-amber-200">Start Here</p>
-            <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Best tools when you are new or unsure</h2>
-            <p className="mt-2 text-sm leading-6 text-amber-50/90">Not sure what the defect is? Start with the Troubleshooting Wizard or upload a photo.</p>
-            <div className="mt-4">
-              <ToolList cards={beginnerStartTools} label="Beginner start tools" favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
-            </div>
-          </section>
-        ) : null}
-
-        <div className="grid gap-6 xl:grid-cols-3">
-          <section className="xl:col-span-2">
-            <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">Favorites</p>
-            <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Quick picks for the floor</h2>
-            <div className="mt-3">
-              {favorites.length > 0 ? (
-                <ToolList cards={favorites} label="Favorite tools" favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
-              ) : (
-                <p className="rounded-[1.5rem] border border-dashed border-emerald-300/30 bg-emerald-300/10 p-6 text-sm leading-6 text-emerald-50">
-                  No favorites saved yet. Tap the star on any tool card to keep it here on this device.
-                </p>
-              )}
-            </div>
-          </section>
-          <section>
-            <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Recent tools</p>
-            <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Last used</h2>
-            <div className="mt-3">
-              {recentTools.length > 0 ? (
-                <div className="grid gap-3">
-                  <ToolList cards={recentTools} label="Recent tools" compact favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
-                  <button
-                    className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm font-black text-slate-200 transition hover:border-rose-300/50 hover:text-rose-100 focus:outline-none focus:ring-4 focus:ring-rose-300/20"
-                    type="button"
-                    onClick={clearRecentTools}
-                  >
-                    Clear recent tools
-                  </button>
-                </div>
-              ) : (
-                <p className="rounded-[1.5rem] border border-dashed border-cyan-300/30 bg-cyan-300/10 p-6 text-sm leading-6 text-cyan-50">
-                  Open any tool card and your 5 most recent tools will appear here on this device.
-                </p>
-              )}
-            </div>
-          </section>
-        </div>
-
-        <section className="rounded-[2rem] border border-white/10 bg-slate-900/70 p-4 sm:p-6">
+        <section className="rounded-[2rem] border border-amber-300/25 bg-slate-900/85 p-4 shadow-2xl shadow-amber-950/20 sm:p-6" aria-labelledby="guide-me-heading">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">All tools</p>
-              <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Browse by simple job type</h2>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-amber-300">Not Sure Where to Start?</p>
+              <h2 id="guide-me-heading" className="mt-1 text-2xl font-black tracking-tight text-white">Guide Me</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-300">Answer one simple question. No new form, no saved data.</p>
             </div>
-            <p className="text-sm text-slate-400">Search filters this list without removing any routes.</p>
+            <Link href="/start-here" className="rounded-full bg-amber-300 px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-amber-200">Guide Me →</Link>
           </div>
-          <div className="mt-5 grid gap-5">
-            {categories.map((category) => {
-              const { importantTools, moreTools } = splitToolsByImportance(category.name, category.tools);
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {guideMeOptions.map((option) => (
+              <Link key={option.question} href={option.href} className="group rounded-2xl border border-white/10 bg-slate-950/60 p-4 transition hover:-translate-y-0.5 hover:border-amber-200/70 hover:bg-amber-300/10 focus:outline-none focus:ring-4 focus:ring-amber-300/20" onClick={() => trackRecentTool(option.href)}>
+                <span className="block text-lg font-black text-white">{option.question}</span>
+                <span className="mt-2 block text-sm font-semibold leading-5 text-slate-300">{option.helper}</span>
+                <span className="mt-4 block text-sm font-black text-amber-100 transition group-hover:translate-x-1">{option.cta} →</span>
+              </Link>
+            ))}
+          </div>
+        </section>
 
-              return (
-                <section key={category.name} className="rounded-[1.5rem] border border-white/10 bg-slate-950/45 p-4">
-                  <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      <h3 className="text-xl font-black text-white"><span aria-hidden="true">{categoryDetails[category.name].icon}</span> {category.name}</h3>
-                      <p className="mt-1 text-sm leading-5 text-slate-300">{categoryDetails[category.name].helper}</p>
-                    </div>
-                    <span className="w-fit rounded-full bg-white/10 px-3 py-1 text-sm font-bold text-slate-300">{category.tools.length} tools</span>
-                  </div>
-                  {category.tools.length > 0 ? (
-                    <div className="grid gap-4">
-                      <ToolList cards={importantTools} label={`${category.name} important tools`} compact favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
-                      {moreTools.length > 0 ? (
-                        <details className="rounded-[1.25rem] border border-white/10 bg-slate-900/75 p-3">
-                          <summary className="cursor-pointer text-sm font-black uppercase tracking-[0.18em] text-cyan-100 focus:outline-none focus:ring-4 focus:ring-cyan-300/20">More tools</summary>
-                          <div className="mt-3">
-                            <ToolList cards={moreTools} label={`${category.name} more tools`} compact favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
-                          </div>
-                        </details>
-                      ) : null}
-                    </div>
-                  ) : <p className="text-sm text-slate-400">No matching tools in this category.</p>}
-                </section>
-              );
-            })}
-          </div>
+        <section className="rounded-[2rem] border border-white/10 bg-slate-900/70 p-4 sm:p-6" aria-labelledby="all-tools-heading">
+          <label className="block">
+            <span id="all-tools-heading" className="mb-2 block text-sm font-bold text-slate-200">Need something else? Search all existing tools</span>
+            <input className="w-full rounded-3xl border border-cyan-300/40 bg-slate-950/85 px-5 py-4 text-base font-semibold text-white shadow-inner shadow-slate-950 placeholder:text-slate-400 focus:border-cyan-200 focus:outline-none focus:ring-4 focus:ring-cyan-300/20" placeholder="Try dryer, first piece, downtime, training..." type="search" value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} />
+          </label>
+          {normalizedSearch ? (
+            <div className="mt-4">
+              <p className="mb-3 text-sm text-slate-400">{visibleCards.length} tools found for “{searchTerm}”</p>
+              {visibleCards.length > 0 ? <ToolList cards={visibleCards} label="Matching search tools" favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} /> : <p className="rounded-2xl border border-amber-300/30 bg-amber-300/10 p-5 text-amber-50">No tools found. Try another word.</p>}
+            </div>
+          ) : null}
         </section>
       </section>
     </main>
