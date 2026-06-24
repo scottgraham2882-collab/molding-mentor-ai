@@ -33,11 +33,14 @@ const STORAGE_KEY = "molding-mentor-checklists";
 const statuses: ChecklistStatus[] = ["Draft", "Active", "Complete", "Archived"];
 
 const starterTasks = [
-  "Verify safety guards, PPE, and lockout requirements for the work area.",
-  "Confirm the latest approved setup, quality, or work instruction is available.",
-  "Record machine, mold, material, job, lot, or customer details before starting.",
-  "Inspect first output or completed work against the required acceptance criteria.",
-  "Document open issues, containment needs, and handoff notes before closing.",
+  "Material hopper checked",
+  "Dryer operating correctly",
+  "Shot size verified",
+  "Cushion verified",
+  "Fill time verified",
+  "Melt temperature verified",
+  "Venting inspected",
+  "Machine alarms reviewed",
 ];
 
 const emptyForm: ChecklistForm = {
