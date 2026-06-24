@@ -32,6 +32,11 @@ const navigationGroups: NavigationGroup[] = [
         description: "Open role-based training modules for operators, technicians, and supervisors.",
         href: "/training/role-paths",
       },
+      {
+        title: "Learning Roadmaps",
+        description: "Follow simple role-based roadmaps for operators, process technicians, and supervisors.",
+        href: "/roadmaps",
+      },
     ],
   },
   {
