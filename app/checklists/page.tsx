@@ -39,6 +39,11 @@ const starterTasks = [
   "Cushion verified",
   "Fill time verified",
   "Melt temperature verified",
+  "Hold pressure verified",
+  "Hold time verified",
+  "Gate freeze confirmed",
+  "Part thickness reviewed",
+  "Material shrinkage reviewed",
   "Venting inspected",
   "Machine alarms reviewed",
 ];
