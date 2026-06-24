@@ -33,14 +33,11 @@ const STORAGE_KEY = "molding-mentor-checklists";
 const statuses: ChecklistStatus[] = ["Draft", "Active", "Complete", "Archived"];
 
 const starterTasks = [
-  "Material hopper checked",
-  "Dryer operating correctly",
-  "Shot size verified",
-  "Cushion verified",
-  "Fill time verified",
-  "Melt temperature verified",
   "Venting inspected",
-  "Machine alarms reviewed",
+  "Injection speed reviewed",
+  "Melt temperature reviewed",
+  "Trapped air locations checked",
+  "Barrel residence time reviewed",
 ];
 
 const emptyForm: ChecklistForm = {
