@@ -586,6 +586,16 @@ const dashboardCards: DashboardCard[] = [
   },
 
   {
+    title: "Knowledge Vault",
+    plainSubtitle: "Capture simple lessons from the production floor",
+    description:
+      "Save problem, root cause, fix, prevention, and submitted-by notes so teams can learn, troubleshoot, preserve knowledge, and collaborate.",
+    href: "/knowledge-vault",
+    accent: "from-emerald-300 to-cyan-400",
+    keywords: ["knowledge vault", "lessons learned", "production floor", "root cause", "fix", "prevention", "submitted by"],
+  },
+
+  {
     title: "Knowledge Search",
     plainSubtitle: "Find answers across defects, lessons, materials, and molding tools",
     description:
@@ -739,6 +749,7 @@ const toolKeywordMap: Record<string, string[]> = {
   "/scenarios": ["shop-floor scenarios", "troubleshooting practice", "real molding problems", "flash startup", "short shot material change", "splay color change", "warpage cycle time", "burn marks end of fill", "voids thick section"],
   "/knowledge-search": ["knowledge search", "search all", "defects", "troubleshooting", "materials", "scientific molding", "mold number", "machine number", "part number", "plain english"],
   "/knowledge-base": ["lessons learned", "knowledge base", "root cause", "teach technician", "tribal knowledge", "saved fixes"],
+  "/knowledge-vault": ["knowledge vault", "production floor", "problem", "root cause", "fix", "prevention", "submitted by", "lessons learned", "collaborate"],
   "/mentor-notes": ["mentor notes", "teaching notes", "new technician", "supervisor notes", "topic", "defect", "machine", "mold", "tag", "tribal knowledge"],
   "/training/skills-matrix": ["skills", "qualified", "cross training", "matrix"],
 };
@@ -765,7 +776,7 @@ function getToolCategory(card: DashboardCard) {
     return "Learn Molding";
   }
 
-  if (href === "/knowledge-search" || href === "/case-studies" || href === "/knowledge-base") {
+  if (href === "/knowledge-search" || href === "/case-studies" || href === "/knowledge-base" || href === "/knowledge-vault") {
     return "Search Knowledge";
   }
 
