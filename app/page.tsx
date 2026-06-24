@@ -98,6 +98,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-amber-300 to-cyan-400",
   },
   {
+    title: "Checklist Manager",
+    description:
+      "Create reusable production, quality, maintenance, safety, and training checklists with saved progress and print-friendly review.",
+    href: "/checklists",
+    accent: "from-cyan-300 to-emerald-400",
+  },
+  {
     title: "Document Control System",
     description:
       "Keep work instructions, forms, and controlled documents organized by owner and revision.",
