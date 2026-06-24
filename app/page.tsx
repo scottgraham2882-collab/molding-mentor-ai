@@ -120,14 +120,19 @@ export default function Home() {
                 A simple starting point for learning, troubleshooting, preserving knowledge, and supporting collaboration on the shop floor.
               </p>
             </div>
-            <ul className="grid gap-2 rounded-2xl bg-cyan-50 p-4 text-sm font-bold text-cyan-950 sm:grid-cols-2 lg:grid-cols-1">
-              {missionItems.map((item) => (
-                <li key={item} className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-cyan-600" aria-hidden="true" />
-                  {item}
-                </li>
-              ))}
-            </ul>
+            <div className="rounded-2xl bg-cyan-50 p-4">
+              <ul className="grid gap-2 text-sm font-bold text-cyan-950 sm:grid-cols-2 lg:grid-cols-1">
+                {missionItems.map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-cyan-600" aria-hidden="true" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/all-tools" className="mt-4 inline-flex rounded-full bg-cyan-600 px-4 py-2 text-sm font-black text-white transition hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-200">
+                View all tools →
+              </Link>
+            </div>
           </div>
         </header>
 
