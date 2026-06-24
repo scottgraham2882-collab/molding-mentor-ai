@@ -1,226 +1,163 @@
-"use client";
-
+import type { ReactNode } from "react";
 import Link from "next/link";
 
-import { RecommendedNextStepEngine } from "../../components/RecommendedNextStepEngine";
-import { FormEvent, useEffect, useMemo, useState } from "react";
-
 type CaseStudy = {
-  id: string;
   title: string;
-  date: string;
-  material: string;
-  moldNumber: string;
-  machineNumber: string;
-  defect: string;
-  problemDescription: string;
-  whatChanged: string;
-  investigationSteps: string;
-  rootCause: string;
-  solution: string;
-  result: string;
-  lessonsLearned: string;
-  teachNewTechnician: string;
+  problem: string;
+  situation: string;
+  likelyCause: string;
+  whatToCheck: string[];
+  lessonLearned: string;
 };
 
-type CaseStudyFormField = {
-  key: keyof Omit<CaseStudy, "id">;
-  label: string;
-  helper: string;
-  multiline?: boolean;
-};
-
-const storageKey = "moldingMentorCaseStudies";
-
-const emptyCaseStudy: Omit<CaseStudy, "id"> = {
-  title: "",
-  date: new Date().toISOString().slice(0, 10),
-  material: "",
-  moldNumber: "",
-  machineNumber: "",
-  defect: "",
-  problemDescription: "",
-  whatChanged: "",
-  investigationSteps: "",
-  rootCause: "",
-  solution: "",
-  result: "",
-  lessonsLearned: "",
-  teachNewTechnician: "",
-};
-
-const formFields: CaseStudyFormField[] = [
-  { key: "title", label: "Title", helper: "Short name for this troubleshooting story." },
-  { key: "date", label: "Date", helper: "When the issue happened." },
-  { key: "material", label: "Material", helper: "Example: ABS, PP, PC/ABS, nylon 6/6." },
-  { key: "moldNumber", label: "Mold number", helper: "Use the shop mold ID or tool number." },
-  { key: "machineNumber", label: "Machine number", helper: "Use the press or workcell number." },
-  { key: "defect", label: "Defect", helper: "Example: flash, splay, short shot, warp." },
-  { key: "problemDescription", label: "Problem description", helper: "Describe what the team saw in plain language.", multiline: true },
-  { key: "whatChanged", label: "What changed", helper: "Record the known change before the problem started.", multiline: true },
-  { key: "investigationSteps", label: "Investigation steps", helper: "List what was checked, measured, or ruled out.", multiline: true },
-  { key: "rootCause", label: "Root cause", helper: "The verified reason the defect happened.", multiline: true },
-  { key: "solution", label: "Solution", helper: "The corrective action that fixed the issue.", multiline: true },
-  { key: "result", label: "Result", helper: "What improved after the solution was applied.", multiline: true },
-  { key: "lessonsLearned", label: "Lessons learned", helper: "What the team should remember next time.", multiline: true },
+const caseStudies: CaseStudy[] = [
   {
-    key: "teachNewTechnician",
-    label: "What would you teach a new technician from this experience?",
-    helper: "Write the coaching point you would pass to someone learning the trade.",
-    multiline: true,
+    title: "Flash after mold change",
+    problem: "Thin plastic is showing up on the parting line shortly after a mold was changed into the press.",
+    situation:
+      "The previous job ran clean. After the new mold was set, the first parts looked acceptable, but flash started appearing as the mold warmed up and production continued.",
+    likelyCause:
+      "The mold may not be fully closed at the flashing area because of dirt, trapped plastic, clamp setup, worn shutoffs, or too much cavity pressure during pack and hold.",
+    whatToCheck: [
+      "Cleanliness of the parting line, vents, slides, lifters, and shutoff faces.",
+      "Clamp tonnage, mold protection, tie-bar balance, and whether the mold is seating evenly.",
+      "Actual fill, transfer, pack, and hold settings compared with the approved setup sheet.",
+      "Whether flash begins during fill or only after pack pressure is applied.",
+    ],
+    lessonLearned:
+      "Do not chase flash with random pressure changes first. Find the escape path, confirm the setup, then make one controlled process adjustment if needed.",
+  },
+  {
+    title: "Short shot after material change",
+    problem: "The part no longer fills completely after changing to a new material lot or color blend.",
+    situation:
+      "Production was making full parts before the hopper change. Soon after the new material was loaded, the end of fill and a thin rib started coming up short.",
+    likelyCause:
+      "The new material condition may have changed flow. Possible causes include the wrong resin, moisture, cold material, feed interruption, blocked gate, pressure limit, or a shot size that is no longer enough.",
+    whatToCheck: [
+      "Correct resin grade, lot number, regrind level, colorant, and dryer settings.",
+      "Hopper feed, throat condition, cushion, shot size, fill time, and peak pressure.",
+      "Nozzle, sprue, runner, gate, and vents for cold slugs or restrictions.",
+      "Whether the machine is pressure limited before the cavity fills.",
+    ],
+    lessonLearned:
+      "A short shot is a fill problem first. Prove the cavity is filling before using hold pressure to solve a problem that happens during injection.",
+  },
+  {
+    title: "Sink marks on thick section",
+    problem: "A visible sink mark appears over a boss, rib, or other thick section of the molded part.",
+    situation:
+      "The part looks mostly full, but a dull depression appears as the part cools. The sink is always in the same heavy-wall area.",
+    likelyCause:
+      "The thick section is shrinking more than the surrounding wall. The gate may be freezing before enough plastic is packed into the area, or the part design may create a heavy section that is difficult to pack.",
+    whatToCheck: [
+      "Part wall thickness around the sink area and whether ribs or bosses are too thick.",
+      "Gate seal time using part weight or another approved gate seal study method.",
+      "Pack pressure, hold time, cushion stability, and transfer position.",
+      "Mold cooling near the thick section and whether cooling lines are blocked or uneven.",
+    ],
+    lessonLearned:
+      "Sink is usually about shrinkage balance. Pack the part while the gate is open, verify cooling, and escalate design concerns when the section is too thick.",
+  },
+  {
+    title: "Burn marks near end of fill",
+    problem: "Dark burn marks appear near the last area of the cavity to fill.",
+    situation:
+      "The defect repeats in the same location. The team recently increased fill speed to improve the surface finish in another area of the part.",
+    likelyCause:
+      "Air or gas is trapped at the end of fill and compressed by fast-moving plastic. Dirty or blocked vents can make the trapped gas burn the material.",
+    whatToCheck: [
+      "Exact burn location by cavity and whether it matches the end-of-fill area.",
+      "Vent lands, inserts, parting line, and any trapped-gas locations for contamination.",
+      "Fill speed profile, peak pressure, and whether the speed increase made the burn worse.",
+      "Material residence time and purge condition if burns appear away from the end of fill.",
+    ],
+    lessonLearned:
+      "End-of-fill burns often point to venting. Give the gas a way out before blaming the resin or lowering every barrel temperature.",
+  },
+  {
+    title: "Warpage after cooling change",
+    problem: "Parts begin bending or twisting after a cooling-time or water-temperature change.",
+    situation:
+      "The part passed inspection earlier in the shift. After cooling was shortened to improve cycle time, parts looked acceptable at the press but warped later on the table.",
+    likelyCause:
+      "The part is being ejected too hot or cooling unevenly. Uneven shrinkage, poor water flow, hot spots, or stacking warm parts can let the part move after ejection.",
+    whatToCheck: [
+      "Actual cooling time, mold temperature, water temperature, and water flow against the approved process.",
+      "Part temperature at ejection and part dimensions after a consistent cooling period.",
+      "Whether parts are stacked, bent, clipped, or constrained while still warm.",
+      "Pack and hold settings only after cooling and handling checks are stable.",
+    ],
+    lessonLearned:
+      "Warp can show up after the part leaves the mold. Judge parts at a consistent time, protect cooling control, and avoid stacking hot parts in a way that trains in distortion.",
   },
 ];
 
-const relatedLinks = [
-  { label: "Defect Library", href: "/defects", helper: "Review symptoms and first checks." },
-  { label: "Troubleshooting Wizard", href: "/troubleshooting", helper: "Walk through a guided defect path." },
-  { label: "AI Coach", href: "/coach", helper: "Ask for plain-language next steps." },
-  { label: "Knowledge Search", href: "/knowledge-search", helper: "Search saved learning and tools." },
-];
-
 export default function CaseStudiesPage() {
-  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
-  const [form, setForm] = useState(emptyCaseStudy);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState({ defect: "", material: "", mold: "", machine: "" });
-
-  useEffect(() => {
-    const saved = window.localStorage.getItem(storageKey);
-    if (saved) setCaseStudies(JSON.parse(saved) as CaseStudy[]);
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem(storageKey, JSON.stringify(caseStudies));
-  }, [caseStudies]);
-
-  const filteredCaseStudies = useMemo(() => {
-    const search = searchTerm.trim().toLowerCase();
-    return caseStudies.filter((study) => {
-      const combined = Object.values(study).join(" ").toLowerCase();
-      const matchesSearch = !search || combined.includes(search);
-      const matchesDefect = !filters.defect || study.defect.toLowerCase().includes(filters.defect.toLowerCase());
-      const matchesMaterial = !filters.material || study.material.toLowerCase().includes(filters.material.toLowerCase());
-      const matchesMold = !filters.mold || study.moldNumber.toLowerCase().includes(filters.mold.toLowerCase());
-      const matchesMachine = !filters.machine || study.machineNumber.toLowerCase().includes(filters.machine.toLowerCase());
-      return matchesSearch && matchesDefect && matchesMaterial && matchesMold && matchesMachine;
-    });
-  }, [caseStudies, filters, searchTerm]);
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!form.title.trim()) return;
-
-    if (editingId) {
-      setCaseStudies((current) => current.map((study) => (study.id === editingId ? { ...form, id: editingId } : study)));
-    } else {
-      setCaseStudies((current) => [{ ...form, id: crypto.randomUUID() }, ...current]);
-    }
-    setForm({ ...emptyCaseStudy, date: new Date().toISOString().slice(0, 10) });
-    setEditingId(null);
-  }
-
-  function editCaseStudy(study: CaseStudy) {
-    const { id, ...editableFields } = study;
-    setForm(editableFields);
-    setEditingId(id);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function deleteCaseStudy(id: string) {
-    setCaseStudies((current) => current.filter((study) => study.id !== id));
-    if (editingId === id) setEditingId(null);
-  }
-
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
-        <header className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-2xl shadow-cyan-950/30 sm:p-8">
-          <Link href="/" className="inline-flex rounded-full border border-cyan-300/30 px-4 py-2 text-sm font-semibold text-cyan-200 hover:bg-cyan-300/10">← Back home</Link>
-          <p className="mt-8 text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Case Studies Library</p>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">Save real molding troubleshooting stories</h1>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">Capture what happened, what changed, how the team investigated, and what a new technician should learn from the experience.</p>
+        <header className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-2xl shadow-cyan-950/30 sm:p-8 lg:p-10">
+          <Link
+            href="/"
+            className="inline-flex rounded-full border border-cyan-300/30 px-4 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-200 hover:bg-cyan-300/10"
+          >
+            ← Back home
+          </Link>
+          <p className="mt-8 text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Saved Examples</p>
+          <h1 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
+            Case studies for practical molding troubleshooting
+          </h1>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">
+            Learn from realistic shop-floor examples that help teams troubleshoot, preserve knowledge, and coach newer molders with simple language.
+          </p>
         </header>
 
-        <section className="mt-6 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-          <form onSubmit={handleSubmit} className="rounded-3xl border border-cyan-300/20 bg-slate-900/80 p-4 sm:p-6">
-            <h2 className="text-2xl font-bold text-white">{editingId ? "Edit case study" : "Create case study"}</h2>
-            <div className="mt-5 grid gap-4 sm:grid-cols-2">
-              {formFields.map((field) => (
-                <label key={field.key} className={field.multiline ? "sm:col-span-2" : ""}>
-                  <span className="text-sm font-bold text-slate-100">{field.label}</span>
-                  <span className="mt-1 block text-xs text-slate-400">{field.helper}</span>
-                  {field.multiline ? (
-                    <textarea value={form[field.key]} onChange={(event) => setForm({ ...form, [field.key]: event.target.value })} className="mt-2 min-h-24 w-full rounded-2xl border border-white/10 bg-slate-950/70 p-3 text-sm text-white outline-none focus:border-cyan-300" />
-                  ) : (
-                    <input type={field.key === "date" ? "date" : "text"} value={form[field.key]} onChange={(event) => setForm({ ...form, [field.key]: event.target.value })} className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 p-3 text-sm text-white outline-none focus:border-cyan-300" />
-                  )}
-                </label>
-              ))}
-            </div>
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-              <button className="rounded-2xl bg-cyan-300 px-5 py-3 text-sm font-black text-slate-950 hover:bg-cyan-200">{editingId ? "Save changes" : "Save case study"}</button>
-              {editingId && <button type="button" onClick={() => { setEditingId(null); setForm(emptyCaseStudy); }} className="rounded-2xl border border-white/15 px-5 py-3 text-sm font-bold text-slate-200 hover:bg-white/10">Cancel edit</button>}
-            </div>
-          </form>
-
-          <aside className="space-y-4">
-            <section className="rounded-3xl border border-emerald-300/20 bg-emerald-300/10 p-5">
-              <h2 className="text-xl font-bold text-white">Beginner tip</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-300">A good case study tells the next person what not to guess at. Start with the visible defect, then document the checks that proved the root cause.</p>
-            </section>
-            <section className="rounded-3xl border border-white/10 bg-slate-900/80 p-5">
-              <h2 className="text-xl font-bold text-white">Related links</h2>
-              <div className="mt-4 grid gap-3">
-                {relatedLinks.map((link) => <Link key={link.href} href={link.href} className="rounded-2xl border border-white/10 bg-white/5 p-4 hover:border-cyan-300/40"><span className="font-bold text-cyan-100">{link.label}</span><span className="mt-1 block text-sm text-slate-400">{link.helper}</span></Link>)}
+        <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {caseStudies.map((study, index) => (
+            <article
+              key={study.title}
+              className="flex h-full flex-col rounded-3xl border border-white/10 bg-slate-900/80 p-5 shadow-xl shadow-slate-950/20"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <p className="rounded-full bg-cyan-300 px-3 py-1 text-xs font-black text-slate-950">Case {index + 1}</p>
               </div>
-            </section>
-          </aside>
-        </section>
+              <h2 className="mt-4 text-2xl font-bold text-white">{study.title}</h2>
 
-        <section className="mt-6 rounded-3xl border border-white/10 bg-slate-900/75 p-4 sm:p-6">
-          <h2 className="text-2xl font-bold text-white">Search and filter case studies</h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
-            <input aria-label="Search case studies" placeholder="Search all notes" value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} className="rounded-2xl border border-white/10 bg-slate-950/70 p-3 text-sm text-white outline-none focus:border-cyan-300 lg:col-span-2" />
-            <input placeholder="Filter defect" value={filters.defect} onChange={(event) => setFilters({ ...filters, defect: event.target.value })} className="rounded-2xl border border-white/10 bg-slate-950/70 p-3 text-sm text-white outline-none focus:border-cyan-300" />
-            <input placeholder="Filter material" value={filters.material} onChange={(event) => setFilters({ ...filters, material: event.target.value })} className="rounded-2xl border border-white/10 bg-slate-950/70 p-3 text-sm text-white outline-none focus:border-cyan-300" />
-            <input placeholder="Filter mold" value={filters.mold} onChange={(event) => setFilters({ ...filters, mold: event.target.value })} className="rounded-2xl border border-white/10 bg-slate-950/70 p-3 text-sm text-white outline-none focus:border-cyan-300" />
-            <input placeholder="Filter machine" value={filters.machine} onChange={(event) => setFilters({ ...filters, machine: event.target.value })} className="rounded-2xl border border-white/10 bg-slate-950/70 p-3 text-sm text-white outline-none focus:border-cyan-300" />
-          </div>
-        </section>
-
-        <section className="mt-6 grid gap-4 md:grid-cols-2">
-          {filteredCaseStudies.map((study) => (
-            <article key={study.id} className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-xl shadow-slate-950/20">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div><p className="text-sm font-semibold text-cyan-300">{study.date || "No date"}</p><h2 className="mt-1 text-2xl font-bold text-white">{study.title}</h2></div>
-                <div className="flex gap-2"><button onClick={() => editCaseStudy(study)} className="rounded-xl border border-cyan-300/30 px-3 py-2 text-xs font-bold text-cyan-100">Edit</button><button onClick={() => deleteCaseStudy(study.id)} className="rounded-xl border border-rose-300/30 px-3 py-2 text-xs font-bold text-rose-100">Delete</button></div>
-              </div>
-              <dl className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
-                <Info label="Material" value={study.material} /><Info label="Mold" value={study.moldNumber} /><Info label="Machine" value={study.machineNumber} /><Info label="Defect" value={study.defect} />
-              </dl>
-              <div className="mt-4 space-y-4 text-sm leading-6 text-slate-300">
-                <Narrative title="Problem" value={study.problemDescription} /><Narrative title="What changed" value={study.whatChanged} /><Narrative title="Investigation" value={study.investigationSteps} /><Narrative title="Root cause" value={study.rootCause} /><Narrative title="Solution" value={study.solution} /><Narrative title="Result" value={study.result} /><Narrative title="Lessons learned" value={study.lessonsLearned} /><Narrative title="Teach a new technician" value={study.teachNewTechnician} />
+              <div className="mt-5 space-y-4 text-sm leading-6 text-slate-300">
+                <CaseSection title="Problem">{study.problem}</CaseSection>
+                <CaseSection title="Situation">{study.situation}</CaseSection>
+                <CaseSection title="Likely Cause">{study.likelyCause}</CaseSection>
+                <section>
+                  <h3 className="text-xs font-black uppercase tracking-[0.2em] text-cyan-300">What To Check</h3>
+                  <ul className="mt-2 list-disc space-y-2 pl-5">
+                    {study.whatToCheck.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </section>
+                <CaseSection title="Lesson Learned">{study.lessonLearned}</CaseSection>
               </div>
             </article>
           ))}
-          {filteredCaseStudies.length === 0 && <p className="rounded-3xl border border-dashed border-white/15 p-8 text-center text-slate-400 md:col-span-2">No case studies found. Create one above or clear your search filters.</p>}
         </section>
 
-        <RecommendedNextStepEngine
-          context="case-study"
-          intro="After saving or reviewing a case, use it to find a lesson learned or a similar problem."
-        />
+        <section className="mt-6 rounded-3xl border border-emerald-300/20 bg-emerald-300/10 p-5 sm:p-6">
+          <h2 className="text-2xl font-bold text-white">How to use these examples</h2>
+          <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-300 sm:text-base">
+            Review one case during a shift meeting, ask the team what they would check first, then compare answers with the checklist. Keep the focus on learning and collaboration instead of blame.
+          </p>
+        </section>
       </div>
     </main>
   );
 }
 
-function Info({ label, value }: { label: string; value: string }) {
-  return <div className="rounded-2xl bg-slate-950/50 p-3"><dt className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">{label}</dt><dd className="mt-1 text-slate-100">{value || "—"}</dd></div>;
-}
-
-function Narrative({ title, value }: { title: string; value: string }) {
-  if (!value.trim()) return null;
-  return <section><h3 className="text-xs font-black uppercase tracking-[0.2em] text-cyan-300">{title}</h3><p className="mt-1 whitespace-pre-line">{value}</p></section>;
+function CaseSection({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section>
+      <h3 className="text-xs font-black uppercase tracking-[0.2em] text-cyan-300">{title}</h3>
+      <p className="mt-1">{children}</p>
+    </section>
+  );
 }
