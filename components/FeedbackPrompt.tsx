@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { saveLearningEvent } from "../lib/learning-data";
+
 export type FeedbackResponse = "yes" | "no";
 
 export type StoredFeedback = {
@@ -54,12 +56,22 @@ export function FeedbackPrompt({ page }: { page: string }) {
   function handleSave() {
     if (!response) return;
 
+    const trimmedComment = comment.trim();
+
     saveStoredFeedback({
       id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       page,
       response,
-      comment: comment.trim(),
+      comment: trimmedComment,
       createdAt: new Date().toISOString(),
+    });
+    saveLearningEvent({
+      type: "user_feedback",
+      tool: page,
+      title: response === "yes" ? "Helpful feedback" : "Needs improvement feedback",
+      summary: trimmedComment || "No written comment provided.",
+      feedbackResponse: response,
+      metadata: { page },
     });
     setSaved(true);
   }

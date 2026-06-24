@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { saveLearningEvent } from "../../lib/learning-data";
+
 type ProblemOption = {
   symptom: string;
   likelyDefect: string;
@@ -26,6 +28,18 @@ const problemOptions: ProblemOption[] = [
 
 export default function ProblemPage() {
   const [selectedSymptom, setSelectedSymptom] = useState(problemOptions[0].symptom);
+
+  function selectSymptom(option: ProblemOption) {
+    setSelectedSymptom(option.symptom);
+    saveLearningEvent({
+      type: "defect_selection",
+      tool: "Problem helper",
+      title: option.symptom,
+      summary: option.safeFirstAction,
+      defect: option.likelyDefect,
+      metadata: { checkFirst: option.checkFirst },
+    });
+  }
   const selectedProblem = useMemo(() => problemOptions.find((option) => option.symptom === selectedSymptom) ?? problemOptions[0], [selectedSymptom]);
 
   return (
@@ -43,7 +57,7 @@ export default function ProblemPage() {
             <h2 className="text-2xl font-black text-white">What are you seeing?</h2>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               {problemOptions.map((option) => (
-                <button key={option.symptom} type="button" onClick={() => setSelectedSymptom(option.symptom)} className={`rounded-2xl border p-4 text-left text-base font-black transition focus:outline-none focus:ring-4 focus:ring-cyan-300/20 ${selectedSymptom === option.symptom ? "border-cyan-200 bg-cyan-300 text-slate-950" : "border-white/10 bg-slate-950/70 text-slate-100 hover:border-cyan-300/50 hover:bg-white/10"}`}>
+                <button key={option.symptom} type="button" onClick={() => selectSymptom(option)} className={`rounded-2xl border p-4 text-left text-base font-black transition focus:outline-none focus:ring-4 focus:ring-cyan-300/20 ${selectedSymptom === option.symptom ? "border-cyan-200 bg-cyan-300 text-slate-950" : "border-white/10 bg-slate-950/70 text-slate-100 hover:border-cyan-300/50 hover:bg-white/10"}`}>
                   {option.symptom}
                 </button>
               ))}
