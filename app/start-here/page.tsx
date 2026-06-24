@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { getTool } from "../../lib/tool-registry";
 
 type ShopRole = "Operator" | "Process Technician" | "Supervisor" | "Manager";
 type HelpNeed =
@@ -12,10 +13,20 @@ type HelpNeed =
   | "Manage training"
   | "View reports";
 
-type Tool = {
+type RecommendedTool = {
   title: string;
   href: string;
   plainText: string;
+};
+
+const recommendation = (href: string, plainText?: string): RecommendedTool => {
+  const tool = getTool(href);
+
+  return {
+    title: tool.title,
+    href: tool.href,
+    plainText: plainText ?? tool.description,
+  };
 };
 
 const roleStorageKey = "moldingMentorSelectedRole";
@@ -30,36 +41,36 @@ const needs: HelpNeed[] = [
   "View reports",
 ];
 
-const toolMap: Record<HelpNeed, Tool[]> = {
+const toolMap: Record<HelpNeed, RecommendedTool[]> = {
   "Troubleshoot a part defect": [
-    { title: "Troubleshooting Wizard", href: "/troubleshooting", plainText: "Answer simple questions and get likely causes." },
-    { title: "Defect Guide", href: "/defects", plainText: "Match the part problem to common fixes." },
-    { title: "Photo Analysis", href: "/photo-analysis", plainText: "Use a part photo when you are not sure what to call the defect." },
+    recommendation("/troubleshooting", "Answer simple questions and get likely causes."),
+    recommendation("/defects", "Match the part problem to common fixes."),
+    recommendation("/photo-analysis"),
   ],
   "Learn molding basics": [
-    { title: "Operator Safety & Startup", href: "/training/operator-safety-startup", plainText: "Start with safe machine and startup basics." },
-    { title: "Scientific Molding Training", href: "/lessons", plainText: "Learn the molding ideas in short lessons." },
-    { title: "Process Window Lesson", href: "/lessons/process-window", plainText: "See why stable settings matter." },
+    recommendation("/training/operator-safety-startup"),
+    recommendation("/lessons", "Learn the molding ideas in short lessons."),
+    recommendation("/lessons/process-window"),
   ],
   "Run production": [
-    { title: "Live Production Board", href: "/production/live-board", plainText: "See what is running and what needs attention." },
-    { title: "Startup Approval", href: "/startup-approval", plainText: "Check the job before full production." },
-    { title: "Shift Handoff", href: "/shift-handoff", plainText: "Pass clear notes to the next shift." },
+    recommendation("/production/live-board", "See what is running and what needs attention."),
+    recommendation("/startup-approval", "Check the job before full production."),
+    recommendation("/shift-handoff", "Pass clear notes to the next shift."),
   ],
   "Check quality": [
-    { title: "First Piece Approval", href: "/quality/first-piece-approval", plainText: "Confirm the first good parts before running." },
-    { title: "Quality Hold / Containment", href: "/quality/containment", plainText: "Control suspect parts and keep them separated." },
-    { title: "Corrective Action", href: "/quality/corrective-action", plainText: "Track the fix so the issue does not repeat." },
+    recommendation("/quality/first-piece-approval", "Confirm the first good parts before running."),
+    recommendation("/quality/containment", "Control suspect parts and keep them separated."),
+    recommendation("/quality/corrective-action", "Track the fix so the issue does not repeat."),
   ],
   "Manage training": [
-    { title: "Training Assignments", href: "/training/assignments", plainText: "Give people the right training work." },
-    { title: "Skills Matrix", href: "/training/skills-matrix", plainText: "See who is trained and where gaps exist." },
-    { title: "Training Plan Builder", href: "/training/plan-builder", plainText: "Build a simple plan for each employee." },
+    recommendation("/training/assignments", "Give people the right training work."),
+    recommendation("/training/skills-matrix", "See who is trained and where gaps exist."),
+    recommendation("/training/plan-builder", "Build a simple plan for each employee."),
   ],
   "View reports": [
-    { title: "KPI Dashboard", href: "/reports/kpi-dashboard", plainText: "Review the main plant numbers." },
-    { title: "Daily Report", href: "/reports/daily", plainText: "Check today’s production, scrap, downtime, and notes." },
-    { title: "Weekly Report", href: "/reports/weekly", plainText: "Review trends for the week." },
+    recommendation("/reports/kpi-dashboard", "Review the main plant numbers."),
+    recommendation("/reports/daily", "Check today’s production, scrap, downtime, and notes."),
+    recommendation("/reports/weekly", "Review trends for the week."),
   ],
 };
 

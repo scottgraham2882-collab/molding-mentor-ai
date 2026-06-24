@@ -1,9 +1,20 @@
 import Link from "next/link";
+import { getTool } from "../../lib/tool-registry";
 
 type RoadmapStep = {
   title: string;
   href?: string;
   why: string;
+};
+
+const roadmapStep = (href: string, why: string, title?: string): RoadmapStep => {
+  const tool = getTool(href);
+
+  return {
+    title: title ?? tool.title,
+    href: tool.href,
+    why,
+  };
 };
 
 type Roadmap = {
@@ -19,31 +30,11 @@ const roadmaps: Roadmap[] = [
     audience: "For people running presses, checking parts, and reporting issues during production.",
     focus: "Build common language first, then learn what defects look like and how to respond safely.",
     steps: [
-      {
-        title: "Molding Dictionary",
-        href: "/molding-dictionary",
-        why: "Shared terms help operators explain what they see clearly during handoffs, checks, and troubleshooting conversations.",
-      },
-      {
-        title: "Defect Library",
-        href: "/defects",
-        why: "Recognizing defects by name helps the team sort parts faster and describe quality problems consistently.",
-      },
-      {
-        title: "Troubleshooting Checklists",
-        href: "/checklists",
-        why: "Checklists keep first responses simple, repeatable, and focused on observation before changing the process.",
-      },
-      {
-        title: "Training Modules",
-        href: "/training/role-paths",
-        why: "Role-based modules help operators keep building skills after the basics are understood.",
-      },
-      {
-        title: "Knowledge Vault Examples",
-        href: "/knowledge-vault",
-        why: "Reviewing saved examples shows how previous teams captured problems, fixes, and prevention notes.",
-      },
+      roadmapStep("/molding-dictionary", "Shared terms help operators explain what they see clearly during handoffs, checks, and troubleshooting conversations."),
+      roadmapStep("/defects", "Recognizing defects by name helps the team sort parts faster and describe quality problems consistently.", "Defect Library"),
+      roadmapStep("/checklists", "Checklists keep first responses simple, repeatable, and focused on observation before changing the process.", "Troubleshooting Checklists"),
+      roadmapStep("/training/role-paths", "Role-based modules help operators keep building skills after the basics are understood.", "Training Modules"),
+      roadmapStep("/knowledge-vault", "Reviewing saved examples shows how previous teams captured problems, fixes, and prevention notes.", "Knowledge Vault Examples"),
     ],
   },
   {
@@ -51,31 +42,11 @@ const roadmaps: Roadmap[] = [
     audience: "For people adjusting processes, supporting startups, and helping solve repeat molding problems.",
     focus: "Start with root cause thinking, then connect process adjustments to documented learning.",
     steps: [
-      {
-        title: "Root Cause Coach",
-        href: "/root-cause-coach",
-        why: "Root cause thinking helps technicians avoid chasing symptoms and focus on what changed.",
-      },
-      {
-        title: "Process Adjustment Guide",
-        href: "/process-adjustment-guide",
-        why: "A structured adjustment sequence supports safer decisions and better communication before process changes are made.",
-      },
-      {
-        title: "Scientific Molding Lessons",
-        href: "/lessons",
-        why: "Scientific molding concepts make process decisions easier to explain, repeat, and improve over time.",
-      },
-      {
-        title: "Defect Library",
-        href: "/defects",
-        why: "Defect references connect symptoms to possible causes so technicians can choose better next checks.",
-      },
-      {
-        title: "Advanced Troubleshooting Resources",
-        href: "/troubleshooting",
-        why: "Guided troubleshooting resources help technicians organize evidence and decide what to verify next.",
-      },
+      roadmapStep("/root-cause-coach", "Root cause thinking helps technicians avoid chasing symptoms and focus on what changed."),
+      roadmapStep("/process-adjustment-guide", "A structured adjustment sequence supports safer decisions and better communication before process changes are made."),
+      roadmapStep("/lessons", "Scientific molding concepts make process decisions easier to explain, repeat, and improve over time.", "Scientific Molding Lessons"),
+      roadmapStep("/defects", "Defect references connect symptoms to possible causes so technicians can choose better next checks.", "Defect Library"),
+      roadmapStep("/troubleshooting", "Guided troubleshooting resources help technicians organize evidence and decide what to verify next.", "Advanced Troubleshooting Resources"),
     ],
   },
   {
@@ -83,31 +54,11 @@ const roadmaps: Roadmap[] = [
     audience: "For shift leaders, supervisors, and team leads supporting people and production flow.",
     focus: "Keep shifts aligned, grow team capability, and preserve what the team learns.",
     steps: [
-      {
-        title: "Shift Handoff Log",
-        href: "/shift-handoff",
-        why: "Clear handoffs reduce repeated questions and keep open issues visible from one shift to the next.",
-      },
-      {
-        title: "Skills Matrix",
-        href: "/skills-matrix",
-        why: "A skills view helps supervisors identify coverage gaps and plan practical coaching conversations.",
-      },
-      {
-        title: "Knowledge Vault",
-        href: "/knowledge-vault",
-        why: "Preserving lessons learned keeps fixes from living only in one person's memory.",
-      },
-      {
-        title: "Root Cause Coach",
-        href: "/root-cause-coach",
-        why: "Supervisors can use root cause structure to guide team problem solving without jumping to blame.",
-      },
-      {
-        title: "Team Development and Knowledge Sharing",
-        href: "/training/role-paths",
-        why: "Shared development paths help leaders turn daily production learning into stronger team capability.",
-      },
+      roadmapStep("/shift-handoff", "Clear handoffs reduce repeated questions and keep open issues visible from one shift to the next.", "Shift Handoff Log"),
+      roadmapStep("/training/skills-matrix", "A skills view helps supervisors identify coverage gaps and plan practical coaching conversations."),
+      roadmapStep("/knowledge-vault", "Preserving lessons learned keeps fixes from living only in one person's memory."),
+      roadmapStep("/root-cause-coach", "Supervisors can use root cause structure to guide team problem solving without jumping to blame."),
+      roadmapStep("/training/role-paths", "Shared development paths help leaders turn daily production learning into stronger team capability.", "Team Development and Knowledge Sharing"),
     ],
   },
 ];
