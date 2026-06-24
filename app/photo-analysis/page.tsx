@@ -7,6 +7,7 @@ import { RecommendedNextStepEngine } from "../../components/RecommendedNextStepE
 import { ChangeEvent, useMemo, useState } from "react";
 
 import { defectGuides } from "../../lib/defect-data";
+import { saveLearningEvent } from "../../lib/learning-data";
 
 type ObservationKey = "flash" | "short-shot" | "silver-streaks" | "burn-marks" | "voids" | "sink" | "warp" | "color" | "sticking";
 type LocationKey = "near-gate" | "end-of-fill" | "parting-line" | "ejector-pins" | "thick-section" | "random";
@@ -181,6 +182,18 @@ export default function PhotoAnalysisPage() {
 
   const result = useMemo(() => buildGuidedAnalysis(observation, location, Boolean(photoUrl)), [location, observation, photoUrl]);
 
+  function savePhotoAnalysis(nextObservation: ObservationKey, nextLocation: LocationKey, hasPhoto: boolean) {
+    const nextResult = buildGuidedAnalysis(nextObservation, nextLocation, hasPhoto);
+    saveLearningEvent({
+      type: "photo_analysis_result",
+      tool: "Defect Photo Analysis",
+      title: nextResult.likelyDefect,
+      summary: nextResult.safeFirstActions[0],
+      defect: nextResult.likelyDefect,
+      metadata: { observation: nextObservation, location: nextLocation, hasPhoto },
+    });
+  }
+
   function handlePhotoChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) {
@@ -248,7 +261,7 @@ export default function PhotoAnalysisPage() {
                 {observationOptions.map((option) => (
                   <label key={option.key} className="rounded-2xl border border-white/10 bg-slate-900/70 p-4 transition has-[:checked]:border-cyan-300/70 has-[:checked]:bg-cyan-300/10">
                     <span className="flex items-start gap-3">
-                      <input type="radio" name="observation" value={option.key} checked={observation === option.key} onChange={() => setObservation(option.key)} className="mt-1" />
+                      <input type="radio" name="observation" value={option.key} checked={observation === option.key} onChange={() => { setObservation(option.key); savePhotoAnalysis(option.key, location, Boolean(photoUrl)); }} className="mt-1" />
                       <span>
                         <span className="block font-bold text-white">{option.label}</span>
                         <span className="mt-1 block text-sm leading-5 text-slate-400">{option.beginnerHint}</span>
@@ -268,7 +281,7 @@ export default function PhotoAnalysisPage() {
                 {locationOptions.map((option) => (
                   <label key={option.key} className="rounded-2xl border border-white/10 bg-slate-900/70 p-4 transition has-[:checked]:border-cyan-300/70 has-[:checked]:bg-cyan-300/10">
                     <span className="flex items-start gap-3">
-                      <input type="radio" name="location" value={option.key} checked={location === option.key} onChange={() => setLocation(option.key)} className="mt-1" />
+                      <input type="radio" name="location" value={option.key} checked={location === option.key} onChange={() => { setLocation(option.key); savePhotoAnalysis(observation, option.key, Boolean(photoUrl)); }} className="mt-1" />
                       <span>
                         <span className="block font-bold text-white">{option.label}</span>
                         <span className="mt-1 block text-sm leading-5 text-slate-400">{option.beginnerHint}</span>
