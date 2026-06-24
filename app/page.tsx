@@ -586,6 +586,15 @@ const dashboardCards: DashboardCard[] = [
   },
 
   {
+    title: "Knowledge Vault",
+    plainSubtitle: "Store validated shop-floor answers in one searchable place",
+    description:
+      "Create, save, search, filter, edit, delete, and print approved shop-floor knowledge by machine, mold, part, material, source, status, and tags.",
+    href: "/knowledge-vault",
+    accent: "from-blue-300 to-cyan-400",
+    keywords: ["knowledge vault", "tribal knowledge", "validated answers", "setup tips", "troubleshooting fixes", "shop floor answers"],
+  },
+  {
     title: "Knowledge Search",
     plainSubtitle: "Find answers across defects, lessons, materials, and molding tools",
     description:
@@ -963,7 +972,7 @@ function RoleToolList({
 const importantToolHrefsByCategory: Record<string, Set<string>> = {
   "Fix a Problem": new Set(["/troubleshooting", "/coach", "/photo-analysis", "/defects"]),
   "Learn Molding": new Set(["/learning-paths", "/lessons", "/scientific-molding/studies", "/scenarios"]),
-  "Search Knowledge": new Set(["/knowledge-search", "/case-studies", "/knowledge-base"]),
+  "Search Knowledge": new Set(["/knowledge-search", "/case-studies", "/knowledge-base", "/knowledge-vault"]),
   "More Tools": new Set(["/process-sheet-builder", "/production/live-board", "/scrap", "/oee", "/materials/resin-drying", "/calculators"]),
 };
 
@@ -1178,7 +1187,7 @@ const startHereActions = [
   { label: "I Have a Defect", helper: "Identify the visible problem and choose a safe first check.", href: "/problem", icon: "🆘" },
   { label: "I Need to Learn", helper: "Follow beginner-friendly learning paths and real shop scenarios.", href: "/learning-paths", icon: "🎓" },
   { label: "I Need an Answer", helper: "Ask the coach or search the knowledge in plain language.", href: "/coach", icon: "💬" },
-  { label: "I Want to Save Knowledge", helper: "Capture lessons learned so the next person starts smarter.", href: "/knowledge-base", icon: "🧠" },
+  { label: "I Want to Save Knowledge", helper: "Capture validated answers so the next person starts smarter.", href: "/knowledge-vault", icon: "🧠" },
 ];
 
 const commonProblemShortcuts = [
