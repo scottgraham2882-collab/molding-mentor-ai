@@ -68,6 +68,13 @@ const dashboardCards: DashboardCard[] = [
     accent: "from-lime-300 to-cyan-400",
   },
   {
+    title: "Process Guide",
+    description:
+      "Follow a safe process-control sequence for setup verification, material checks, fill, pack, cooling, recovery, and change validation.",
+    href: "/process-guide",
+    accent: "from-emerald-300 to-cyan-400",
+  },
+  {
     title: "Electronic Process Sheet Approval",
     description:
       "Review and approve process sheet changes before a setup is used again.",
