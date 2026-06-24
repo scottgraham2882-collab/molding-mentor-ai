@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BeginnerLearningFooter from "../components/BeginnerLearningFooter";
 import FirstTimeWalkthrough from "../components/FirstTimeWalkthrough";
 import "./globals.css";
 
@@ -16,6 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {children}
+        <BeginnerLearningFooter />
         <FirstTimeWalkthrough />
       </body>
     </html>

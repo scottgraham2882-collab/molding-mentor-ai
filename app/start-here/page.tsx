@@ -103,13 +103,14 @@ export default function StartHerePage() {
           <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Start Here</p>
           <h1 className="mt-3 text-4xl font-black tracking-tight text-white sm:text-6xl">Let’s find your first tools.</h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">
-            Pick your job and what you need help with. We will point you to the best 3 tools to open first.
+            Pick your job and the problem in front of you. We will point you to three safe tools to open first, with no molding experience required.
           </p>
         </header>
 
         <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-4 sm:p-6">
           <p className="text-sm font-black uppercase tracking-[0.2em] text-emerald-300">Step 1</p>
           <h2 className="mt-2 text-2xl font-black text-white">What is your role?</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-300"><strong className="text-slate-100">What is this?</strong> Choose the job closest to what you do today. This only changes the recommendations on this page.</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {roles.map((role) => (
               <button
@@ -133,6 +134,7 @@ export default function StartHerePage() {
         <section className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-4 sm:p-6">
           <p className="text-sm font-black uppercase tracking-[0.2em] text-cyan-300">Step 2</p>
           <h2 className="mt-2 text-2xl font-black text-white">What do you need help with?</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-300"><strong className="text-slate-100">Example:</strong> choose “Troubleshoot a part defect” for flash, short shots, splay, burns, sinks, or warped parts.</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {needs.map((need) => (
               <button
@@ -155,6 +157,7 @@ export default function StartHerePage() {
         <section className="rounded-[2rem] border border-amber-300/30 bg-gradient-to-br from-amber-300/15 via-slate-900 to-cyan-300/10 p-4 shadow-2xl shadow-amber-950/20 sm:p-6">
           <p className="text-sm font-black uppercase tracking-[0.2em] text-amber-200">Step 3</p>
           <h2 className="mt-2 text-2xl font-black text-white">Open these 3 first</h2>
+          <p className="mt-2 text-sm leading-6 text-amber-50/90"><strong>What is this?</strong> Start with Tool 1, then use Tool 2 or 3 if you still need help. Do not change machine settings until you understand what changed.</p>
           <p className="mt-2 text-sm leading-6 text-amber-50/90">Based on: {selectedRole} · {selectedNeed}</p>
           <div className="mt-5 grid gap-3 lg:grid-cols-3">
             {recommendedTools.map((tool, index) => (
@@ -169,7 +172,7 @@ export default function StartHerePage() {
                   <p className="mt-2 text-sm leading-6 text-slate-300">{tool.plainText}</p>
                 </div>
                 <p className="mt-5 flex items-center justify-between text-sm font-black text-cyan-100">
-                  <span>Open tool</span>
+                  <span>Open this tool</span>
                   <span aria-hidden="true">→</span>
                 </p>
               </Link>

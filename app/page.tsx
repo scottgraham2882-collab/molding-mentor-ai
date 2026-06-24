@@ -63,21 +63,21 @@ const dashboardCards: DashboardCard[] = [
   {
     title: "Process Sheet Builder",
     description:
-      "Create, save, edit, print, and export injection molding process sheets for repeatable setups and shift handoffs.",
+      "Build or update the approved setup sheet so each shift starts from the same settings.",
     href: "/process-sheet-builder",
     accent: "from-lime-300 to-cyan-400",
   },
   {
     title: "Electronic Process Sheet Approval",
     description:
-      "Create, save, filter, edit, delete, and print electronic approvals for controlled process sheet revisions.",
+      "Review and approve process sheet changes before a setup is used again.",
     href: "/process-sheets/approval",
     accent: "from-cyan-300 to-emerald-400",
   },
   {
     title: "Work Instruction Builder",
     description:
-      "Create, save, filter, edit, delete, and print controlled work instructions with PPE, tools, safety warnings, quality checks, approvals, and image placeholders.",
+      "Write simple step-by-step work instructions with safety, tools, and quality checks.",
     href: "/work-instructions",
     accent: "from-emerald-300 to-cyan-400",
   },
@@ -86,42 +86,42 @@ const dashboardCards: DashboardCard[] = [
     title: "Process Change Log",
     plainSubtitle: "Record what setting was changed",
     description:
-      "Create before-and-after process change records with reasons, results, notes, browser storage, filters, editing, deletion, and print view.",
+      "Record what setting changed, why it changed, and whether the part improved.",
     href: "/process-change-log",
     accent: "from-cyan-300 to-emerald-400",
   },
   {
     title: "Action Item Tracker",
     description:
-      "Create, assign, filter, edit, save, and print management action items with status, priority, category, assignee, due-date, and overdue tracking.",
+      "Track who owns each follow-up, when it is due, and whether it is done.",
     href: "/actions",
     accent: "from-amber-300 to-cyan-400",
   },
   {
     title: "Document Control System",
     description:
-      "Create, save, edit, filter, review, delete, and print controlled document records with revision, owner, status, and review-due tracking.",
+      "Keep work instructions, forms, and controlled documents organized by owner and revision.",
     href: "/documents",
     accent: "from-cyan-300 to-amber-400",
   },
   {
     title: "Mold History Database",
     description:
-      "Add, search, edit, delete, save, and print mold history records with tooling notes, repair history, and process knowledge.",
+      "Look up mold notes, repairs, and known issues before starting or troubleshooting a job.",
     href: "/molds",
     accent: "from-cyan-300 to-emerald-400",
   },
   {
     title: "Mold Preventive Maintenance Scheduler",
     description:
-      "Create, save, filter, edit, delete, and print mold PM schedules with cycle intervals, due dates, technicians, issues, and status counts.",
+      "Plan mold maintenance before wear, damage, or missed cleaning causes production trouble.",
     href: "/molds/pm-scheduler",
     accent: "from-emerald-300 to-cyan-400",
   },
   {
     title: "Machine History Database",
     description:
-      "Add, search, edit, delete, save, and print machine history records with maintenance, hydraulic, electrical, automation, and process notes.",
+      "Look up machine repairs and known problems before blaming the mold or material.",
     href: "/machines",
     accent: "from-emerald-300 to-cyan-400",
   },
@@ -151,28 +151,28 @@ const dashboardCards: DashboardCard[] = [
   {
     title: "Production Schedule Board",
     description:
-      "Create, save, edit, filter, delete, and print production schedule entries with planned-versus-actual quantities and job status tracking.",
+      "See what should be running, what actually ran, and which jobs need attention.",
     href: "/production/schedule",
     accent: "from-emerald-300 to-cyan-400",
   },
   {
     title: "Real-Time Production Board",
     description:
-      "Add, save, edit, delete, filter, and print live machine status cards with cycle times, quantities, scrap, downtime, issues, next actions, and status counts.",
+      "See each press status, open issue, next action, good parts, scrap, and downtime.",
     href: "/production/live-board",
     accent: "from-cyan-300 to-blue-400",
   },
   {
     title: "Production Run Log",
     description:
-      "Create, save, edit, filter, delete, and print production run logs with automatic run time, total parts, scrap percentage, and parts-per-hour calculations.",
+      "Record what happened during a run: time, good parts, scrap, and notes.",
     href: "/production/run-log",
     accent: "from-cyan-300 to-emerald-400",
   },
   {
     title: "Production Job Traveler",
     description:
-      "Create, save, edit, delete, status-track, and print job travelers from material verification through final approval.",
+      "Follow the job from material check through final quality approval.",
     href: "/production/job-traveler",
     accent: "from-cyan-300 to-blue-400",
   },
@@ -194,7 +194,7 @@ const dashboardCards: DashboardCard[] = [
   {
     title: "OEE Dashboard",
     description:
-      "Calculate availability, performance, quality, scrap, downtime, and OEE with saved history, charts, editing, deletion, and print-friendly reports.",
+      "Understand how much planned production time made good parts at the expected pace.",
     href: "/oee",
     accent: "from-emerald-300 to-cyan-400",
   },
@@ -418,14 +418,14 @@ const dashboardCards: DashboardCard[] = [
   {
     title: "Employee Training Record",
     description:
-      "Create, save, edit, filter, and print employee training records with quiz scores, pass/fail status, certifications, expiration alerts, and supervisor sign-off.",
+      "Keep one clear record of an employee’s completed training, quiz results, and sign-offs.",
     href: "/employees/training-record",
     accent: "from-cyan-300 to-emerald-400",
   },
   {
     title: "Employee Performance Coaching Log",
     description:
-      "Create, save, edit, filter, and print employee performance coaching logs with observations, standards, action plans, employee responses, follow-up dates, and closure status.",
+      "Record coaching conversations, expectations, follow-up dates, and closure notes.",
     href: "/employees/performance-coaching-log",
     accent: "from-violet-300 to-cyan-400",
   },
@@ -517,7 +517,7 @@ const dashboardCards: DashboardCard[] = [
   {
     title: "Process Calculators",
     description:
-      "Estimate clamp tonnage, total shot weight, and screw recovery time with mobile-friendly scientific molding calculator cards.",
+      "Use simple calculators for clamp force, shot size, cycle time, and recovery checks.",
     href: "/calculators",
     accent: "from-amber-300 to-orange-400",
   },
@@ -839,7 +839,8 @@ function SimpleToolCard({
         {beginnerMode && card.beginnerExplanation ? (
           <p className="mt-2 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 px-3 py-2 text-sm font-semibold leading-5 text-cyan-50">{card.beginnerExplanation}</p>
         ) : null}
-        <p className="mt-2 line-clamp-2 text-sm leading-5 text-slate-300">{card.description}</p>
+        <p className="mt-2 text-xs font-black uppercase tracking-[0.16em] text-slate-500">What is this?</p>
+        <p className="mt-1 line-clamp-2 text-sm leading-5 text-slate-300">{card.description}</p>
       </div>
       <div className="flex shrink-0 items-center gap-2">
         {card.href && onToggleFavorite ? (
@@ -1416,7 +1417,8 @@ export default function Home() {
 
         <section className="rounded-[2rem] border border-emerald-300/20 bg-slate-900/80 p-4 shadow-2xl shadow-emerald-950/20 sm:p-6" aria-labelledby="recommended-tools-heading">
           <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">Recommended Tools</p>
-          <h2 id="recommended-tools-heading" className="mt-1 text-2xl font-black tracking-tight text-white">Top 4 most-used tools</h2>
+          <h2 id="recommended-tools-heading" className="mt-1 text-2xl font-black tracking-tight text-white">Top 4 starter tools</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-300">Use these when you are unsure what to do next: answer questions, ask the coach, compare defects, or search past fixes.</p>
           <div className="mt-4">
             <ToolList cards={recommendedTools} label="Top recommended tools" favoriteHrefs={favoriteHrefSet} beginnerMode={beginnerMode} beginnerStartHrefs={beginnerStartHrefs} onToggleFavorite={toggleFavorite} onOpenTool={trackRecentTool} />
           </div>
@@ -1441,8 +1443,29 @@ export default function Home() {
               <Link key={option.question} href={option.href} className="group rounded-2xl border border-white/10 bg-slate-950/60 p-4 transition hover:-translate-y-0.5 hover:border-amber-200/70 hover:bg-amber-300/10 focus:outline-none focus:ring-4 focus:ring-amber-300/20" onClick={() => trackRecentTool(option.href)}>
                 <span className="block text-lg font-black text-white">{option.question}</span>
                 <span className="mt-2 block text-sm font-semibold leading-5 text-slate-300">{option.helper}</span>
+                <span className="mt-3 block rounded-2xl border border-amber-300/20 bg-amber-300/10 px-3 py-2 text-xs font-bold leading-5 text-amber-50">Example: {option.question === "Are you troubleshooting?" ? "part has flash or short shot" : option.question === "Learning?" ? "new operator needs basics" : option.question === "Training someone?" ? "supervisor assigns startup training" : "find how this was fixed last time"}</span>
                 <span className="mt-4 block text-sm font-black text-amber-100 transition group-hover:translate-x-1">{option.cta} →</span>
               </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="rounded-[2rem] border border-cyan-300/20 bg-slate-900/80 p-4 shadow-2xl shadow-cyan-950/20 sm:p-6" aria-labelledby="beginner-terms-heading">
+          <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Beginner Help</p>
+          <h2 id="beginner-terms-heading" className="mt-1 text-2xl font-black tracking-tight text-white">Common shop words in plain language</h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              ["Defect", "Something wrong with the molded part, like flash, burn marks, or a short shot."],
+              ["Process", "The machine settings and steps used to make the part."],
+              ["Root cause", "The real reason the problem happened, not just the first thing you notice."],
+              ["Containment", "Keeping suspect parts separated until quality decides what to do."],
+              ["OEE", "A plant number that compares planned time, running speed, and good parts."],
+              ["Process window", "The safe range where settings still make good parts."],
+            ].map(([term, meaning]) => (
+              <article key={term} className="rounded-2xl border border-white/10 bg-slate-950/60 p-4">
+                <h3 className="text-lg font-black text-white">{term}</h3>
+                <p className="mt-2 text-sm font-semibold leading-6 text-slate-300">{meaning}</p>
+              </article>
             ))}
           </div>
         </section>
