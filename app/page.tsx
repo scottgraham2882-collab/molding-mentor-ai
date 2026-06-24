@@ -18,7 +18,7 @@ const navigationGroups: NavigationGroup[] = [
   {
     title: "Troubleshooting",
     description: "Find a safe first step before changing the process.",
-    cards: getTools(["/coach", "/troubleshooting", "/checklists", "/process-adjustment-guide", "/root-cause-coach"]),
+    cards: getTools(["/coach", "/troubleshooting", "/simulator", "/checklists", "/process-adjustment-guide", "/root-cause-coach"]),
   },
   {
     title: "Knowledge & Collaboration",
