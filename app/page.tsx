@@ -119,6 +119,17 @@ export default function Home() {
               <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
                 A simple starting point for learning, troubleshooting, preserving knowledge, and supporting collaboration on the shop floor.
               </p>
+              <Link
+                href="/start-here"
+                className="mt-6 flex max-w-xl flex-col rounded-2xl border border-cyan-200 bg-cyan-50 p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-500 hover:bg-cyan-100 focus:outline-none focus:ring-4 focus:ring-cyan-200"
+              >
+                <span className="text-xs font-black uppercase tracking-[0.24em] text-cyan-700">New or not sure?</span>
+                <span className="mt-2 text-2xl font-black text-slate-950">Start Here</span>
+                <span className="mt-2 text-sm leading-6 text-slate-700">
+                  Pick your role and need, then get three clear tools to open first.
+                </span>
+                <span className="mt-4 text-sm font-black text-cyan-800">Find your first step →</span>
+              </Link>
             </div>
             <div className="rounded-2xl bg-cyan-50 p-4">
               <ul className="grid gap-2 text-sm font-bold text-cyan-950 sm:grid-cols-2 lg:grid-cols-1">
