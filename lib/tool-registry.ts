@@ -12,6 +12,7 @@ export type ToolMetadata = {
 export const toolRegistry = [
   { title: "Start Here", href: "/start-here", category: "Start Here", description: "Pick your role and need to get three clear tools to open first.", audience: "all", tags: ["navigation", "recommendations", "onboarding"] },
   { title: "Mission", href: "/mission", category: "Start Here", description: "Review the people-first principles behind Molding Mentor AI.", audience: "all", tags: ["mission", "principles", "people-first"] },
+  { title: "Why Molding Mentor", href: "/why-molding-mentor", category: "Start Here", description: "Understand why Molding Mentor AI was built for learning, troubleshooting, and knowledge preservation.", audience: "all", tags: ["mission", "why", "learning", "knowledge"] },
   { title: "Main Dashboard", href: "/", category: "Start Here", description: "Return to the simple homepage with the most common starting points.", audience: "all", tags: ["navigation", "dashboard", "home"] },
   { title: "Molding Dictionary", href: "/molding-dictionary", category: "Learning", description: "Look up molding terms in simple language with shop-floor examples.", audience: "all", tags: ["terms", "reference", "basics"] },
   { title: "Lessons", href: "/lessons", category: "Learning", description: "Study practical scientific molding concepts in short learning modules.", audience: "all", tags: ["scientific molding", "learning", "lessons"] },
