@@ -61,7 +61,7 @@ export default function Home() {
                   <span className="mt-4 text-sm font-black text-cyan-800">Find your first step →</span>
                 </Link>
                 <Link
-                  href="/why-molding-mentor-experience"
+                  href="/why-molding-mentor"
                   className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-white focus:outline-none focus:ring-4 focus:ring-cyan-200"
                 >
                   <span className="text-xs font-black uppercase tracking-[0.24em] text-slate-500">Why this experience?</span>
