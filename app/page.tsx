@@ -13,7 +13,7 @@ const navigationGroups: NavigationGroup[] = [
   {
     title: "Learning",
     description: "Build molding knowledge one clear step at a time.",
-    cards: getTools(["/molding-dictionary", "/lessons", "/training/role-paths", "/roadmaps", "/learning-plans"]),
+    cards: getTools(["/why-molding-mentor", "/molding-dictionary", "/lessons", "/training/role-paths", "/roadmaps", "/learning-plans"]),
   },
   {
     title: "Troubleshooting",
