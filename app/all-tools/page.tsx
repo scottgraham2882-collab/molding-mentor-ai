@@ -12,7 +12,7 @@ type ToolCategory = {
 const categoryDefinitions = [
   { title: "Start Here", purpose: "Simple first stops for people who are new, unsure, or trying to find the right next tool.", hrefs: ["/start-here", "/mission", "/"] },
   { title: "Learning", purpose: "Build molding knowledge with plain-language references, lessons, examples, and roadmaps.", hrefs: ["/molding-dictionary", "/lessons", "/roadmaps", "/case-studies", "/knowledge-checks"] },
-  { title: "Troubleshooting", purpose: "Help teams slow down, understand the problem, and choose safe first checks.", hrefs: ["/troubleshooting", "/defects", "/root-cause-coach", "/root-cause/what-changed", "/process-adjustment-guide"] },
+  { title: "Troubleshooting", purpose: "Help teams slow down, understand the problem, and choose safe first checks.", hrefs: ["/troubleshooting", "/simulator", "/defects", "/root-cause-coach", "/root-cause/what-changed", "/process-adjustment-guide"] },
   { title: "Knowledge & Collaboration", purpose: "Preserve what people learn and help shifts, teams, and departments stay aligned.", hrefs: ["/knowledge-vault", "/knowledge-search", "/shift-handoff", "/work-instructions", "/meetings"] },
   { title: "Training", purpose: "Assign learning, track progress, and support people as they grow into new roles.", hrefs: ["/training/assignments", "/training/plan-builder", "/training/skills-matrix", "/training/role-paths", "/certifications"] },
   { title: "Quality", purpose: "Support first-piece checks, containment, corrective action, audits, and customer quality work.", hrefs: ["/quality/first-piece-approval", "/quality/containment", "/quality/corrective-action", "/quality/8d-report", "/quality/audits"] },
