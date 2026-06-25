@@ -23,6 +23,33 @@ const reasons = [
   },
 ];
 
+const experienceSteps = [
+  {
+    label: "Orient",
+    title: "Start with the situation on the floor",
+    detail:
+      "The experience begins by asking what role you are in, what problem you are facing, and whether you are learning, troubleshooting, documenting, or coaching.",
+  },
+  {
+    label: "Guide",
+    title: "Turn uncertainty into a safe next action",
+    detail:
+      "Molding Mentor AI presents practical checks, plain-language explanations, and links to the right tool so the next step is visible without overloading the user.",
+  },
+  {
+    label: "Capture",
+    title: "Save what the team learns",
+    detail:
+      "Notes, handoffs, corrective actions, and training paths help convert daily experience into reusable shop-floor knowledge for the next person and the next shift.",
+  },
+];
+
+const experienceHighlights = [
+  "Role-aware paths for operators, process technicians, supervisors, quality, and maintenance",
+  "Beginner-friendly explanations that preserve the reasoning behind experienced decisions",
+  "Connected tools that move from learning to troubleshooting to documentation",
+];
+
 const outcomes = [
   "Safer first responses before changing machine settings",
   "Clearer training conversations between experienced and newer employees",
@@ -60,6 +87,36 @@ export default function WhyMoldingMentorPage() {
               <p className="mt-3 text-sm leading-6 text-slate-300 sm:text-base">{reason.detail}</p>
             </article>
           ))}
+        </section>
+
+        <section className="rounded-3xl border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-xl shadow-slate-950/20 sm:p-8">
+          <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-cyan-200">The Molding Mentor experience</p>
+              <h2 className="mt-3 text-3xl font-black text-white">A guided path from first question to shared know-how</h2>
+              <p className="mt-4 text-base leading-7 text-slate-300">
+                The experience is designed to feel like a calm senior mentor beside the press: ask what is happening, explain why it matters, recommend the safest next move, and help the team remember what was learned.
+              </p>
+              <ul className="mt-5 grid gap-3">
+                {experienceHighlights.map((highlight) => (
+                  <li key={highlight} className="flex gap-3 rounded-2xl border border-white/10 bg-slate-950/60 p-4 text-sm font-bold leading-6 text-cyan-50">
+                    <span className="text-cyan-300" aria-hidden="true">✓</span>
+                    <span>{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="grid gap-4">
+              {experienceSteps.map((step) => (
+                <article key={step.label} className="rounded-2xl border border-white/10 bg-white/10 p-5">
+                  <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-200">{step.label}</p>
+                  <h3 className="mt-2 text-xl font-black text-white">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">{step.detail}</p>
+                </article>
+              ))}
+            </div>
+          </div>
         </section>
 
         <section className="rounded-3xl border border-emerald-300/20 bg-emerald-300/10 p-5 shadow-xl shadow-slate-950/20 sm:p-8">
